@@ -41,12 +41,12 @@ public class GameController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    /*@PutMapping("{id}")
-    public ResponseEntity updateGame(@RequestBody Game game) {
+    @PutMapping("{id}")
+    public ResponseEntity updateGame(@RequestBody Game game, @PathVariable int id) {
         if(game.getId() != id) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         Game updateGame = gameService.updateGame(game);
-        return new ResponseEntity(updateGame, HttpStatus.NO_CONTENT)
-    }*/
+        return new ResponseEntity(updateGame, HttpStatus.NO_CONTENT);
+    }
 }
