@@ -1,11 +1,13 @@
 package academy.noroff.hvz.controllers;
 
 import academy.noroff.hvz.models.Game;
+import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.services.GameService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -49,4 +51,13 @@ public class GameController {
         Game updateGame = gameService.updateGame(game);
         return new ResponseEntity(updateGame, HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("{id}/players") // GET: localhost:8080/api/v1/movies/{id}/characters
+    public ResponseEntity getCharactersInMovie(@PathVariable int id) {
+        Collection<Player> players= gameService.getPlayersInGames(id);
+        //Collection<PlayerDTO> playerDTOS = playerMapper.playersToPlayersDTO(players);
+        // TODO: 10/6/2022 denne skal retunere playerDTOS ikke players
+        return ResponseEntity.ok(players);
+    }
+
 }

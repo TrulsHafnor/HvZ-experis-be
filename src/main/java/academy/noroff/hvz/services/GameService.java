@@ -2,10 +2,12 @@ package academy.noroff.hvz.services;
 
 import academy.noroff.hvz.exeptions.GameNotFoundException;
 import academy.noroff.hvz.models.Game;
+import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -65,5 +67,12 @@ public class GameService {
         // TODO: 10/5/2022 Sjekk om denne er riktig når vi har aktivt game
         return gameRepository.save(game);
     }
+
+    public Collection<Player> getPlayersInGames(int id) {
+        Game game = gameRepository.findById(id)
+                .orElseThrow(()->new GameNotFoundException("Game by id "+ id + " was not found"));
+        return game.getPlayers();
+    }
+
 
 }
