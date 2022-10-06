@@ -38,7 +38,7 @@ public class GameController {
     @DeleteMapping("{id}")
     public ResponseEntity deleteGame (@PathVariable("id") int id) {
         gameService.deleteGame(id);
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("{id}")
