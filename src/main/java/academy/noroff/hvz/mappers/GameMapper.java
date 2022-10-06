@@ -1,4 +1,4 @@
-package academy.noroff.hvz.exeptions.mappers;
+package academy.noroff.hvz.mappers;
 
 import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Player;
@@ -24,7 +24,7 @@ public abstract class GameMapper {
     protected PlayerService playerService;
 
 
-    @Mapping(target = "players", source = "players", qualifiedByName = "playerToIds")
+    @Mapping(target = "players", source = "players", qualifiedByName = "playersToIds")
     public abstract GameDto gameToGameDto(Game game);
 
 
@@ -35,7 +35,7 @@ public abstract class GameMapper {
     public abstract Game gameDtoToGame(GameDto dto);
 
 
-    @Named("playerToIds")
+    @Named("playersToIds")
     Set<Integer> map(Set<Player> source) {
         if(source == null)
             return Collections.emptySet();

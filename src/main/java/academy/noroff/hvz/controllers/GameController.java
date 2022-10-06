@@ -1,7 +1,7 @@
 package academy.noroff.hvz.controllers;
 
-import academy.noroff.hvz.exeptions.mappers.GameMapper;
-import academy.noroff.hvz.exeptions.mappers.PlayerMapper;
+import academy.noroff.hvz.mappers.GameMapper;
+import academy.noroff.hvz.mappers.PlayerMapper;
 import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.models.dtos.GameDto;
@@ -15,13 +15,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.Collection;
-import java.util.List;
 
 @RestController
 @RequestMapping("/game")

@@ -1,4 +1,4 @@
-package academy.noroff.hvz.exeptions.mappers;
+package academy.noroff.hvz.mappers;
 
 import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Player;
