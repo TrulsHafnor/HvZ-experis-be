@@ -2,6 +2,7 @@ package academy.noroff.hvz.mappers;
 
 import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Player;
+import academy.noroff.hvz.models.dtos.GameDto;
 import academy.noroff.hvz.models.dtos.PlayerDto;
 import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.services.PlayerService;
@@ -21,7 +22,27 @@ public abstract class PlayerMapper {
     @Autowired
     protected GameService gameService;
 
+    @Autowired
+    protected PlayerService playerService;
 
+
+    @Mapping(target = "game", source = "game.id")
+    public abstract PlayerDto playerToPlayerDto(Player player);
+
+
+    public abstract Collection<PlayerDto> playersToPlayerDtos(Collection<Player> player);
+
+
+    @Mapping(target = "game", source = "game", qualifiedByName = "gameToIds")
+    public abstract Player playerDtoToPlayer(PlayerDto dto);
+
+    @Named("gameToIds")
+    Game mapIdToGame(int id) {
+        return gameService.findGameById(id);
+    }
+
+
+  /*
     public abstract Collection<PlayerDto> playersToPlayerDtos(Collection<Player> player);
 
 
@@ -49,6 +70,6 @@ public abstract class PlayerMapper {
                 .collect(Collectors.toSet());
     }
 
-
+    */
 
 }

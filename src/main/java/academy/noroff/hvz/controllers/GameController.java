@@ -62,7 +62,7 @@ public class GameController {
     })
     @GetMapping
     public ResponseEntity getAllGames() {
-        Collection<GameDto> games = gameMapper.gameToGameDto(
+        Collection<GameDto> games = gameMapper.gamesToGamesDtos(
                 gameService.finAllGames()
         );
         return ResponseEntity.ok(games);

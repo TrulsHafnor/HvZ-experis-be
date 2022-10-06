@@ -23,7 +23,36 @@ public abstract class GameMapper {
     @Autowired
     protected PlayerService playerService;
 
+    public abstract Collection<GameDto> gamesToGamesDtos(Collection<Game> games);
 
+
+    @Mapping(target = "players", source = "players", qualifiedByName = "playersToIds")
+    public abstract GameDto gameToGameDto(Game game);
+
+
+    @Mapping(target = "players", source = "players", qualifiedByName = "playerIdsToGames")
+    public abstract Game gameDtoToGame(GameDto dto);
+
+
+
+    @Named("playersToIds")
+    Set<Integer> map(Set<Player> source) {
+        if(source == null)
+            return Collections.emptySet();
+        return source.stream()
+                .map(Player::getId).collect(Collectors.toSet());
+    }
+
+
+    @Named("playerIdsToGames")
+    Set<Player> mapIdsToplayers(Set<Integer> id) {
+        return id.stream()
+                .map( i -> playerService.findPlayerById(i))
+                .collect(Collectors.toSet());
+    }
+
+
+    /*
     @Mapping(target = "players", source = "players.id")
     public abstract GameDto gameToGameDto(Game game);
 
@@ -39,5 +68,5 @@ public abstract class GameMapper {
         return playerService.findPlayerById(id);
     }
 
-
+    */
 }
