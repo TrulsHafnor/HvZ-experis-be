@@ -32,7 +32,7 @@ public class PlayerController {
         this.playerMapper = playerMapper;
     }
 
-    @Operation(summary = "Get all games")
+    /*@Operation(summary = "Get all games")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
@@ -48,5 +48,5 @@ public class PlayerController {
                 playerService.findAllPlayers()
         );
         return ResponseEntity.ok(player);
-    }
+    }*/
 }
