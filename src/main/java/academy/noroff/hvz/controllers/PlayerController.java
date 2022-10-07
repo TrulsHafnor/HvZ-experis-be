@@ -24,6 +24,7 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("/game")
+@CrossOrigin(origins = "https://localhost:3000")
 public class PlayerController {
     private final PlayerService playerService;
     private final GameMapper gameMapper;
@@ -114,7 +115,7 @@ public class PlayerController {
     @PutMapping("{gameId}/player/{playerId}")
     public ResponseEntity updatePlayer(@RequestBody PlayerDto playerDto, @PathVariable int gameId, int playerId) {
         // TODO: 10/7/2022 admin only
-        // sjekker om player id som parameter er lik player id i body, og sjekker om game finnes
+        // sjekker om player id som parameter er lik player id i body, og sjekker om game finnes i databasen
         if(playerId != playerDto.getId() || gameId != gameService.findGameById(gameId).getId())
             return ResponseEntity.badRequest().build();
         playerService.updatePlayer(
