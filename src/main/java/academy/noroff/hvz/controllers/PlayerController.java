@@ -3,21 +3,27 @@ package academy.noroff.hvz.controllers;
 import academy.noroff.hvz.mappers.GameMapper;
 import academy.noroff.hvz.mappers.PlayerMapper;
 import academy.noroff.hvz.models.Game;
+import academy.noroff.hvz.models.Player;
+import academy.noroff.hvz.models.dtos.GameDto;
 import academy.noroff.hvz.models.dtos.PlayerDto;
 import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.services.PlayerService;
+import academy.noroff.hvz.utils.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.Collection;
 
 @RestController
+@RequestMapping("/game")
 public class PlayerController {
     private final PlayerService playerService;
     private final GameMapper gameMapper;
@@ -32,21 +38,111 @@ public class PlayerController {
         this.playerMapper = playerMapper;
     }
 
-    /*@Operation(summary = "Get all games")
+    @Operation(summary = "Get all players in game by ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Game.class)) }),
+                    content = @Content),
+            @ApiResponse(responseCode = "400",
+                    description = "Malformed request",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorAttributeOptions.class))}),
             @ApiResponse(responseCode = "404",
-                    description = "Cant find games",
+                    description = "Game not found with supplied ID",
                     content = @Content)
     })
-    @GetMapping
-    public ResponseEntity getAllPlayers() {
-        Collection<PlayerDto> player = playerMapper.playerToPlayerDto(
-                playerService.findAllPlayers()
+    @GetMapping("{id}/players")
+    public ResponseEntity getPlayersInGame(@PathVariable int id) {
+        Collection<Player> players= gameService.getPlayersInGames(id);
+        Collection<PlayerDto> playerDtos = playerMapper.playerToPlayerDto(players);
+        return ResponseEntity.ok(playerDtos);
+    }
+
+    @Operation(summary = "Find player in game")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Success",
+                    content = @Content),
+            @ApiResponse(responseCode = "400",
+                    description = "Malformed request",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorAttributeOptions.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "Game or Player not found with supplied ID",
+                    content = @Content)
+    })
+    @GetMapping("{gameId}/player/{playerId}")
+    public ResponseEntity getPlayerInGame(@PathVariable int gameId, int playerId) {
+        // TODO: 10/7/2022 only admin can se if player is patient zero
+        Player player = playerService.findPlayerInGame(gameId,playerId);
+        PlayerDto playerDto = playerMapper.playerToPlayerDto(player);
+        return ResponseEntity.ok(playerDto);
+    }
+
+    // TODO: 10/7/2022 Hjelpemetode for testing kan endresog slettes ved behov
+    @Operation(summary = "Add user")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Player successfully created",
+                    content = @Content),
+            @ApiResponse(responseCode = "400",
+                    description = "Malformed request",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
+    })
+    @PostMapping("player")
+    public ResponseEntity addGame (@RequestBody PlayerDto playerDto) {
+        Player player = playerMapper.playerDtoToPlayer(playerDto);
+        playerService.addPlayer(player);
+        URI location = URI.create("game/player" + player.getId());
+        return ResponseEntity.created(location).build();
+    }
+
+    @Operation(summary = "Update a player by ID")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "204",
+                    description = "Player successfully updated",
+                    content = @Content),
+            @ApiResponse(responseCode = "400",
+                    description = "Malformed request",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
+            @ApiResponse(responseCode = "404",
+                    description = "Player not found with supplied ID",
+                    content = @Content)
+    })
+    @PutMapping("player/{id}")
+    public ResponseEntity updatePlayer(@RequestBody PlayerDto playerDto, @PathVariable int id) {
+        // TODO: 10/7/2022 admin only
+        // Validates if body is correct
+        if(id != playerDto.getId())
+            return ResponseEntity.badRequest().build();
+        playerService.updatePlayer(
+                playerMapper.playerDtoToPlayer(playerDto)
         );
-        return ResponseEntity.ok(player);
-    }*/
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Delete a player by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Success",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = PlayerDto.class))) }),
+            @ApiResponse(responseCode = "404",
+                    description = "Player does not exist with supplied ID",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ApiErrorResponse.class)) })
+    })
+    //<game_id>/player/<player_id
+    @DeleteMapping("player/{playerId}")
+    public ResponseEntity deletePlayer (@PathVariable int id) {
+        // TODO: 10/7/2022 admin only
+        playerService.deletePlayer(id);
+        return ResponseEntity.noContent().build();
+    }
 }

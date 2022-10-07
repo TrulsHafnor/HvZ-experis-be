@@ -134,26 +134,4 @@ public class GameController {
         );
         return ResponseEntity.noContent().build();
     }
-
-    @Operation(summary = "Get all players in game by ID")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "Success",
-                    content = @Content),
-            @ApiResponse(responseCode = "400",
-                    description = "Malformed request",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorAttributeOptions.class))}),
-            @ApiResponse(responseCode = "404",
-                    description = "Game not found with supplied ID",
-                    content = @Content)
-    })
-    @GetMapping("{id}/players")
-    public ResponseEntity getPlayersInGame(@PathVariable int id) {
-        Collection<Player> players= gameService.getPlayersInGames(id);
-        Collection<PlayerDto> playerDtos = playerMapper.playerToPlayerDto(players);
-        return ResponseEntity.ok(playerDtos);
-
-    }
-
 }

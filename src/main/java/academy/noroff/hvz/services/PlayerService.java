@@ -21,13 +21,61 @@ public class PlayerService {
         this.playerRepository = playerRepository;
     }
 
+
+    /**
+     * Find all player by id
+     * @param id
+     * @return
+     */
     public Player findPlayerById (int id) {
         return playerRepository.findById(id). orElseThrow(
                 () -> new PlayerNotFoundException("Player by id "+ id + " was not found"));
     }
 
 
+    /**
+     * find all payers
+     * @return
+     */
     public Collection<Player> findAllPlayers() {
         return playerRepository.findAll();
+    }
+
+    /**
+     * Find player in game
+     * @param gameId
+     * @param playerId
+     * @return
+     */
+    public Player findPlayerInGame(int gameId, int playerId) {
+        return playerRepository.getPlayerInGame(gameId, playerId);
+    }
+
+    /**
+     * Add player
+     * @param player
+     * @return
+     */
+    public Player addPlayer (Player player) {
+        return playerRepository.save(player);
+    }
+
+    /**
+     * Update user
+     * @param player
+     * @return
+     */
+    public Player updatePlayer (Player player) {
+        return playerRepository.save(player);
+    }
+
+
+    /**
+     * delete player
+     * @param id
+     */
+    public void deletePlayer(int id) {
+        // TODO: 10/5/2022 Cascade delete (Drøyer denne til vi har mer fyll i applikasjonen)
+        playerRepository.deleteById(id);
     }
 }
