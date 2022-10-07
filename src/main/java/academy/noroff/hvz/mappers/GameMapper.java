@@ -10,7 +10,6 @@ import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,10 +35,10 @@ public abstract class GameMapper {
     //public abstract Game gameUpdateDtoToGame(GameUpdateDto dto);
 
     @Named("playersToIDs")
-    List<Integer> playersToIDs(Set<Player> source) {
+    Set<Integer> playersToIDs(Set<Player> source) {
         if(source == null)
             return null;
-        return source.stream()
+        return (Set<Integer>) source.stream()
                 .map(Player::getId).collect(Collectors.toList());
     }
 
