@@ -2,6 +2,7 @@ package academy.noroff.hvz.mappers;
 
 import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Player;
+import academy.noroff.hvz.models.dtos.GameDto;
 import academy.noroff.hvz.models.dtos.PlayerDto;
 import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.services.PlayerService;
@@ -17,38 +18,23 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public abstract class PlayerMapper {
-
+    // MANY TO ONE
+    @Autowired
+    protected PlayerService playerService;
     @Autowired
     protected GameService gameService;
 
-
-    public abstract Collection<PlayerDto> playersToPlayerDtos(Collection<Player> player);
-
-
-    @Mapping(target = "game", source = "game", qualifiedByName = "gameToIds")
+    @Mapping(target = "game", source = "game.id")
     public abstract PlayerDto playerToPlayerDto(Player player);
 
+    public abstract Collection<PlayerDto> playerToPlayerDto(Collection<Player> player);
 
-    @Mapping(target = "game", source = "game", qualifiedByName = "gameIdsToGames")
-    public abstract Player playerDtoToPlayer(PlayerDto dto);
+    @Mapping(target = "game", source = "game", qualifiedByName = "gameToGameIds")
+    public abstract Player playerDtoToPlayer(PlayerDto player);
 
-
-    @Named("gameToIds")
-    Set<Integer> map(Set<Game> source) {
-        if(source == null)
-            return Collections.emptySet();
-        return source.stream()
-                .map(Game::getId).collect(Collectors.toSet());
+    @Named("gameToGameIds")
+    Game mapIdToFranchise(Integer id) {
+        return gameService.findGameById(id);
     }
-
-
-    @Named("gameIdsToGames")
-    Set<Game> mapIdsToGames(Set<Integer> id) {
-        return id.stream()
-                .map( i -> gameService.findGameById(i))
-                .collect(Collectors.toSet());
-    }
-
-
 
 }

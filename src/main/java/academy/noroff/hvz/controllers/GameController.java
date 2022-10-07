@@ -22,6 +22,7 @@ import java.net.URI;
 import java.util.Collection;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/game")
 public class GameController {
     private final GameService gameService;
@@ -63,7 +64,7 @@ public class GameController {
     @GetMapping
     public ResponseEntity getAllGames() {
         Collection<GameDto> games = gameMapper.gameToGameDto(
-                gameService.finAllGames()
+                gameService.findAllGames()
         );
         return ResponseEntity.ok(games);
     }
@@ -149,7 +150,7 @@ public class GameController {
     @GetMapping("{id}/players")
     public ResponseEntity getPlayersInGame(@PathVariable int id) {
         Collection<Player> players= gameService.getPlayersInGames(id);
-        Collection<PlayerDto> playerDtos = playerMapper.playersToPlayerDtos(players);
+        Collection<PlayerDto> playerDtos = playerMapper.playerToPlayerDto(players);
         return ResponseEntity.ok(playerDtos);
 
     }
