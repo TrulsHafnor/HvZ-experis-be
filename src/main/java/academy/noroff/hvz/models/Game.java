@@ -1,11 +1,15 @@
 package academy.noroff.hvz.models;
 
 import academy.noroff.hvz.enums.GameState;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -26,5 +30,6 @@ public class Game {
     private float se_lat;
     private float se_lng;
 
-
+    @OneToMany(mappedBy = "game")
+    private Set<Player> players;
 }
