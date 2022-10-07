@@ -22,7 +22,6 @@ import java.net.URI;
 import java.util.Collection;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/game")
 public class GameController {
     private final GameService gameService;
