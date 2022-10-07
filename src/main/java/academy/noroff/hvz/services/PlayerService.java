@@ -57,8 +57,14 @@ public class PlayerService {
      * @return
      */
     public Player addPlayer (Player player) {
+        if (playerRepository.checkIfBiteCodeExists(player.getBiteCode(), player.getGame().getId()) !=0) {
+            do {
+                player.setBiteCode("holderValue");
+            } while (playerRepository.checkIfBiteCodeExists(player.getBiteCode(), player.getGame().getId()) != 0);
+        }
         return playerRepository.save(player);
     }
+
 
     /**
      * Update user
