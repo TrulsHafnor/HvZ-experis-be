@@ -19,10 +19,6 @@ public abstract class GameMapper {
     @Autowired
     protected PlayerService playerService;
 
-
-    // TODO: 10/6/2022 Maybe have something like this
-    // public abstract Collection<updateGameDto> gameToUpdateGameDto(Collection<Game> games);
-
     @Mapping(target = "players", source = "players", qualifiedByName = "playersToIDs")
     public abstract GameDto gameToGameDto(Game game);
 
@@ -31,15 +27,12 @@ public abstract class GameMapper {
     @Mapping(target = "players", ignore = true)
     public abstract Game gameDtoToGame(GameDto dto);
 
-    // TODO: 10/6/2022 Maybe add something like this
-    //public abstract Game gameUpdateDtoToGame(GameUpdateDto dto);
-
     @Named("playersToIDs")
     Set<Integer> playersToIDs(Set<Player> source) {
         if(source == null)
             return null;
         return (Set<Integer>) source.stream()
-                .map(Player::getId).collect(Collectors.toList());
+                .map(Player::getId).collect(Collectors.toSet());
     }
 
     @Named("playerIdsToPlayers")
