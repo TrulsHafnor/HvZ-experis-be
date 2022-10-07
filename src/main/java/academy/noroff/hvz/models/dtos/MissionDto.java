@@ -1,20 +1,15 @@
 package academy.noroff.hvz.models.dtos;
 
+import academy.noroff.hvz.enums.MissionVisibility;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 @Getter
 @Setter
 public class MissionDto {
-    private int id;
+    private int missionId;
     private String missionName;
-    private boolean isHumanVisible;
-    private boolean isZombieVisible;
+    private MissionVisibility missionVisibility;
     private String missionDescription;
     private String startTime;
     private String endTime;

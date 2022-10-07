@@ -1,9 +1,9 @@
 package academy.noroff.hvz.controllers;
 
+import academy.noroff.hvz.enums.MissionVisibility;
 import academy.noroff.hvz.mappers.MissionMapper;
 import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Mission;
-import academy.noroff.hvz.models.dtos.GameDto;
 import academy.noroff.hvz.models.dtos.MissionDto;
 import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.services.MissionService;
@@ -22,8 +22,8 @@ import java.net.URI;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/game/<game_id>/mission")
-@CrossOrigin(origins = "https://localhost:3000") // TODO: 10/7/2022 fix for later (Sondre sec master)
+@RequestMapping("/game")
+@CrossOrigin(origins = "http://localhost:3000") // TODO: 10/7/2022 fix for later (Sondre sec master)
 public class MissionController {
     protected MissionMapper missionMapper;
     protected MissionService missionService;
@@ -46,9 +46,10 @@ public class MissionController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
-    @GetMapping("{id}")
-    public ResponseEntity getMissionById(@PathVariable("id") int id) {
-        return ResponseEntity.ok(missionMapper.missionToMissionDto(missionService.findMissionById(id)));
+    // TODO: 10/7/2022
+    @GetMapping("{game_id}/mission/{mission_id}")
+    public ResponseEntity getMissionById(@PathVariable int missionId, int gameId) {
+        return ResponseEntity.ok(missionMapper.missionToMissionDto(missionService.findMissionById(missionId, gameId)));
     }
 
     @Operation(summary = "Get all missions")
@@ -61,11 +62,12 @@ public class MissionController {
                     description = "Can't find missions",
                     content = @Content)
     })
-    @GetMapping
-    public ResponseEntity getAllMissions() {
+    @GetMapping("{game_id}/mission/{missionType}")
+    public ResponseEntity getAllMissions(@PathVariable int game_id, MissionVisibility missionType) {
         Collection<MissionDto> missions = missionMapper.missionToMissionDto(
-                missionService.findAllMissions()
+                missionService.findAllMissions(game_id, missionType)
         );
+
         return ResponseEntity.ok(missions);
     }
 
@@ -79,7 +81,7 @@ public class MissionController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
     })
-    @PostMapping
+    @PostMapping("{game_id}/mission")
     public ResponseEntity addMission (@RequestBody MissionDto missionDto) {
         if (missionDto.getGame() != gameService.findGameById(missionDto.getGame()).getId()) {
             return ResponseEntity.badRequest().build();
@@ -106,9 +108,9 @@ public class MissionController {
                                     schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
 
-    @DeleteMapping("{id}")
-    public ResponseEntity deleteMission (@PathVariable("id") int id) {
-        missionService.deleteMission(id);
+    @DeleteMapping("{game_id}/mission/{mission_id}")
+    public ResponseEntity deleteMission (@PathVariable("missionId") int missionId) {
+        missionService.deleteMission(missionId);
         return ResponseEntity.noContent().build();
     }
 
@@ -125,17 +127,15 @@ public class MissionController {
                     description = "Mission not found with supplied ID",
                     content = @Content)
     })
-    @PutMapping("{id}")
-    public ResponseEntity updateMission(@RequestBody MissionDto missionDto, @PathVariable int id) {
+    @PutMapping("{game_id}/mission/{mission_id}")
+    public ResponseEntity updateMission(@RequestBody MissionDto missionDto, @PathVariable int missionId) {
         // Validates if body is correct
-        if(id != missionDto.getId())
+        if(missionId != missionDto.getMissionId())
             return ResponseEntity.badRequest().build();
         missionService.updateMission(
                 missionMapper.missionDtoToMission(missionDto)
         );
         return ResponseEntity.noContent().build();
     }
-
-
 
 }
