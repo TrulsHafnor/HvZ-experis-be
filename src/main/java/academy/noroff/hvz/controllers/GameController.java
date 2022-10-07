@@ -24,7 +24,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/game")
 // TODO: 10/7/2022 fix for later (Sondre sec master) 
-@CrossOrigin(origins = "https://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 public class GameController {
     private final GameService gameService;
     private final GameMapper gameMapper;
