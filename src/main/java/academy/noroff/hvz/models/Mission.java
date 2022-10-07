@@ -1,5 +1,6 @@
 package academy.noroff.hvz.models;
 
+import academy.noroff.hvz.enums.MissionVisibility;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,9 +19,8 @@ public class Mission {
     @NotNull
     @Column(length = 50, nullable = false)
     private String missionName;
-
-    private boolean isHumanVisible;
-    private boolean isZombieVisible;
+    @Enumerated(EnumType.STRING)
+    private MissionVisibility missionVisibility;
 
     private String missionDescription;
 
