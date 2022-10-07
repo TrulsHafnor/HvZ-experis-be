@@ -1,6 +1,7 @@
 package academy.noroff.hvz.mappers;
 
 import academy.noroff.hvz.models.Game;
+import academy.noroff.hvz.models.Mission;
 import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.models.dtos.GameDto;
 import academy.noroff.hvz.services.PlayerService;
@@ -20,11 +21,13 @@ public abstract class GameMapper {
     protected PlayerService playerService;
 
     @Mapping(target = "players", source = "players", qualifiedByName = "playersToIDs")
+    @Mapping(target = "missions", source = "missions", qualifiedByName = "missionsToIDs")
     public abstract GameDto gameToGameDto(Game game);
 
     public abstract Collection<GameDto> gameToGameDto(Collection<Game> games);
 
     @Mapping(target = "players", ignore = true)
+    @Mapping(target = "missions", ignore = true)
     public abstract Game gameDtoToGame(GameDto dto);
 
     @Named("playersToIDs")
@@ -40,6 +43,14 @@ public abstract class GameMapper {
         return id.stream()
                 .map( i -> playerService.findPlayerById(i))
                 .collect(Collectors.toSet());
+    }
+
+    @Named("missionsToIDs")
+    Set<Integer> missionsToIDs(Set<Mission> source) {
+        if(source == null)
+            return null;
+        return (Set<Integer>) source.stream()
+                .map(Mission::getId).collect(Collectors.toSet());
     }
 
 }

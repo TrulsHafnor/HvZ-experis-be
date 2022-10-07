@@ -17,4 +17,5 @@ public class GameDto {
     private float se_lat;
     private float se_lng;
     private Set<Integer> players;
+    private Set<Integer> missions;
 }
