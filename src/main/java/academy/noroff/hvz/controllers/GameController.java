@@ -62,8 +62,8 @@ public class GameController {
     })
     @GetMapping
     public ResponseEntity getAllGames() {
-        Collection<GameDto> games = gameMapper.gamesToGamesDtos(
-                gameService.finAllGames()
+        Collection<GameDto> games = gameMapper.gameToGameDto(
+                gameService.findAllGames()
         );
         return ResponseEntity.ok(games);
     }
@@ -149,7 +149,7 @@ public class GameController {
     @GetMapping("{id}/players")
     public ResponseEntity getPlayersInGame(@PathVariable int id) {
         Collection<Player> players= gameService.getPlayersInGames(id);
-        Collection<PlayerDto> playerDtos = playerMapper.playersToPlayerDtos(players);
+        Collection<PlayerDto> playerDtos = playerMapper.playerToPlayerDto(players);
         return ResponseEntity.ok(playerDtos);
 
     }

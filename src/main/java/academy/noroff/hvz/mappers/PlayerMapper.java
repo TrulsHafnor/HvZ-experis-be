@@ -18,58 +18,23 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public abstract class PlayerMapper {
-
-    @Autowired
-    protected GameService gameService;
-
+    // MANY TO ONE
     @Autowired
     protected PlayerService playerService;
-
+    @Autowired
+    protected GameService gameService;
 
     @Mapping(target = "game", source = "game.id")
     public abstract PlayerDto playerToPlayerDto(Player player);
 
+    public abstract Collection<PlayerDto> playerToPlayerDto(Collection<Player> player);
 
-    public abstract Collection<PlayerDto> playersToPlayerDtos(Collection<Player> player);
+    @Mapping(target = "game", source = "game", qualifiedByName = "gameToGameIds")
+    public abstract Player playerDtoToPlayer(PlayerDto player);
 
-
-    @Mapping(target = "game", source = "game", qualifiedByName = "gameToIds")
-    public abstract Player playerDtoToPlayer(PlayerDto dto);
-
-    @Named("gameToIds")
-    Game mapIdToGame(int id) {
+    @Named("gameToGameIds")
+    Game mapIdToFranchise(Integer id) {
         return gameService.findGameById(id);
     }
-
-
-  /*
-    public abstract Collection<PlayerDto> playersToPlayerDtos(Collection<Player> player);
-
-
-    @Mapping(target = "game", source = "game", qualifiedByName = "gameToIds")
-    public abstract PlayerDto playerToPlayerDto(Player player);
-
-
-    @Mapping(target = "game", source = "game", qualifiedByName = "gameIdsToGames")
-    public abstract Player playerDtoToPlayer(PlayerDto dto);
-
-
-    @Named("gameToIds")
-    Set<Integer> map(Set<Game> source) {
-        if(source == null)
-            return Collections.emptySet();
-        return source.stream()
-                .map(Game::getId).collect(Collectors.toSet());
-    }
-
-
-    @Named("gameIdsToGames")
-    Set<Game> mapIdsToGames(Set<Integer> id) {
-        return id.stream()
-                .map( i -> gameService.findGameById(i))
-                .collect(Collectors.toSet());
-    }
-
-    */
 
 }

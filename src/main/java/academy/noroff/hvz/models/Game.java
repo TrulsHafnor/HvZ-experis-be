@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -28,8 +29,7 @@ public class Game {
     private float nw_lng;
     private float se_lat;
     private float se_lng;
+
     @OneToMany(mappedBy = "game")
-    private List<Player> players;
-
-
+    private Set<Player> players;
 }

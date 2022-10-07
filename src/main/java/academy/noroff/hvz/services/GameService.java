@@ -24,7 +24,7 @@ public class GameService {
      * Returns list of all games
      * @return
      */
-    public List<Game> finAllGames() {
+    public List<Game> findAllGames() {
         return gameRepository.findAll();
     }
 
@@ -73,6 +73,4 @@ public class GameService {
                 .orElseThrow(()->new GameNotFoundException("Game by id "+ id + " was not found"));
         return game.getPlayers();
     }
-
-
 }
