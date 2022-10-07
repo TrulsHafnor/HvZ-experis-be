@@ -111,11 +111,11 @@ public class PlayerController {
                     description = "Player not found with supplied ID",
                     content = @Content)
     })
-    @PutMapping("player/{id}")
-    public ResponseEntity updatePlayer(@RequestBody PlayerDto playerDto, @PathVariable int id) {
+    @PutMapping("{gameId}/player/{playerId}")
+    public ResponseEntity updatePlayer(@RequestBody PlayerDto playerDto, @PathVariable int gameId, int playerId) {
         // TODO: 10/7/2022 admin only
-        // Validates if body is correct
-        if(id != playerDto.getId())
+        // sjekker om player id som parameter er lik player id i body, og sjekker om game finnes
+        if(playerId != playerDto.getId() || gameId != gameService.findGameById(gameId).getId())
             return ResponseEntity.badRequest().build();
         playerService.updatePlayer(
                 playerMapper.playerDtoToPlayer(playerDto)
