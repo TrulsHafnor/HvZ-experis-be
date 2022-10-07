@@ -5,6 +5,7 @@ import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Mission;
 import academy.noroff.hvz.models.dtos.GameDto;
 import academy.noroff.hvz.models.dtos.MissionDto;
+import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.services.MissionService;
 import academy.noroff.hvz.utils.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,10 +27,12 @@ import java.util.Collection;
 public class MissionController {
     protected MissionMapper missionMapper;
     protected MissionService missionService;
+    protected GameService gameService;
 
-    public MissionController (MissionMapper missionMapper, MissionService missionService){
+    public MissionController (MissionMapper missionMapper, MissionService missionService, GameService gameService){
         this.missionMapper = missionMapper;
         this.missionService = missionService;
+        this.gameService=gameService;
     }
 
     @Operation(summary = "Get a mission by ID")
@@ -78,6 +81,9 @@ public class MissionController {
     })
     @PostMapping
     public ResponseEntity addMission (@RequestBody MissionDto missionDto) {
+        if (missionDto.getGame() != gameService.findGameById(missionDto.getGame()).getId()) {
+            return ResponseEntity.badRequest().build();
+        }
         Mission mission = missionMapper.missionDtoToMission(missionDto);
         missionService.addMission(mission);
         URI location = URI.create("mission/" + mission.getId());
