@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PlayerService {
@@ -30,6 +31,10 @@ public class PlayerService {
     public Player findPlayerById (int id) {
         return playerRepository.findById(id). orElseThrow(
                 () -> new PlayerNotFoundException("Player by id "+ id + " was not found"));
+    }
+
+    public Player findPlayerWhitBiteCode(int gameId, String bitecode) {
+        return playerRepository.findPlayerWhitBiteCode(gameId,bitecode);
     }
 
 

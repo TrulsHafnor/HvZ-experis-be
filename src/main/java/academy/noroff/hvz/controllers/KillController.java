@@ -2,8 +2,10 @@ package academy.noroff.hvz.controllers;
 
 import academy.noroff.hvz.mappers.KillMapper;
 import academy.noroff.hvz.models.Kill;
+import academy.noroff.hvz.models.Mission;
 import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.models.dtos.KillDto;
+import academy.noroff.hvz.models.dtos.MissionDto;
 import academy.noroff.hvz.models.dtos.PlayerDto;
 import academy.noroff.hvz.services.KillService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +17,7 @@ import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.Collection;
 
 @RestController
@@ -48,5 +51,26 @@ public class KillController {
         Collection<Kill> kills = killService.findAllKillsInGame(game_id);
         Collection<KillDto> killDtos = killMapper.killToKillDto(kills);
         return ResponseEntity.ok(killDtos);
+    }
+
+    @Operation(summary = "register a new kill")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Kill created successfully",
+                    content = @Content),
+            @ApiResponse(responseCode = "400",
+                    description = "Malformed request",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
+    })
+    @PostMapping("{game_id}/kill/{biteCode}")
+    public ResponseEntity addKill (@RequestBody KillDto killDto, @PathVariable int game_id, @PathVariable String biteCode) {
+        // TODO: 10/10/2022 if admin u can change anyway 
+        Kill kill = killMapper.killDtoToKill(killDto);
+        if(!killService.createKill(kill,game_id,biteCode)) {
+            return ResponseEntity.badRequest().build();
+        }
+        URI location = URI.create("kill/" + kill.getId());
+        return ResponseEntity.created(location).build();
     }
 }

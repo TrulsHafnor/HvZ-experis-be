@@ -3,6 +3,7 @@ package academy.noroff.hvz.services;
 import academy.noroff.hvz.exeptions.GameNotFoundException;
 import academy.noroff.hvz.exeptions.KillNotFoundException;
 import academy.noroff.hvz.models.Kill;
+import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.repositories.KillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +13,12 @@ import java.util.Collection;
 @Service
 public class KillService {
     private final KillRepository killRepository;
+    private final PlayerService playerService;
 
     @Autowired
-    public KillService (KillRepository killRepository) {
+    public KillService (KillRepository killRepository, PlayerService playerService) {
         this.killRepository = killRepository;
+        this.playerService = playerService;
     }
 
 
@@ -26,6 +29,17 @@ public class KillService {
     public Kill findKillById(int id) {
         return killRepository.findById(id).orElseThrow(
                 () -> new KillNotFoundException("Kill by id "+ id + " was not found"));
+    }
+
+    public boolean createKill(Kill kill, int gameId, String bitecode) {
+        Player player = playerService.findPlayerWhitBiteCode(gameId,bitecode);
+        if (player == null || !player.isHuman()) {
+            return false;
+        }
+        player.setHuman(false);
+        playerService.updatePlayer(player);
+        killRepository.save(kill);
+        return true;
     }
 
 }
