@@ -27,7 +27,11 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("/game")
-@CrossOrigin(origins = "http://localhost:3000") // TODO: 10/7/2022 fix for later (Sondre sec master)
+@CrossOrigin(origins = {
+    "https://hvz-fe-noroff.herokuapp.com/",
+    "http://localhost:3000"   
+    }
+)
 public class MissionController {
     protected MissionMapper missionMapper;
     protected MissionService missionService;
