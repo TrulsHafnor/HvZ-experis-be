@@ -1,5 +1,7 @@
 package academy.noroff.hvz.services;
 
+import academy.noroff.hvz.exeptions.GameNotFoundException;
+import academy.noroff.hvz.exeptions.KillNotFoundException;
 import academy.noroff.hvz.models.Kill;
 import academy.noroff.hvz.repositories.KillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,11 @@ public class KillService {
 
     public Collection<Kill> findAllKillsInGame(int id) {
         return killRepository.findAllKillsInGame(id);
+    }
+
+    public Kill findKillById(int id) {
+        return killRepository.findById(id).orElseThrow(
+                () -> new KillNotFoundException("Kill by id "+ id + " was not found"));
     }
 
 }
