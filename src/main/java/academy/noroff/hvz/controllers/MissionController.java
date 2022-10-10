@@ -63,19 +63,17 @@ public class MissionController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
-    // TODO: 10/7/2022
+
     @GetMapping("{game_id}/mission/{mission_id}/player/{player_id}")
     public ResponseEntity getMissionById(@PathVariable int mission_id, @PathVariable int game_id, @PathVariable int player_id) {
         Mission missionCheck = missionRepository.getMissionInGame(game_id, mission_id);
-        if(!checkMissionType(missionCheck.getMissionVisibility(), player_id)){
-            System.out.println("Jakob1");
+        if(playerService.findPlayerById(player_id).getGame().getId() != game_id || !checkMissionType(missionCheck.getMissionVisibility(), player_id, game_id)){
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
-        System.out.println("Jakob2");
         return ResponseEntity.ok(missionMapper.missionToMissionDto(missionCheck));
     }
 
-    public Boolean checkMissionType(MissionVisibility missionVisibility, int player_id) {
+    public Boolean checkMissionType(MissionVisibility missionVisibility, int player_id, int game_id) {
         if(missionVisibility == MissionVisibility.GLOBAL){
             return true;
         }

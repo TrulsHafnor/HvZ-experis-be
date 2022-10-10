@@ -14,5 +14,18 @@ VALUES ('Hei1',true, 1),
        ('Hei6',false, 3),
        ('Hei7',true, 1);
 -- Mission
---INSERT INTO movie (movie_name,genre,movie_director,movie_picture,movie_trailer, release_year,franchise_id)
+INSERT INTO mission (end_time, mission_description,
+                    mission_lat,mission_lng,
+                    mission_name,mission_visibility,
+                    start_time,game_id)
+values ('02/04/1996','It is time to embrace the Eat', 59.931146,10.756830,'Code Jabo','HUMAN','12:00',1),
+       ('02/04/1999','It is time to embrace the Eat', 59.931146,10.756830,'Code Babor','HUMAN','12:00',2),
+       ('14/12/1995','Eat the beans', 59.933545,10.763886,'Code Truls','ZOMBIE','12:00',1),
+       ('14/12/1992','Eat the brains', 59.933545,10.763886,'Code Trults','ZOMBIE','12:00',2),
+       ('24/06/2020','Delve into the drakness', 59.936418,10.783266,'Code Carl','GLOBAL','12:00',1),
+       ('24/06/2020','Delve into the drakness', 59.936418,10.783266,'Code Zarl','GLOBAL','12:00',2),
+       ('04/02/2022','Very cool misison', 59.938316,10.800220,'Code SKULLS','HUMAN','12:00',3),
+       ('04/02/2022','Very cool misison', 59.938316,10.800220,'Code PULS','GLOBAL','12:00',3),
+       ('04/02/2022','Very cool misison', 59.938316,10.800220,'Code SNULS','ZOMBIE','12:00',3);
+
 
