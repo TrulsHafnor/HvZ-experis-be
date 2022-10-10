@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MissionDto {
-    private int missionId;
+    private int id;
     private String missionName;
     private MissionVisibility missionVisibility;
     private String missionDescription;

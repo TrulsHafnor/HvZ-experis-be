@@ -33,7 +33,7 @@ public abstract class PlayerMapper {
     public abstract Player playerDtoToPlayer(PlayerDto player);
 
     @Named("gameToGameIds")
-    Game mapIdToFranchise(Integer id) {
+    Game mapIdToGame(Integer id) {
         return gameService.findGameById(id);
     }
 

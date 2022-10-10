@@ -1,6 +1,7 @@
 package academy.noroff.hvz.services;
 
 import academy.noroff.hvz.enums.MissionVisibility;
+import academy.noroff.hvz.exeptions.GameNotFoundException;
 import academy.noroff.hvz.exeptions.MissionNotFoundException;
 import academy.noroff.hvz.models.Mission;
 import academy.noroff.hvz.repositories.GameRepository;
@@ -8,7 +9,6 @@ import academy.noroff.hvz.repositories.MissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -27,7 +27,7 @@ public class MissionService {
      * @return
      */
     public Set<Mission> findAllMissions(int gameId, MissionVisibility faction) {
-        return missionRepository.getVisibilityOfMission(gameId, faction);
+        return missionRepository.getVisibilityOfMission(gameId, faction.toString());
     }
 
     /**
@@ -36,9 +36,9 @@ public class MissionService {
      * @param missionId
      * @return
      */
-    public Mission findMissionById (int gameId, int missionId) {
-        Mission mission = missionRepository.getMissionInGame(gameId, missionId);
-        return mission;
+    public Mission findMissionById (int missionId) {
+        return missionRepository.findById(missionId).orElseThrow(
+                () -> new MissionNotFoundException("Mission by id "+ missionId + " was not found"));
     }
 
     /**

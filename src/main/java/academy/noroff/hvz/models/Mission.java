@@ -13,15 +13,13 @@ import javax.validation.constraints.NotNull;
 public class Mission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "mission_id", nullable = false)
+    @Column(name = "mission_id")
     private int id;
-
     @NotNull
     @Column(length = 50, nullable = false)
     private String missionName;
     @Enumerated(EnumType.STRING)
     private MissionVisibility missionVisibility;
-
     private String missionDescription;
 
     // TODO: 10/7/2022 Needs to be revised

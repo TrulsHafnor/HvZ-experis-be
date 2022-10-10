@@ -34,7 +34,7 @@ public class GameService {
      * @return
      */
     public Game findGameById (int id) {
-        return gameRepository.findById(id). orElseThrow(
+        return gameRepository.findById(id).orElseThrow(
                 () -> new GameNotFoundException("Game by id "+ id + " was not found"));
     }
 
