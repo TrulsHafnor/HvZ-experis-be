@@ -7,9 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.Collection;
 import java.util.Set;
 
 @Repository
@@ -20,4 +18,6 @@ public interface MissionRepository extends JpaRepository<Mission,Integer> {
     @Query(value = "SELECT * FROM Mission m where m.game_id = :gameId AND m.mission_visibility = :missionVisibility or m.mission_visibility ='GLOBAL'", nativeQuery = true)
     Set<Mission> getVisibilityOfMission(@Param("gameId") Integer gameId, @Param("missionVisibility") String missionVisibility);
 
+    @Query(value = "SELECT * FROM Mission m where m.game_id = :gameId AND m.mission_visibility = :missionVisibility or m.mission_visibility ='GLOBAL'", nativeQuery = true)
+    Mission getVisibilityOfASingularMission(@Param("gameId") Integer gameId, @Param("missionVisibility") String missionVisibility);
 }
