@@ -1,36 +1,30 @@
 package academy.noroff.hvz.mappers;
 
 import academy.noroff.hvz.models.Game;
-import academy.noroff.hvz.models.Player;
-import academy.noroff.hvz.models.dtos.GameDto;
-import academy.noroff.hvz.models.dtos.PlayerDto;
+import academy.noroff.hvz.models.Mission;
+import academy.noroff.hvz.models.dtos.MissionDto;
 import academy.noroff.hvz.services.GameService;
-import academy.noroff.hvz.services.PlayerService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
-public abstract class PlayerMapper {
-    // MANY TO ONE
-    @Autowired
-    protected PlayerService playerService;
+public abstract class MissionMapper {
+    // Many to one
+
     @Autowired
     protected GameService gameService;
 
     @Mapping(target = "game", source = "game.id")
-    public abstract PlayerDto playerToPlayerDto(Player player);
+    public abstract MissionDto missionToMissionDto(Mission mission);
 
-    public abstract Collection<PlayerDto> playerToPlayerDto(Collection<Player> player);
+    public abstract Collection<MissionDto> missionToMissionDto(Collection<Mission> missions);
 
     @Mapping(target = "game", source = "game", qualifiedByName = "gameToGameIds")
-    public abstract Player playerDtoToPlayer(PlayerDto player);
+    public abstract Mission missionDtoToMission(MissionDto dto);
 
     @Named("gameToGameIds")
     Game mapIdToGame(Integer id) {
