@@ -1,9 +1,11 @@
 package academy.noroff.hvz.mappers;
 
 import academy.noroff.hvz.models.Game;
+import academy.noroff.hvz.models.Kill;
 import academy.noroff.hvz.models.Mission;
 import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.models.dtos.GameDto;
+import academy.noroff.hvz.services.KillService;
 import academy.noroff.hvz.services.MissionService;
 import academy.noroff.hvz.services.PlayerService;
 import org.mapstruct.Mapper;
@@ -23,15 +25,19 @@ public abstract class GameMapper {
     protected PlayerService playerService;
     @Autowired
     protected MissionService missionService;
+    @Autowired
+    protected KillService killService;
 
     @Mapping(target = "players", source = "players", qualifiedByName = "playersToIDs")
     @Mapping(target = "missions", source = "missions", qualifiedByName = "missionsToIDs")
+    @Mapping(target = "kills", source = "kills", qualifiedByName = "killsToIDs")
     public abstract GameDto gameToGameDto(Game game);
 
     public abstract Collection<GameDto> gameToGameDto(Collection<Game> games);
 
     @Mapping(target = "players", ignore = true)
     @Mapping(target = "missions", ignore = true)
+    @Mapping(target = "kills", ignore = true)
     public abstract Game gameDtoToGame(GameDto dto);
 
     @Named("playersToIDs")
@@ -62,6 +68,21 @@ public abstract class GameMapper {
             return Collections.emptySet();
         return source.stream()
                 .map(Mission::getId).collect(Collectors.toSet());
+    }
+
+    @Named("killIdsToKills")
+    Set<Kill> mapIdsToKills(Set<Integer> id) {
+        return id.stream()
+                .map( i -> killService.findKillById(i))
+                .collect(Collectors.toSet());
+    }
+
+    @Named("killsToIDs")
+    Set<Integer> killsToIDs(Set<Kill> source) {
+        if(source == null)
+            return Collections.emptySet();
+        return source.stream()
+                .map(Kill::getId).collect(Collectors.toSet());
     }
 
 }
