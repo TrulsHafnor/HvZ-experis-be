@@ -15,12 +15,13 @@ import java.util.Date;
 public class Kill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "game_id",insertable=false)
+    @Column(name = "kill_id")
     private int id;
     @Setter(AccessLevel.NONE)
     private String timeOfDeath;
     private float lat;
     private float lng;
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
