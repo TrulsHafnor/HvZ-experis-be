@@ -20,4 +20,5 @@ public interface MissionRepository extends JpaRepository<Mission,Integer> {
 
     @Query(value = "SELECT * FROM Mission m where m.game_id = :gameId AND m.mission_visibility = :missionVisibility or m.mission_visibility ='GLOBAL'", nativeQuery = true)
     Mission getVisibilityOfASingularMission(@Param("gameId") Integer gameId, @Param("missionVisibility") String missionVisibility);
+
 }

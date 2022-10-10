@@ -135,6 +135,12 @@ public class MissionController {
                             @Content(
                                     mediaType = "application/json",
                                     array = @ArraySchema(schema = @Schema(implementation = MissionDto.class))) }),
+            @ApiResponse(responseCode = "403",
+                    description = "Mission does not exist in this game",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ApiErrorResponse.class)) }),
             @ApiResponse(responseCode = "404",
                     description = "Mission does not exist with supplied ID",
                     content = {
@@ -144,13 +150,16 @@ public class MissionController {
     })
 
     @DeleteMapping("{game_id}/mission/{mission_id}")
-    public ResponseEntity deleteMission (@PathVariable("missionId") int missionId) {
-        missionService.deleteMission(missionId);
+    public ResponseEntity deleteMission (@PathVariable int mission_id, @PathVariable int game_id) {
+        // TODO: 10/10/2022 Admin only
+        Mission tempMission = missionRepository.getMissionInGame(game_id, mission_id);
+        if(tempMission == null){
+            return ResponseEntity.badRequest().build();
+        }
+        missionService.deleteMission(mission_id, game_id);
         return ResponseEntity.noContent().build();
     }
 
-
-    /*
     @Operation(summary = "Update a mission by ID")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "204",
@@ -165,15 +174,14 @@ public class MissionController {
                     content = @Content)
     })
     @PutMapping("{game_id}/mission/{mission_id}")
-    public ResponseEntity updateMission(@RequestBody MissionDto missionDto, @PathVariable int missionId) {
+    public ResponseEntity updateMission(@RequestBody MissionDto missionDto, @PathVariable int mission_id, @PathVariable int game_id) {
         // Validates if body is correct
-        if(missionId != missionDto.getMissionId())
+        if(mission_id != missionDto.getId())
             return ResponseEntity.badRequest().build();
         missionService.updateMission(
                 missionMapper.missionDtoToMission(missionDto)
         );
         return ResponseEntity.noContent().build();
     }
-    */
 
 }
