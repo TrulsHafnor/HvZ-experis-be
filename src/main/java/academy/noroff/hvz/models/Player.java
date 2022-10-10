@@ -32,8 +32,8 @@ public class Player {
     }
 
     private String generateBitCode() {
-        int leftLimit = 48; // numeral '0'
-        int rightLimit = 122; // letter 'z'
+        int leftLimit = 48;
+        int rightLimit = 122;
         int targetStringLength = 5;
         Random random = new Random();
 
