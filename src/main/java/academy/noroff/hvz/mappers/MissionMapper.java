@@ -1,10 +1,12 @@
 package academy.noroff.hvz.mappers;
 
+import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Mission;
 import academy.noroff.hvz.models.dtos.MissionDto;
 import academy.noroff.hvz.services.GameService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
@@ -21,7 +23,12 @@ public abstract class MissionMapper {
 
     public abstract Collection<MissionDto> missionToMissionDto(Collection<Mission> missions);
 
-    @Mapping(target = "game", ignore = true)
+    @Mapping(target = "game", source = "game", qualifiedByName = "gameToGameIds")
     public abstract Mission missionDtoToMission(MissionDto dto);
+
+    @Named("gameToGameIds")
+    Game mapIdToGame(Integer id) {
+        return gameService.findGameById(id);
+    }
 
 }

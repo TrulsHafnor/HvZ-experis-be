@@ -34,7 +34,7 @@ public class MissionController {
         this.missionService = missionService;
         this.gameService=gameService;
     }
-
+    /*
     @Operation(summary = "Get a mission by ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
@@ -51,23 +51,23 @@ public class MissionController {
     public ResponseEntity getMissionById(@PathVariable int missionId, int gameId) {
         return ResponseEntity.ok(missionMapper.missionToMissionDto(missionService.findMissionById(missionId, gameId)));
     }
+     */
 
     @Operation(summary = "Get all missions")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Game.class)) }),
+                            schema = @Schema(implementation = Mission.class)) }),
             @ApiResponse(responseCode = "404",
                     description = "Can't find missions",
                     content = @Content)
     })
     @GetMapping("{game_id}/mission/{missionType}")
-    public ResponseEntity getAllMissions(@PathVariable int game_id, MissionVisibility missionType) {
+    public ResponseEntity getAllMissions(@PathVariable int game_id,  @PathVariable MissionVisibility missionType) {
         Collection<MissionDto> missions = missionMapper.missionToMissionDto(
                 missionService.findAllMissions(game_id, missionType)
         );
-
         return ResponseEntity.ok(missions);
     }
 
@@ -92,6 +92,8 @@ public class MissionController {
         return ResponseEntity.created(location).build();
     }
 
+
+    /*
     @Operation(summary = "Delete a mission by ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
@@ -107,13 +109,18 @@ public class MissionController {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
+    */
 
+    /*
     @DeleteMapping("{game_id}/mission/{mission_id}")
     public ResponseEntity deleteMission (@PathVariable("missionId") int missionId) {
         missionService.deleteMission(missionId);
         return ResponseEntity.noContent().build();
     }
+    */
 
+
+    /*
     @Operation(summary = "Update a mission by ID")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "204",
@@ -137,5 +144,6 @@ public class MissionController {
         );
         return ResponseEntity.noContent().build();
     }
+    */
 
 }
