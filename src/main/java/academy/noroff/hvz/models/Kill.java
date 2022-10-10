@@ -1,0 +1,33 @@
+package academy.noroff.hvz.models;
+
+import com.sun.istack.NotNull;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+@Entity
+@Getter
+@Setter
+public class Kill {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "game_id",insertable=false)
+    private int id;
+    @Setter(AccessLevel.NONE)
+    private String timeOfDeath;
+    private float lat;
+    private float lng;
+    @ManyToOne
+    @JoinColumn(name = "game_id")
+    private Game game;
+
+    public void setTimeOfDeath() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date date = new Date();
+        this.timeOfDeath = formatter.format(date);
+    }
+}
