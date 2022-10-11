@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Random;
+import java.util.Set;
 
 @Entity
 @Setter
@@ -25,7 +26,10 @@ public class Player {
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
-
+    @OneToMany(mappedBy = "player")
+    private Set<Kill> kills;
+    @OneToOne(mappedBy = "kill")
+    private Kill death;
     public void setBiteCode(String biteCode) {
         this.biteCode = generateBitCode();
     }
