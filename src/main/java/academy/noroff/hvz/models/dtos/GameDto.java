@@ -12,6 +12,7 @@ public class GameDto {
     private int id;
     private String gameTitle;
     private GameState gameState;
+    private String gameDescription;
     private float nw_lat;
     private float nw_lng;
     private float se_lat;

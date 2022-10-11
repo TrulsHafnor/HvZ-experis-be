@@ -73,4 +73,9 @@ public class MissionService {
         // TODO: 10/7/2022 ADMIN ONLY
         missionRepository.deleteById(missionId);
     }
+
+    public Mission getMissionInGame(int game_id, int mission_id) {
+        return missionRepository.getMissionInGame(game_id, mission_id).orElseThrow(
+                () -> new MissionNotFoundException("Cant find mission by id "+ mission_id + " ing game " + game_id));
+    }
 }

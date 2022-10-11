@@ -20,6 +20,7 @@ public class Mission {
     private String missionName;
     @Enumerated(EnumType.STRING)
     private MissionVisibility missionVisibility;
+    @Column(length = 250)
     private String missionDescription;
 
     // TODO: 10/7/2022 Needs to be revised

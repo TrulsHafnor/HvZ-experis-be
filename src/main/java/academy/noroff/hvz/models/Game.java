@@ -4,6 +4,7 @@ import academy.noroff.hvz.enums.GameState;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,9 +23,12 @@ public class Game {
     @NotNull
     @Column(length = 50, nullable = false)
     private String gameTitle;
+    @Setter(AccessLevel.NONE)
     @NotNull
     @Enumerated(EnumType.STRING)
     private GameState gameState;
+    @Column(length = 250)
+    private String gameDescription;
     private float nw_lat;
     private float nw_lng;
     private float se_lat;
@@ -35,4 +39,8 @@ public class Game {
 
     @OneToMany(mappedBy = "game")
     private Set<Mission> missions;
+
+    public void setGameState(GameState gameState) {
+        this.gameState = GameState.REGISTRATION;
+    }
 }

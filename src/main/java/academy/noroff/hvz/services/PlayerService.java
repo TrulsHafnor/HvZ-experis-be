@@ -48,7 +48,9 @@ public class PlayerService {
      * @return
      */
     public Player findPlayerInGame(int gameId, int playerId) {
-        return playerRepository.getPlayerInGame(gameId, playerId);
+        return playerRepository.getPlayerInGame(gameId, playerId). orElseThrow(
+                () -> new PlayerNotFoundException("Cant find player by id "+ playerId + " ing game by id" + gameId));
+
     }
 
     /**
