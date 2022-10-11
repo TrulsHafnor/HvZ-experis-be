@@ -1,10 +1,10 @@
 package academy.noroff.hvz.controllers;
 
+import academy.noroff.hvz.enums.GameState;
 import academy.noroff.hvz.mappers.GameMapper;
 import academy.noroff.hvz.mappers.PlayerMapper;
 import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Player;
-import academy.noroff.hvz.models.dtos.GameDto;
 import academy.noroff.hvz.models.dtos.PlayerDto;
 import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.services.PlayerService;
@@ -85,7 +85,7 @@ public class PlayerController {
     }
 
     // TODO: 10/7/2022 Hjelpemetode for testing kan endresog slettes ved behov
-    @Operation(summary = "Add user")
+    @Operation(summary = "Add player to game")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "201",
                     description = "Player successfully created",
@@ -97,8 +97,12 @@ public class PlayerController {
     })
     @PostMapping("player")
     public ResponseEntity addGame (@RequestBody PlayerDto playerDto) {
+        Game tempGame = gameService.findGameById(playerDto.getGame());
+        if (tempGame.getGameState() != GameState.REGISTRATION) {
+            return ResponseEntity.badRequest().build();
+        }
         Player player = playerMapper.playerDtoToPlayer(playerDto);
-        playerService.addPlayer(player);
+        playerService.addPlayerToGame(player);
         URI location = URI.create("game/player" + player.getId());
         return ResponseEntity.created(location).build();
     }

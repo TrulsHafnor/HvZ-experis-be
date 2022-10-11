@@ -1,10 +1,12 @@
 package academy.noroff.hvz.services;
 
 
+import academy.noroff.hvz.enums.GameState;
 import academy.noroff.hvz.exeptions.GameNotFoundException;
 import academy.noroff.hvz.exeptions.PlayerNotFoundException;
 import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Player;
+import academy.noroff.hvz.repositories.GameRepository;
 import academy.noroff.hvz.repositories.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,7 +60,7 @@ public class PlayerService {
      * @param player
      * @return
      */
-    public Player addPlayer (Player player) {
+    public Player addPlayerToGame (Player player) {
         if (playerRepository.checkIfBiteCodeExists(player.getBiteCode(), player.getGame().getId()) !=0) {
             do {
                 player.setBiteCode("holderValue");
