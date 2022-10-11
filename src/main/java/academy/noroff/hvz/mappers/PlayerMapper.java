@@ -30,7 +30,7 @@ public abstract class PlayerMapper {
     protected KillService killService;
 
     @Mapping(target = "kills", source = "kills", qualifiedByName = "killsToIDs")
-    @Mapping(target = "death", source = "death", qualifiedByName = "deathToDeathIds")
+    @Mapping(target = "death", source = "death.id")
     @Mapping(target = "game", source = "game.id")
     public abstract PlayerDto playerToPlayerDto(Player player);
 
@@ -46,10 +46,18 @@ public abstract class PlayerMapper {
         return gameService.findGameById(id);
     }
 
-    @Named("deathToDeathIds")
-    Player deathToDeathIds(Integer id) {
+   @Named("deathToDeathIds")
+    Player mapToDeathIds(Integer id) {
         return playerService.findPlayerById(id);
     }
+    @Named("killsToIDs")
+    Set<Integer> mapKillsToIds(Set<Kill> source) {
+        if(source == null)
+            return Collections.emptySet();
+        return source.stream()
+                .map(Kill::getId).collect(Collectors.toSet());
+    }
+
 
     /*
     @Named("deathToDeathIds")
@@ -72,13 +80,6 @@ public abstract class PlayerMapper {
                 .collect(Collectors.toSet());
     }
     */
-    @Named("killsToIDs")
-    Set<Integer> killsToIDs(Set<Kill> source) {
-        if(source == null)
-            return Collections.emptySet();
-        return source.stream()
-                .map(Kill::getId).collect(Collectors.toSet());
-    }
 
 
 
