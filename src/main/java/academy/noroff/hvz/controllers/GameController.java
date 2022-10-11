@@ -26,7 +26,7 @@ import java.util.Collection;
 // TODO: 10/7/2022 fix for later (Sondre sec master) 
 @CrossOrigin(origins = {
     "https://hvz-fe-noroff.herokuapp.com/",
-    "http://localhost:3000"   
+    "http://localhost:3000"
     }
 )
 public class GameController {
@@ -51,7 +51,8 @@ public class GameController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity getGameById(@PathVariable("id") int id) {
         return ResponseEntity.ok(gameMapper.gameToGameDto(gameService.findGameById(id)));
     }
