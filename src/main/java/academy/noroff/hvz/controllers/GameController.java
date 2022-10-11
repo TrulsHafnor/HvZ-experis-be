@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -24,7 +25,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/game")
 // TODO: 10/7/2022 fix for later (Sondre sec master) 
-@CrossOrigin(origins = "https://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 public class GameController {
     private final GameService gameService;
     private final GameMapper gameMapper;
@@ -47,7 +48,8 @@ public class GameController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity getGameById(@PathVariable("id") int id) {
         return ResponseEntity.ok(gameMapper.gameToGameDto(gameService.findGameById(id)));
     }
@@ -63,6 +65,7 @@ public class GameController {
                     content = @Content)
     })
     @GetMapping
+    @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity getAllGames() {
         Collection<GameDto> games = gameMapper.gameToGameDto(
                 gameService.findAllGames()
