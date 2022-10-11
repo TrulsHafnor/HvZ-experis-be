@@ -70,7 +70,7 @@ public class MissionController {
 
     @GetMapping("{game_id}/mission/{mission_id}/player/{player_id}")
     public ResponseEntity getMissionById(@PathVariable int mission_id, @PathVariable int game_id, @PathVariable int player_id) {
-        Mission missionCheck = missionRepository.getMissionInGame(game_id, mission_id);
+        Mission missionCheck = missionService.getMissionInGame(game_id, mission_id);
         if(playerService.findPlayerById(player_id).getGame().getId() != game_id || !checkMissionType(missionCheck.getMissionVisibility(), player_id, game_id)){
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
@@ -154,7 +154,7 @@ public class MissionController {
     @DeleteMapping("{game_id}/mission/{mission_id}")
     public ResponseEntity deleteMission (@PathVariable int mission_id, @PathVariable int game_id) {
         // TODO: 10/10/2022 Admin only
-        Mission tempMission = missionRepository.getMissionInGame(game_id, mission_id);
+        Mission tempMission = missionService.getMissionInGame(game_id, mission_id);
         if(tempMission == null){
             return ResponseEntity.badRequest().build();
         }
