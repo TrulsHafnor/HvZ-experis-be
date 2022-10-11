@@ -1,5 +1,6 @@
 package academy.noroff.hvz.models.dtos;
 
+import academy.noroff.hvz.models.Kill;
 import academy.noroff.hvz.models.Player;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,5 +15,5 @@ public class KillDto {
     private float lng;
     private int game;
     private int playerKiller;
-    private int playerVictim;
+    private int playerDeath;
 }

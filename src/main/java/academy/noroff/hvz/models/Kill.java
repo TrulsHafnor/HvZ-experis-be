@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -25,14 +26,16 @@ public class Kill {
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
+
     //killer
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "player_id")
+    @JoinColumn(name = "kills_id")
     private Player playerKiller;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "player_id", referencedColumnName = "id")
-    private Player playerVictim;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "playerDeath_id")
+    private Player playerDeath;
 
 
     public void setTimeOfDeath(String timeOfDeath) {

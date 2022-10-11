@@ -27,29 +27,29 @@ public abstract class KillMapper {
     protected PlayerService playerService;
 
     @Mapping(target = "game", source = "game.id")
-    @Mapping(target = "player", source = "player.id")
-    //@Mapping(target = "death", source = "death.id")
+    @Mapping(target = "playerKiller", source = "playerKiller.id")
+    @Mapping(target = "playerDeath", source = "playerDeath.id")
     public abstract KillDto killToKillDto(Kill kill);
 
     public abstract Collection<KillDto> killToKillDto(Collection<Kill> kill);
 
-    @Mapping(target = "game", source = "game", qualifiedByName = "gameToGameIds")
-    @Mapping(target = "playerKiller", source = "playerKiller", qualifiedByName = "playerToPlayerIds")
-    @Mapping(target = "death", source = "death", qualifiedByName = "deathToDeathIds")
+    @Mapping(target = "game", source = "game", qualifiedByName = "killToKillIds")
+    @Mapping(target = "playerKiller", source = "playerKiller", qualifiedByName = "playerKillerToPlayerKillerIds")
+    @Mapping(target = "playerDeath", source = "playerDeath", qualifiedByName = "deathToDeathIds")
     public abstract Kill killDtoToKill(KillDto kill);
 
-    @Named("gameToGameIds")
+    @Named("killToKillIds")
     Game mapIdToGame(Integer id) {
         return gameService.findGameById(id);
     }
 
-    @Named("playerToPlayerIds")
+    @Named("playerKillerToPlayerKillerIds")
     Player mapIdToPlayer(Integer id) {
         return playerService.findPlayerById(id);
     }
 
     @Named("deathToDeathIds")
-    Player mapIdToDeath(Integer id) {
+    Player deathToDeathIds(Integer id) {
         return playerService.findPlayerById(id);
     }
 }

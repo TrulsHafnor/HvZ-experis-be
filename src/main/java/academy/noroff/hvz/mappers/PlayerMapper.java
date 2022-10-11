@@ -2,6 +2,7 @@ package academy.noroff.hvz.mappers;
 
 import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Kill;
+import academy.noroff.hvz.models.Mission;
 import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.models.dtos.GameDto;
 import academy.noroff.hvz.models.dtos.PlayerDto;
@@ -37,7 +38,7 @@ public abstract class PlayerMapper {
 
     @Mapping(target = "game", source = "game", qualifiedByName = "gameToGameIds")
     @Mapping(target = "kills", ignore = true)
-    @Mapping(target = "death", source = "death", qualifiedByName = "deathToDeathIds")
+    @Mapping(target = "death", ignore = true)
     public abstract Player playerDtoToPlayer(PlayerDto player);
 
     @Named("gameToGameIds")
@@ -46,15 +47,31 @@ public abstract class PlayerMapper {
     }
 
     @Named("deathToDeathIds")
-    Kill mapIdToDeath(Integer id) {return killService.findKillById(id);}
+    Player deathToDeathIds(Integer id) {
+        return playerService.findPlayerById(id);
+    }
 
+    /*
+    @Named("deathToDeathIds")
+    Set<Integer> deathToDeathIds(Set<Kill> source) {
+        if(source == null)
+            return Collections.emptySet();
+        return source.stream()
+                .map(Kill::getId).collect(Collectors.toSet());
+    }
+    @Named("deathIdsToDeaths")
+    Set<Kill> deathIdsToDeaths(Set<Integer> id) {
+        return id.stream()
+                .map( i -> killService.findKillById(i))
+                .collect(Collectors.toSet());
+    }
     @Named("killIdsToKills")
     Set<Kill> mapIdsToKills(Set<Integer> id) {
         return id.stream()
                 .map( i -> killService.findKillById(i))
                 .collect(Collectors.toSet());
     }
-
+    */
     @Named("killsToIDs")
     Set<Integer> killsToIDs(Set<Kill> source) {
         if(source == null)
@@ -62,5 +79,7 @@ public abstract class PlayerMapper {
         return source.stream()
                 .map(Kill::getId).collect(Collectors.toSet());
     }
+
+
 
 }
