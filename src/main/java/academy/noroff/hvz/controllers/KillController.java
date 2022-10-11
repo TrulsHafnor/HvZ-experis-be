@@ -93,7 +93,7 @@ public class KillController {
         return ResponseEntity.ok(killMapper.killToKillDto(killService.findKillInGameById(game_id,kill_id)));
         //gameMapper.gameToGameDto(gameService.findGameById(id))
     }
-
+    /*
     @Operation(summary = "Delete a kill by ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
@@ -115,6 +115,7 @@ public class KillController {
         killService.deleteKill(id);
         return ResponseEntity.noContent().build();
     }
+     */
 
     @Operation(summary = "Update a kill by ID")
     @ApiResponses( value = {
