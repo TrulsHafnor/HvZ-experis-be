@@ -31,6 +31,11 @@ public class KillService {
                 () -> new KillNotFoundException("Kill by id "+ id + " was not found"));
     }
 
+    public Kill findKillInGameById(int gameId, int killId) {
+        return killRepository.findKillInGameById(gameId, killId).orElseThrow(
+                () -> new KillNotFoundException("Kill by id "+ killId + " was not found"));
+    }
+
     public boolean createKill(Kill kill, int gameId, String bitecode) {
         Player player = playerService.findPlayerWhitBiteCode(gameId,bitecode);
         if (player == null || !player.isHuman()) {
@@ -40,6 +45,15 @@ public class KillService {
         playerService.updatePlayer(player);
         killRepository.save(kill);
         return true;
+    }
+
+    public void deleteKill(int id) {
+        // TODO: 10/5/2022 Cascade delete (Drøyer denne til vi har mer fyll i applikasjonen)
+        killRepository.deleteById(id);
+    }
+
+    public Kill updateKill (Kill kill) {
+        return killRepository.save(kill);
     }
 
 }

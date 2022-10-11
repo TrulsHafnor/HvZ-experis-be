@@ -108,7 +108,6 @@ public class GameController {
     public ResponseEntity deleteGame (@PathVariable("id") int id) {
         gameService.deleteGame(id);
         return ResponseEntity.noContent().build();
-
     }
 
     @Operation(summary = "Update a game by ID")
