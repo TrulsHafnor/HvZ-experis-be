@@ -2,7 +2,9 @@ package academy.noroff.hvz.services;
 
 import academy.noroff.hvz.exeptions.GameNotFoundException;
 import academy.noroff.hvz.exeptions.KillNotFoundException;
+import academy.noroff.hvz.exeptions.MissionNotFoundException;
 import academy.noroff.hvz.models.Kill;
+import academy.noroff.hvz.models.Mission;
 import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.repositories.KillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,19 +51,13 @@ public class KillService {
         return true;
     }
 
-    public boolean deleteKill(int game_id, int kill_id) {
-        // TODO: 10/5/2022 Cascade delete (Drøyer denne til vi har mer fyll i applikasjonen)
-        Kill kill = findKillById(kill_id);
-        if (kill.getGame().getId() != game_id) {
-            return false;
-        }
-        //find player that is dead
+    public void deleteKill(int kill_id) {
+        //find player that is dead and updates values
         Player player = setPlayerValuesAfterDelete(findKillById(kill_id).getPlayerDeath());
         //delete kill
         killRepository.deleteById(kill_id);
         //update player to alive
         playerService.updatePlayer(player);
-        return true;
     }
 
     private Player setPlayerValuesAfterDelete(Player player) {
@@ -76,6 +72,11 @@ public class KillService {
 
     public Kill updateKill (Kill kill) {
         return killRepository.save(kill);
+    }
+
+    public Kill getKillInGame(int game_id, int kill_id) {
+        return killRepository.findKillInGameById(game_id, kill_id).orElseThrow(
+                () -> new KillNotFoundException("Cant find mission by id "+ kill_id + " ing game " + game_id));
     }
 
 }

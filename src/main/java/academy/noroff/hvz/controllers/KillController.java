@@ -117,9 +117,11 @@ public class KillController {
     @DeleteMapping("{game_id}/kill/{kill_id}")
     public ResponseEntity deleteKill (@PathVariable int game_id,@PathVariable int kill_id) {
         // TODO: 10/11/2022 admin only
-        boolean response = killService.deleteKill(game_id,kill_id);
-        if (!response)
-            return ResponseEntity.badRequest().build();
+        Kill tempKill = killService.getKillInGame(game_id, kill_id);
+        if(tempKill == null){
+            return ResponseEntity.notFound().build();
+        }
+        killService.deleteKill(kill_id);
         return ResponseEntity.noContent().build();
     }
 

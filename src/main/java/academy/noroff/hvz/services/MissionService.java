@@ -69,7 +69,7 @@ public class MissionService {
      * Should only be accessed by Admin
      * @param missionId
      */
-    public void deleteMission(int missionId, int game_id) {
+    public void deleteMission(int missionId) {
         // TODO: 10/7/2022 ADMIN ONLY
         missionRepository.deleteById(missionId);
     }
