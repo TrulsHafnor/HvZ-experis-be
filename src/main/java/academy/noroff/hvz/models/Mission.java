@@ -26,10 +26,8 @@ public class Mission {
     // TODO: 10/7/2022 Needs to be revised
     private String startTime;
     private String endTime;
-
     private float missionLat;
     private float missionLng;
-
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;

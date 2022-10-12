@@ -19,4 +19,5 @@ public class GameDto {
     private float se_lng;
     private Set<Integer> players;
     private Set<Integer> missions;
+    private Set<Integer> kills;
 }

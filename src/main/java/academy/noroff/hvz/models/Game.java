@@ -38,6 +38,9 @@ public class Game {
     private Set<Player> players;
 
     @OneToMany(mappedBy = "game")
+    private Set<Kill> kills;
+
+    @OneToMany(mappedBy = "game")
     private Set<Mission> missions;
 
     public void setGameState(GameState gameState) {

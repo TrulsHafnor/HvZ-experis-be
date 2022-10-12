@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Random;
+import java.util.Set;
 
 @Entity
 @Setter
@@ -26,14 +27,21 @@ public class Player {
     @JoinColumn(name = "game_id")
     private Game game;
 
+    @NotNull
+    @OneToMany(mappedBy = "playerKiller")
+    private Set<Kill> kills;
+
+    @OneToOne(mappedBy = "playerDeath", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY, optional = false)
+    private Kill death;
 
     public void setBiteCode(String biteCode) {
         this.biteCode = generateBitCode();
     }
 
     private String generateBitCode() {
-        int leftLimit = 48; // numeral '0'
-        int rightLimit = 122; // letter 'z'
+        int leftLimit = 48;
+        int rightLimit = 122;
         int targetStringLength = 5;
         Random random = new Random();
 

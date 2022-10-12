@@ -29,8 +29,7 @@ import java.util.Collection;
 @RequestMapping("/game")
 @CrossOrigin(origins = {
     "https://hvz-fe-noroff.herokuapp.com/",
-    "http://localhost:3000",
-    "https://humansandzombiesexperiss.herokuapp.com/"
+    "http://localhost:3000"
     }
 )
 public class MissionController {
@@ -145,7 +144,7 @@ public class MissionController {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ApiErrorResponse.class)) }),
             @ApiResponse(responseCode = "404",
-                    description = "Mission does not exist with supplied ID",
+                    description = "Mission does not exist with supplied ID in game",
                     content = {
                             @Content(
                                     mediaType = "application/json",
@@ -157,7 +156,7 @@ public class MissionController {
         // TODO: 10/10/2022 Admin only
         Mission tempMission = missionService.getMissionInGame(game_id, mission_id);
         if(tempMission == null){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
         missionService.deleteMission(mission_id, game_id);
         return ResponseEntity.noContent().build();
