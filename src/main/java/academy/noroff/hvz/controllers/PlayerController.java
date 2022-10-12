@@ -96,7 +96,7 @@ public class PlayerController {
                             schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
     })
     @PostMapping("player")
-    public ResponseEntity addGame (@RequestBody PlayerDto playerDto) {
+    public ResponseEntity addPlayer (@RequestBody PlayerDto playerDto) {
         Game tempGame = gameService.findGameById(playerDto.getGame());
         if (tempGame.getGameState() != GameState.REGISTRATION) {
             return ResponseEntity.badRequest().build();

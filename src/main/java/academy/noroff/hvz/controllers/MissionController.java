@@ -90,7 +90,7 @@ public class MissionController {
         return false;
     }
 
-    @Operation(summary = "Get all missions")
+    @Operation(summary = "Get all missions in game")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
@@ -100,10 +100,10 @@ public class MissionController {
                     description = "Can't find missions",
                     content = @Content)
     })
-    @GetMapping("{game_id}/mission/{missionType}")
-    public ResponseEntity getAllMissions(@PathVariable int game_id,  @PathVariable MissionVisibility missionType) {
+    @GetMapping("{game_id}/mission/{player_id}")
+    public ResponseEntity getAllMissions(@PathVariable int game_id,@PathVariable int player_id) {
         Collection<MissionDto> missions = missionMapper.missionToMissionDto(
-                missionService.findAllMissions(game_id, missionType)
+                missionService.findAllMissionsInGame(game_id, player_id)
         );
         return ResponseEntity.ok(missions);
     }
