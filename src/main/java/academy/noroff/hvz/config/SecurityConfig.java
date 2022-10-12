@@ -2,7 +2,6 @@ package academy.noroff.hvz.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -35,9 +34,10 @@ public class SecurityConfig {
         http.
                 cors().and()
                 .authorizeRequests(authorize -> authorize
-                        .antMatchers("/.well-known/oas", "/.well-known/oas/*", "/.well-known/oas/**").permitAll()
-                        .antMatchers("/swagger-ui", "/swagger-ui/*", "/swagger-ui/**", "/v3/api-docs" , "/v3/api-docs/**").permitAll()
-                                //.mvcMatchers("/api/private").authenticated()
+                        .mvcMatchers("/.well-known/oas", "/.well-known/oas/*", "/.well-known/oas/**").permitAll()
+                        .mvcMatchers("/swagger-ui", "/swagger-ui/*", "/swagger-ui/**", "/v3/api-docs" , "/v3/api-docs/**").permitAll()
+                        .mvcMatchers("/game").permitAll()
+                        //.mvcMatchers("/api/private").authenticated()
                         //.mvcMatchers("/game").hasAuthority("SCOPE_read:admin")
                         .anyRequest().authenticated()
                 )
