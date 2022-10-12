@@ -5,7 +5,6 @@ import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Kill;
 import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.models.dtos.KillDto;
-import academy.noroff.hvz.models.dtos.PlayerDto;
 import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.services.KillService;
 import academy.noroff.hvz.services.PlayerService;

@@ -2,9 +2,7 @@ package academy.noroff.hvz.mappers;
 
 import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Kill;
-import academy.noroff.hvz.models.Mission;
 import academy.noroff.hvz.models.Player;
-import academy.noroff.hvz.models.dtos.GameDto;
 import academy.noroff.hvz.models.dtos.PlayerDto;
 import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.services.KillService;
@@ -56,30 +54,4 @@ public abstract class PlayerMapper {
         return source.stream()
                 .map(Kill::getId).collect(Collectors.toSet());
     }
-
-
-    /*
-    @Named("deathToDeathIds")
-    Set<Integer> deathToDeathIds(Set<Kill> source) {
-        if(source == null)
-            return Collections.emptySet();
-        return source.stream()
-                .map(Kill::getId).collect(Collectors.toSet());
-    }
-    @Named("deathIdsToDeaths")
-    Set<Kill> deathIdsToDeaths(Set<Integer> id) {
-        return id.stream()
-                .map( i -> killService.findKillById(i))
-                .collect(Collectors.toSet());
-    }
-    @Named("killIdsToKills")
-    Set<Kill> mapIdsToKills(Set<Integer> id) {
-        return id.stream()
-                .map( i -> killService.findKillById(i))
-                .collect(Collectors.toSet());
-    }
-    */
-
-
-
 }
