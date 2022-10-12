@@ -14,12 +14,11 @@ import java.util.Set;
 @Service
 public class MissionService {
     private final MissionRepository missionRepository;
-    private final GameRepository gameRepository;
+
 
     @Autowired
-    public MissionService(MissionRepository missionRepository, GameRepository gameRepository) {
+    public MissionService(MissionRepository missionRepository) {
         this.missionRepository = missionRepository;
-        this.gameRepository = gameRepository;
     }
 
     /**
@@ -74,8 +73,23 @@ public class MissionService {
         missionRepository.deleteById(missionId);
     }
 
+
+    /**
+     * Get mission in game by id
+     * @param game_id
+     * @param mission_id
+     * @return
+     */
     public Mission getMissionInGame(int game_id, int mission_id) {
         return missionRepository.getMissionInGame(game_id, mission_id).orElseThrow(
                 () -> new MissionNotFoundException("Cant find mission by id "+ mission_id + " ing game " + game_id));
+    }
+
+    /**
+     * Delete all missions in game by game_id
+     * @param gameId
+     */
+    public void deleteAllMissionsInGame (int gameId) {
+        missionRepository.deleteAllMissionInGame(gameId);
     }
 }

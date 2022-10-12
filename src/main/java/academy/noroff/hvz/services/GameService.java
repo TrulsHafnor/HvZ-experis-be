@@ -6,6 +6,7 @@ import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -13,10 +14,16 @@ import java.util.List;
 @Service
 public class GameService {
     private final GameRepository gameRepository;
+    private final KillService killService;
+    private final MissionService missionService;
+    private final PlayerService playerService;
 
     @Autowired
-    public GameService (GameRepository gameRepository) {
+    public GameService (GameRepository gameRepository, KillService killService, MissionService missionService, PlayerService playerService) {
         this.gameRepository = gameRepository;
+        this.killService = killService;
+        this.missionService = missionService;
+        this.playerService = playerService;
     }
 
 
@@ -52,8 +59,11 @@ public class GameService {
      * @param id
      */
     // TODO: 10/5/2022 Admin skal kun slette games
+    @Transactional
     public void deleteGame(int id) {
-        // TODO: 10/5/2022 Cascade delete (Drøyer denne til vi har mer fyll i applikasjonen)
+        killService.deleteAllKillsWhitGameId(id);
+        missionService.deleteAllMissionsInGame(id);
+        playerService.deleteAllPlayersInGame(id);
         gameRepository.deleteById(id);
     }
 
@@ -64,7 +74,6 @@ public class GameService {
      * @return
      */
     public Game updateGame (Game game) {
-        // TODO: 10/5/2022 Sjekk om denne er riktig når vi har aktivt game
         return gameRepository.save(game);
     }
 
@@ -73,4 +82,5 @@ public class GameService {
                 .orElseThrow(()->new GameNotFoundException("Game by id "+ id + " was not found"));
         return game.getPlayers();
     }
+
 }

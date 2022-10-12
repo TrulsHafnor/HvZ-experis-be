@@ -16,13 +16,12 @@ import java.util.Collection;
 public class KillService {
     private final KillRepository killRepository;
     private final PlayerService playerService;
-    private final GameService gameService;
+
 
     @Autowired
-    public KillService (KillRepository killRepository, PlayerService playerService, GameService gameService) {
+    public KillService (KillRepository killRepository, PlayerService playerService) {
         this.killRepository = killRepository;
         this.playerService = playerService;
-        this.gameService = gameService;
     }
 
 
@@ -77,6 +76,10 @@ public class KillService {
     public Kill getKillInGame(int game_id, int kill_id) {
         return killRepository.findKillInGameById(game_id, kill_id).orElseThrow(
                 () -> new KillNotFoundException("Cant find mission by id "+ kill_id + " ing game " + game_id));
+    }
+
+    public void deleteAllKillsWhitGameId(int gameId) {
+        killRepository.deleteAllKillInGame(gameId);
     }
 
 }

@@ -2,6 +2,7 @@ package academy.noroff.hvz.repositories;
 
 import academy.noroff.hvz.models.Player;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -16,4 +17,8 @@ public interface PlayerRepository extends JpaRepository<Player,Integer> {
 
     @Query(value = "SELECT * FROM Player p WHERE p.bite_code = :biteCode and p.game_id = :gameId Limit 1", nativeQuery = true)
     Player findPlayerWhitBiteCode(@Param("gameId") int gameId, @Param("biteCode") String biteCode);
+
+    @Modifying
+    @Query(value = "DELETE FROM Player p WHERE p.game_id = :gameId", nativeQuery = true)
+    void deleteAllPlayersInGame(@Param("gameId") int gameId);
 }
