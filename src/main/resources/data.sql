@@ -12,7 +12,14 @@ VALUES ('Hei1',true, 1),
        ('Hei4', false, 2),
        ('Hei5',true, 3),
        ('Hei6',false, 3),
-       ('Hei7',true, 1);
+       ('Hei7',true, 1),
+       ('Hei8',false, 1),
+       ('Hei9',false, 1),
+       ('Hei10',false, 1),
+       ('Hei11',false, 2),
+       ('Hei12',false, 2),
+       ('Hei13',false, 3),
+       ('Hei14',false, 3);
 -- Mission
 INSERT INTO mission (end_time, mission_description,
                     mission_lat,mission_lng,
@@ -27,5 +34,16 @@ values ('02/04/1996','It is time to embrace the Eat', 59.931146,10.756830,'Code 
        ('04/02/2022','Very cool misison', 59.938316,10.800220,'Code SKULLS','HUMAN','12:00',3),
        ('04/02/2022','Very cool misison', 59.938316,10.800220,'Code PULS','GLOBAL','12:00',3),
        ('04/02/2022','Very cool misison', 59.938316,10.800220,'Code SNULS','ZOMBIE','12:00',3);
+
+-- Kill
+INSERT INTO kill(lat, lng, time_of_death, game_id, player_death_id, kills_id)
+VALUES ('59.932723','10.756447', '12:13:00',1,8,2),
+       ('59.932723','10.756447', '12:13:00',1,9,2),
+       ('59.932723','10.756447', '12:13:00',1,10,9),
+       ('59.932723','10.756447', '12:13:00',2,11,4),
+       ('59.932723','10.756447', '12:13:00',2,12,11),
+       ('59.932723','10.756447', '12:13:00',3,13,6),
+       ('59.932723','10.756447', '12:13:00',3,14,13);
+
 
 

@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public abstract class PlayerMapper {
-    // MANY TO ONE
     @Autowired
     protected PlayerService playerService;
     @Autowired
