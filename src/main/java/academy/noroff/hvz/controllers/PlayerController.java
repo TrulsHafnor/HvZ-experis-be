@@ -77,7 +77,7 @@ public class PlayerController {
                     content = @Content)
     })
     @GetMapping("{gameId}/player/{playerId}")
-    public ResponseEntity getPlayerInGame(@PathVariable int gameId, int playerId) {
+    public ResponseEntity getPlayerInGame(@PathVariable int gameId,@PathVariable int playerId) {
         // TODO: 10/7/2022 only admin can se if player is patient zero
         Player player = playerService.findPlayerInGame(gameId,playerId);
         PlayerDto playerDto = playerMapper.playerToPlayerDto(player);
@@ -121,7 +121,7 @@ public class PlayerController {
                     content = @Content)
     })
     @PutMapping("{gameId}/player/{playerId}")
-    public ResponseEntity updatePlayer(@RequestBody PlayerDto playerDto, @PathVariable int gameId, int playerId) {
+    public ResponseEntity updatePlayer(@RequestBody PlayerDto playerDto, @PathVariable int gameId,@PathVariable int playerId) {
         // TODO: 10/7/2022 admin only
         // sjekker om player id som parameter er lik player id i body, og sjekker om game finnes i databasen
         if(playerId != playerDto.getId() || gameId != gameService.findGameById(gameId).getId())
