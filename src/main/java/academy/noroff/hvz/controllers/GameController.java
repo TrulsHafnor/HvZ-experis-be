@@ -26,8 +26,7 @@ import java.util.Collection;
 // TODO: 10/7/2022 fix for later (Sondre sec master) 
 @CrossOrigin(origins = {
     "https://hvz-fe-noroff.herokuapp.com/",
-    "http://localhost:3000",
-    "https://humansandzombiesexperiss.herokuapp.com/"
+    "http://localhost:3000"
     }
 )
 public class GameController {

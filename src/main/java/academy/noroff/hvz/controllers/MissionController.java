@@ -29,8 +29,7 @@ import java.util.Collection;
 @RequestMapping("/game")
 @CrossOrigin(origins = {
     "https://hvz-fe-noroff.herokuapp.com/",
-    "http://localhost:3000",
-    "https://humansandzombiesexperiss.herokuapp.com/"
+    "http://localhost:3000"
     }
 )
 public class MissionController {

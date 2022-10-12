@@ -27,7 +27,11 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("/game")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {
+        "https://hvz-fe-noroff.herokuapp.com/",
+        "http://localhost:3000"
+}
+)
 public class KillController {
     private final KillService killService;
     private final KillMapper killMapper;
