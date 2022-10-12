@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -23,7 +24,6 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("/game")
-// TODO: 10/7/2022 fix for later (Sondre sec master) 
 @CrossOrigin(origins = {
     "https://hvz-fe-noroff.herokuapp.com/",
     "http://localhost:3000"
@@ -51,7 +51,7 @@ public class GameController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity getGameById(@PathVariable("id") int id) {
         return ResponseEntity.ok(gameMapper.gameToGameDto(gameService.findGameById(id)));
     }
@@ -85,6 +85,7 @@ public class GameController {
                             schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
     })
     @PostMapping
+    @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity addGame (@RequestBody GameDto gameDto) {
         Game game = gameMapper.gameDtoToGame(gameDto);
         gameService.addGame(game);
@@ -109,6 +110,7 @@ public class GameController {
     })
 
     @DeleteMapping("{id}")
+    @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity deleteGame (@PathVariable("id") int id) {
         gameService.deleteGame(id);
         return ResponseEntity.noContent().build();
@@ -128,6 +130,7 @@ public class GameController {
                     content = @Content)
     })
     @PutMapping("{id}")
+    @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity updateGame(@RequestBody GameDto gameDto, @PathVariable int id) {
         // Validates if body is correct
         if(id != gameDto.getId())
