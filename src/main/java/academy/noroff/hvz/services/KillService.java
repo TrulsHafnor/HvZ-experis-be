@@ -55,8 +55,23 @@ public class KillService {
         if (kill.getGame().getId() != game_id) {
             return false;
         }
+        //find player that is dead
+        Player player = setPlayerValuesAfterDelete(findKillById(kill_id).getPlayerDeath());
+        //delete kill
         killRepository.deleteById(kill_id);
+        //update player to alive
+        playerService.updatePlayer(player);
         return true;
+    }
+
+    private Player setPlayerValuesAfterDelete(Player player) {
+        //player is now alive
+        player.setHuman(true);
+        //give new bitecode
+        player.setBiteCode("dummy value");
+        //player have zero death value
+        player.setDeath(new Kill());
+        return player;
     }
 
     public Kill updateKill (Kill kill) {
