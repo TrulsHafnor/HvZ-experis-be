@@ -77,6 +77,11 @@ public class GameService {
         return gameRepository.save(game);
     }
 
+    /**
+     * Get all players in game
+     * @param id
+     * @return
+     */
     public Collection<Player> getPlayersInGames(int id) {
         Game game = gameRepository.findById(id)
                 .orElseThrow(()->new GameNotFoundException("Game by id "+ id + " was not found"));
