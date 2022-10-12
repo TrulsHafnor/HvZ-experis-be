@@ -1,11 +1,9 @@
 package academy.noroff.hvz.services;
 
 import academy.noroff.hvz.enums.MissionVisibility;
-import academy.noroff.hvz.exeptions.GameNotFoundException;
 import academy.noroff.hvz.exeptions.MissionNotFoundException;
 import academy.noroff.hvz.models.Mission;
 import academy.noroff.hvz.models.Player;
-import academy.noroff.hvz.repositories.GameRepository;
 import academy.noroff.hvz.repositories.MissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

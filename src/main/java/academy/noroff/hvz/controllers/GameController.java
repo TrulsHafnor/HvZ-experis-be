@@ -1,11 +1,8 @@
 package academy.noroff.hvz.controllers;
 
 import academy.noroff.hvz.mappers.GameMapper;
-import academy.noroff.hvz.mappers.PlayerMapper;
 import academy.noroff.hvz.models.Game;
-import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.models.dtos.GameDto;
-import academy.noroff.hvz.models.dtos.PlayerDto;
 import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.utils.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;

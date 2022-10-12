@@ -2,8 +2,6 @@ package academy.noroff.hvz.controllers;
 
 import academy.noroff.hvz.enums.MissionVisibility;
 import academy.noroff.hvz.mappers.MissionMapper;
-import academy.noroff.hvz.mappers.PlayerMapper;
-import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Mission;
 import academy.noroff.hvz.models.dtos.MissionDto;
 import academy.noroff.hvz.repositories.MissionRepository;
