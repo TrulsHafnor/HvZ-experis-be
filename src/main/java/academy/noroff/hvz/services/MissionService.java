@@ -4,6 +4,7 @@ import academy.noroff.hvz.enums.MissionVisibility;
 import academy.noroff.hvz.exeptions.GameNotFoundException;
 import academy.noroff.hvz.exeptions.MissionNotFoundException;
 import academy.noroff.hvz.models.Mission;
+import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.repositories.GameRepository;
 import academy.noroff.hvz.repositories.MissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +15,25 @@ import java.util.Set;
 @Service
 public class MissionService {
     private final MissionRepository missionRepository;
+    private final PlayerService playerService;
 
 
     @Autowired
-    public MissionService(MissionRepository missionRepository) {
+    public MissionService(MissionRepository missionRepository, PlayerService playerService) {
         this.missionRepository = missionRepository;
+        this.playerService = playerService;
     }
 
     /**
      * Returns a List of missions
      * @return
      */
-    public Set<Mission> findAllMissions(int gameId, MissionVisibility faction) {
-        return missionRepository.getVisibilityOfMission(gameId, faction.toString());
+    public Set<Mission> findAllMissionsInGame(int gameId, int playerId) {
+        Player tempPlayer = playerService.findPlayerById(playerId);
+        if (tempPlayer.isHuman()) {
+            return missionRepository.getVisibilityOfMission(gameId, MissionVisibility.ZOMBIE.toString());
+        }
+        return missionRepository.getVisibilityOfMission(gameId, MissionVisibility.HUMAN.toString());
     }
 
     /**

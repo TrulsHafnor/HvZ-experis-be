@@ -17,14 +17,10 @@ public interface MissionRepository extends JpaRepository<Mission,Integer> {
     @Query(value = "SELECT * FROM Mission m WHERE m.game_id = :gameId and m.mission_id = :missionId", nativeQuery = true)
     Optional<Mission> getMissionInGame(@Param("gameId") Integer gameId, @Param("missionId") Integer playerId);
 
-    @Query(value = "SELECT * FROM Mission m where m.game_id = :gameId AND m.mission_visibility = :missionVisibility or m.mission_visibility ='GLOBAL'", nativeQuery = true)
+    @Query(value = "SELECT * FROM Mission m where m.game_id = :gameId AND NOT m.mission_visibility = :missionVisibility", nativeQuery = true)
     Set<Mission> getVisibilityOfMission(@Param("gameId") Integer gameId, @Param("missionVisibility") String missionVisibility);
-
-    @Query(value = "SELECT * FROM Mission m where m.game_id = :gameId AND m.mission_visibility = :missionVisibility or m.mission_visibility ='GLOBAL'", nativeQuery = true)
-    Optional<Mission> getVisibilityOfASingularMission(@Param("gameId") Integer gameId, @Param("missionVisibility") String missionVisibility);
 
     @Modifying
     @Query(value = "DELETE FROM Mission m WHERE m.game_id = :gameId", nativeQuery = true)
     void deleteAllMissionInGame(@Param("gameId") int gameId);
-
 }
