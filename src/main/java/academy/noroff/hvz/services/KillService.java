@@ -14,11 +14,13 @@ import java.util.Collection;
 public class KillService {
     private final KillRepository killRepository;
     private final PlayerService playerService;
+    private final GameService gameService;
 
     @Autowired
-    public KillService (KillRepository killRepository, PlayerService playerService) {
+    public KillService (KillRepository killRepository, PlayerService playerService, GameService gameService) {
         this.killRepository = killRepository;
         this.playerService = playerService;
+        this.gameService = gameService;
     }
 
 
@@ -47,9 +49,14 @@ public class KillService {
         return true;
     }
 
-    public void deleteKill(int id) {
+    public boolean deleteKill(int game_id, int kill_id) {
         // TODO: 10/5/2022 Cascade delete (Drøyer denne til vi har mer fyll i applikasjonen)
-        killRepository.deleteById(id);
+        Kill kill = findKillById(kill_id);
+        if (kill.getGame().getId() != game_id) {
+            return false;
+        }
+        killRepository.deleteById(kill_id);
+        return true;
     }
 
     public Kill updateKill (Kill kill) {

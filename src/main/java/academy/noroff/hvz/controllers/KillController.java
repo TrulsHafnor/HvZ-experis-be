@@ -1,6 +1,7 @@
 package academy.noroff.hvz.controllers;
 
 import academy.noroff.hvz.mappers.KillMapper;
+import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Kill;
 import academy.noroff.hvz.models.Mission;
 import academy.noroff.hvz.models.Player;
@@ -8,6 +9,7 @@ import academy.noroff.hvz.models.dtos.GameDto;
 import academy.noroff.hvz.models.dtos.KillDto;
 import academy.noroff.hvz.models.dtos.MissionDto;
 import academy.noroff.hvz.models.dtos.PlayerDto;
+import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.services.KillService;
 import academy.noroff.hvz.utils.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -91,10 +93,9 @@ public class KillController {
     @GetMapping("{game_id}/kill/{kill_id}")
     public ResponseEntity getGameById(@PathVariable("game_id") int game_id, @PathVariable("kill_id") int kill_id) {
         return ResponseEntity.ok(killMapper.killToKillDto(killService.findKillInGameById(game_id,kill_id)));
-        //gameMapper.gameToGameDto(gameService.findGameById(id))
     }
-    /*
-    @Operation(summary = "Delete a kill by ID")
+
+    @Operation(summary = "Delete kill by ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
@@ -109,13 +110,15 @@ public class KillController {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
-    @DeleteMapping("{id}")
-    // TODO: 10/11/2022 admin only
-    public ResponseEntity deleteKill (@PathVariable("id") int id) {
-        killService.deleteKill(id);
+    @DeleteMapping("{game_id}/kill/{kill_id}")
+    public ResponseEntity deleteKill (@PathVariable int game_id,@PathVariable int kill_id) {
+        // TODO: 10/11/2022 admin only
+        boolean response = killService.deleteKill(game_id,kill_id);
+        if (!response)
+            return ResponseEntity.badRequest().build();
         return ResponseEntity.noContent().build();
     }
-     */
+
 
     @Operation(summary = "Update a kill by ID")
     @ApiResponses( value = {
