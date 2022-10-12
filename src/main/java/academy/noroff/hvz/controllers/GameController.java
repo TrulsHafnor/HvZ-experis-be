@@ -1,11 +1,8 @@
 package academy.noroff.hvz.controllers;
 
 import academy.noroff.hvz.mappers.GameMapper;
-import academy.noroff.hvz.mappers.PlayerMapper;
 import academy.noroff.hvz.models.Game;
-import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.models.dtos.GameDto;
-import academy.noroff.hvz.models.dtos.PlayerDto;
 import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.utils.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,6 +21,7 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("/game")
+// TODO: 10/7/2022 fix for later (Sondre sec master) 
 @CrossOrigin(origins = {
     "https://hvz-fe-noroff.herokuapp.com/",
     "http://localhost:3000"
@@ -32,12 +30,10 @@ import java.util.Collection;
 public class GameController {
     private final GameService gameService;
     private final GameMapper gameMapper;
-    private final PlayerMapper playerMapper;
 
-    public GameController (GameService gameService, GameMapper gameMapper, PlayerMapper playerMapper) {
+    public GameController (GameService gameService, GameMapper gameMapper) {
         this.gameService = gameService;
         this.gameMapper = gameMapper;
-        this.playerMapper = playerMapper;
     }
 
     @Operation(summary = "Get a game by ID")
@@ -51,9 +47,9 @@ public class GameController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
-    @GetMapping("/{id}")
-    public ResponseEntity getGameById(@PathVariable("id") int id) {
-        return ResponseEntity.ok(gameMapper.gameToGameDto(gameService.findGameById(id)));
+    @GetMapping("{game_id}")
+    public ResponseEntity getGameById(@PathVariable("game_id") int game_id) {
+        return ResponseEntity.ok(gameMapper.gameToGameDto(gameService.findGameById(game_id)));
     }
 
     @Operation(summary = "Get all games")
@@ -109,10 +105,10 @@ public class GameController {
                                     schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("{game_id}")
     @PreAuthorize("hasAuthority('read:admin')")
-    public ResponseEntity deleteGame (@PathVariable("id") int id) {
-        gameService.deleteGame(id);
+    public ResponseEntity deleteGame (@PathVariable("game_id") int game_id) {
+        gameService.deleteGame(game_id);
         return ResponseEntity.noContent().build();
     }
 
@@ -129,11 +125,11 @@ public class GameController {
                     description = "Game not found with supplied ID",
                     content = @Content)
     })
-    @PutMapping("{id}")
+    @PutMapping("{game_id}")
     @PreAuthorize("hasAuthority('read:admin')")
-    public ResponseEntity updateGame(@RequestBody GameDto gameDto, @PathVariable int id) {
+    public ResponseEntity updateGame(@RequestBody GameDto gameDto, @PathVariable("game_id") int game_id) {
         // Validates if body is correct
-        if(id != gameDto.getId())
+        if(game_id != gameDto.getId())
             return ResponseEntity.badRequest().build();
         gameService.updateGame(
                 gameMapper.gameDtoToGame(gameDto)

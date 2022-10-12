@@ -1,15 +1,8 @@
 package academy.noroff.hvz.controllers;
 
 import academy.noroff.hvz.mappers.KillMapper;
-import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Kill;
-import academy.noroff.hvz.models.Mission;
-import academy.noroff.hvz.models.Player;
-import academy.noroff.hvz.models.dtos.GameDto;
 import academy.noroff.hvz.models.dtos.KillDto;
-import academy.noroff.hvz.models.dtos.MissionDto;
-import academy.noroff.hvz.models.dtos.PlayerDto;
-import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.services.KillService;
 import academy.noroff.hvz.utils.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,7 +49,7 @@ public class KillController {
                     content = @Content)
     })
     @GetMapping("/{game_id}/kill")
-    public ResponseEntity getPlayersInGame(@PathVariable int game_id) {
+    public ResponseEntity getPlayersInGame(@PathVariable("game_id") int game_id) {
         Collection<Kill> kills = killService.findAllKillsInGame(game_id);
         Collection<KillDto> killDtos = killMapper.killToKillDto(kills);
         return ResponseEntity.ok(killDtos);
@@ -73,7 +66,7 @@ public class KillController {
                             schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
     })
     @PostMapping("{game_id}/kill/{biteCode}")
-    public ResponseEntity addKill (@RequestBody KillDto killDto, @PathVariable int game_id, @PathVariable String biteCode) {
+    public ResponseEntity addKill (@RequestBody KillDto killDto, @PathVariable("game_id") int game_id, @PathVariable("biteCode") String biteCode) {
         // TODO: 10/10/2022 if admin u can change anyway
         Kill kill = killMapper.killDtoToKill(killDto);
         if(!killService.createKill(kill,game_id,biteCode)) {
@@ -115,11 +108,13 @@ public class KillController {
                                     schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
     @DeleteMapping("{game_id}/kill/{kill_id}")
-    public ResponseEntity deleteKill (@PathVariable int game_id,@PathVariable int kill_id) {
+    public ResponseEntity deleteKill (@PathVariable("game_id") int game_id,@PathVariable("kill_id") int kill_id) {
         // TODO: 10/11/2022 admin only
-        boolean response = killService.deleteKill(game_id,kill_id);
-        if (!response)
-            return ResponseEntity.badRequest().build();
+        Kill tempKill = killService.getKillInGame(game_id, kill_id);
+        if(tempKill == null){
+            return ResponseEntity.notFound().build();
+        }
+        killService.deleteKill(kill_id);
         return ResponseEntity.noContent().build();
     }
 
@@ -138,7 +133,7 @@ public class KillController {
                     content = @Content)
     })
     @PutMapping("{game_id}/kill/{kill_id}")
-    public ResponseEntity updateKill(@RequestBody KillDto killDto,@PathVariable int game_id ,@PathVariable int kill_id) {
+    public ResponseEntity updateKill(@RequestBody KillDto killDto,@PathVariable("game_id") int game_id ,@PathVariable("kill_id") int kill_id) {
         // TODO: 10/11/2022 killer og admin skal kunne endre kill fiks også game id
         if(kill_id != killDto.getId())
             return ResponseEntity.badRequest().build();

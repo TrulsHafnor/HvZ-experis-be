@@ -1,19 +1,13 @@
 package academy.noroff.hvz.services;
 
 
-import academy.noroff.hvz.enums.GameState;
-import academy.noroff.hvz.exeptions.GameNotFoundException;
 import academy.noroff.hvz.exeptions.PlayerNotFoundException;
-import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Player;
-import academy.noroff.hvz.repositories.GameRepository;
 import academy.noroff.hvz.repositories.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PlayerService {
@@ -35,6 +29,12 @@ public class PlayerService {
                 () -> new PlayerNotFoundException("Player by id "+ id + " was not found"));
     }
 
+    /**
+     * Find player whit bitecode
+     * @param gameId
+     * @param bitecode
+     * @return
+     */
     public Player findPlayerWhitBiteCode(int gameId, String bitecode) {
         return playerRepository.findPlayerWhitBiteCode(gameId,bitecode);
     }
@@ -92,5 +92,13 @@ public class PlayerService {
     public void deletePlayer(int id) {
         // TODO: 10/5/2022 Cascade delete (Drøyer denne til vi har mer fyll i applikasjonen)
         playerRepository.deleteById(id);
+    }
+
+    /**
+     * Delete all players in game
+     * @param gameId
+     */
+    public void deleteAllPlayersInGame(int gameId) {
+        playerRepository.deleteAllPlayersInGame(gameId);
     }
 }

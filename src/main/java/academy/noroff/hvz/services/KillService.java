@@ -1,6 +1,5 @@
 package academy.noroff.hvz.services;
 
-import academy.noroff.hvz.exeptions.GameNotFoundException;
 import academy.noroff.hvz.exeptions.KillNotFoundException;
 import academy.noroff.hvz.models.Kill;
 import academy.noroff.hvz.models.Player;
@@ -14,30 +13,52 @@ import java.util.Collection;
 public class KillService {
     private final KillRepository killRepository;
     private final PlayerService playerService;
-    private final GameService gameService;
+
 
     @Autowired
-    public KillService (KillRepository killRepository, PlayerService playerService, GameService gameService) {
+    public KillService (KillRepository killRepository, PlayerService playerService) {
         this.killRepository = killRepository;
         this.playerService = playerService;
-        this.gameService = gameService;
     }
 
 
+    /**
+     * Returns collection og all kills in game
+     * @param id
+     * @return
+     */
     public Collection<Kill> findAllKillsInGame(int id) {
         return killRepository.findAllKillsInGame(id);
     }
 
+    /**
+     * Find kill by id
+     * @param id
+     * @return
+     */
     public Kill findKillById(int id) {
         return killRepository.findById(id).orElseThrow(
                 () -> new KillNotFoundException("Kill by id "+ id + " was not found"));
     }
 
+    /**
+     * Find all kills in game whit supplied id
+     * @param gameId
+     * @param killId
+     * @return
+     */
     public Kill findKillInGameById(int gameId, int killId) {
         return killRepository.findKillInGameById(gameId, killId).orElseThrow(
                 () -> new KillNotFoundException("Kill by id "+ killId + " was not found"));
     }
 
+    /**
+     * Register a kill whit player and set the player tht died to zombie
+     * @param kill
+     * @param gameId
+     * @param bitecode
+     * @return
+     */
     public boolean createKill(Kill kill, int gameId, String bitecode) {
         Player player = playerService.findPlayerWhitBiteCode(gameId,bitecode);
         if (player == null || !player.isHuman()) {
@@ -49,19 +70,17 @@ public class KillService {
         return true;
     }
 
-    public boolean deleteKill(int game_id, int kill_id) {
-        // TODO: 10/5/2022 Cascade delete (Drøyer denne til vi har mer fyll i applikasjonen)
-        Kill kill = findKillById(kill_id);
-        if (kill.getGame().getId() != game_id) {
-            return false;
-        }
-        //find player that is dead
+    /**
+     * Delete a kill from the game and set the player back to human
+     * @param kill_id
+     */
+    public void deleteKill(int kill_id) {
+        //find player that is dead and updates values
         Player player = setPlayerValuesAfterDelete(findKillById(kill_id).getPlayerDeath());
         //delete kill
         killRepository.deleteById(kill_id);
         //update player to alive
         playerService.updatePlayer(player);
-        return true;
     }
 
     private Player setPlayerValuesAfterDelete(Player player) {
@@ -74,8 +93,32 @@ public class KillService {
         return player;
     }
 
+    /**
+     * Updates a kill
+     * @param kill
+     * @return
+     */
     public Kill updateKill (Kill kill) {
         return killRepository.save(kill);
+    }
+
+    /**
+     * Get kill from game
+     * @param game_id
+     * @param kill_id
+     * @return
+     */
+    public Kill getKillInGame(int game_id, int kill_id) {
+        return killRepository.findKillInGameById(game_id, kill_id).orElseThrow(
+                () -> new KillNotFoundException("Cant find mission by id "+ kill_id + " ing game " + game_id));
+    }
+
+    /**
+     * Delete all kills from a game
+     * @param gameId
+     */
+    public void deleteAllKillsWhitGameId(int gameId) {
+        killRepository.deleteAllKillInGame(gameId);
     }
 
 }
