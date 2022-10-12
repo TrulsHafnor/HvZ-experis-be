@@ -93,4 +93,8 @@ public class PlayerService {
         // TODO: 10/5/2022 Cascade delete (Drøyer denne til vi har mer fyll i applikasjonen)
         playerRepository.deleteById(id);
     }
+
+    public void deleteAllPlayersInGame(int gameId) {
+        playerRepository.deleteAllPlayersInGame(gameId);
+    }
 }

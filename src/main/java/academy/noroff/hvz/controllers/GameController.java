@@ -32,12 +32,10 @@ import java.util.Collection;
 public class GameController {
     private final GameService gameService;
     private final GameMapper gameMapper;
-    private final PlayerMapper playerMapper;
 
-    public GameController (GameService gameService, GameMapper gameMapper, PlayerMapper playerMapper) {
+    public GameController (GameService gameService, GameMapper gameMapper) {
         this.gameService = gameService;
         this.gameMapper = gameMapper;
-        this.playerMapper = playerMapper;
     }
 
     @Operation(summary = "Get a game by ID")
