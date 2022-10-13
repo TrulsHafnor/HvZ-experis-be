@@ -1,10 +1,12 @@
 package academy.noroff.hvz.services;
 
+import academy.noroff.hvz.enums.GameState;
 import academy.noroff.hvz.exeptions.KillNotFoundException;
 import academy.noroff.hvz.models.Kill;
 import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.repositories.KillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -13,12 +15,14 @@ import java.util.Collection;
 public class KillService {
     private final KillRepository killRepository;
     private final PlayerService playerService;
+    private final GameService gameService;
 
 
     @Autowired
-    public KillService (KillRepository killRepository, PlayerService playerService) {
+    public KillService (KillRepository killRepository, PlayerService playerService,@Lazy GameService gameService) {
         this.killRepository = killRepository;
         this.playerService = playerService;
+        this.gameService = gameService;
     }
 
 
@@ -60,11 +64,17 @@ public class KillService {
      * @return
      */
     public boolean createKill(Kill kill, int gameId, String bitecode) {
+        GameState checkGameState = gameService.findGameById(gameId).getGameState();
+        if (checkGameState != GameState.IN_PROGRESS) {
+            return false;
+        }
+        System.out.println(checkGameState + " og " + GameState.IN_PROGRESS);
         Player player = playerService.findPlayerWhitBiteCode(gameId,bitecode);
-        if (player == null || !player.isHuman()) {
+        if (!player.isHuman()) {
             return false;
         }
         player.setHuman(false);
+        kill.setPlayerDeath(player);
         playerService.updatePlayer(player);
         killRepository.save(kill);
         return true;

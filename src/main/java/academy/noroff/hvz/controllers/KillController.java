@@ -68,7 +68,8 @@ public class KillController {
     })
     @PostMapping("{game_id}/kill/{biteCode}")
     public ResponseEntity addKill (@RequestBody KillDto killDto, @PathVariable("game_id") int game_id, @PathVariable("biteCode") String biteCode) {
-        // TODO: 10/10/2022 if admin u can change anyway
+        //dette er en dummy value
+        killDto.setPlayerDeath(killDto.getPlayerKiller());
         Kill kill = killMapper.killDtoToKill(killDto);
         if(!killService.createKill(kill,game_id,biteCode)) {
             return ResponseEntity.badRequest().build();

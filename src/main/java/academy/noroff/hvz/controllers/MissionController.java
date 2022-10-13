@@ -180,7 +180,6 @@ public class MissionController {
     @PutMapping("{game_id}/mission/{mission_id}")
     @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity updateMission(@RequestBody MissionDto missionDto, @PathVariable int mission_id, @PathVariable int game_id) {
-        // Validates if body is correct
         if(mission_id != missionDto.getId())
             return ResponseEntity.badRequest().build();
         missionService.updateMission(
