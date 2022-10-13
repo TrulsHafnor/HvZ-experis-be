@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -103,7 +104,7 @@ public class PlayerController {
         }
         Player player = playerMapper.playerDtoToPlayer(playerDto);
         playerService.addPlayerToGame(player);
-        URI location = URI.create("game/player" + player.getId());
+        URI location = URI.create("game/" + tempGame.getId() + "/player/" + player.getId());
         return ResponseEntity.created(location).build();
     }
 
@@ -121,6 +122,7 @@ public class PlayerController {
                     content = @Content)
     })
     @PutMapping("{gameId}/player/{playerId}")
+    @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity updatePlayer(@RequestBody PlayerDto playerDto, @PathVariable int gameId,@PathVariable int playerId) {
         // TODO: 10/7/2022 admin only
         // sjekker om player id som parameter er lik player id i body, og sjekker om game finnes i databasen
@@ -147,10 +149,9 @@ public class PlayerController {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
-    //<game_id>/player/<player_id
     @DeleteMapping("player/{playerId}")
+    @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity deletePlayer (@PathVariable int id) {
-        // TODO: 10/7/2022 admin only
         playerService.deletePlayer(id);
         return ResponseEntity.noContent().build();
     }
