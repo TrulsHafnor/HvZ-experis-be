@@ -178,8 +178,8 @@ public class PlayerController {
     })
     @DeleteMapping("player/{playerId}")
     @PreAuthorize("hasAuthority('read:admin')")
-    public ResponseEntity deletePlayer (@PathVariable int id) {
-        playerService.deletePlayer(id);
+    public ResponseEntity deletePlayer(@PathVariable int playerId) {
+        playerService.deletePlayer(playerId);
         return ResponseEntity.noContent().build();
     }
 }

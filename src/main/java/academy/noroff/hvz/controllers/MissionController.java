@@ -160,7 +160,7 @@ public class MissionController {
         if(tempMission == null){
             return ResponseEntity.notFound().build();
         }
-        missionService.deleteMission(mission_id);
+        missionService.deleteMission(game_id, mission_id);
         return ResponseEntity.noContent().build();
     }
 
