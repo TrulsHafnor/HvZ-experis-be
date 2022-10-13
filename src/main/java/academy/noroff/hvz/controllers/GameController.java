@@ -157,9 +157,9 @@ public class GameController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
     })
-    @PostMapping("/{game_id}/chat/{player_id}")
-    public ResponseEntity addChat (@RequestBody ChatDto chatDto, @PathVariable("game_id") int game_id, @PathVariable("player_id") int player_id) {
-        if (chatDto.getGame() != gameService.findGameById(chatDto.getGame()).getId()) {
+    @PostMapping("/{game_id}/chat")
+    public ResponseEntity addChat (@RequestBody ChatDto chatDto, @PathVariable("game_id") int game_id, int player_id) {
+        if (chatDto.getPlayer() != player_id || chatDto.getGame() != game_id|| chatDto.getGame() != gameService.findGameById(chatDto.getGame()).getId()) {
             return ResponseEntity.badRequest().build();
         }
         Chat chat = chatMapper.chatDtoToChat(chatDto);
@@ -168,7 +168,7 @@ public class GameController {
         return ResponseEntity.created(location).build();
     }
 
-    @Operation(summary = "Get all Chats")
+    @Operation(summary = "Get chat")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
@@ -178,9 +178,9 @@ public class GameController {
                     description = "Cant find chat",
                     content = @Content)
     })
-    @GetMapping("/getAllChats")
-    public ResponseEntity getAllChats() {
-        Collection<ChatDto> chats = chatMapper.chatToChatDto(chatService.findAllChats());
+    @GetMapping("/{game_id}/chat")
+    public ResponseEntity getAllChats(@PathVariable("game_id") int game_id, int player_id) {
+        Collection<ChatDto> chats = chatMapper.chatToChatDto(chatService.findAllChatsForPlayer(game_id, player_id));
         return ResponseEntity.ok(chats);
     }
 }

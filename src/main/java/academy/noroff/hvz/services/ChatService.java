@@ -8,7 +8,9 @@ import academy.noroff.hvz.repositories.ChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ChatService {
@@ -39,6 +41,10 @@ public class ChatService {
                 () -> new GameNotFoundException("Chat whit id "+ id + " was not found"));
     }
 
+    public Collection<Chat> findAllChatsForPlayer(int gameId, int playerId) {
+        boolean cantSeeOtherFaction = playerService.findPlayerById(playerId).isHuman();
+        return chatRepository.findChatInGameForPlayer(gameId,cantSeeOtherFaction);
+    }
     public List<Chat> findAllChats() {
         return chatRepository.findAll();
     }
