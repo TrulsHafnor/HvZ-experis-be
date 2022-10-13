@@ -3,11 +3,13 @@ package academy.noroff.hvz.controllers;
 import academy.noroff.hvz.enums.GameState;
 import academy.noroff.hvz.mappers.GameMapper;
 import academy.noroff.hvz.mappers.PlayerMapper;
+import academy.noroff.hvz.models.AppUser;
 import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.models.dtos.PlayerDto;
 import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.services.PlayerService;
+import academy.noroff.hvz.services.UserService;
 import academy.noroff.hvz.utils.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -15,9 +17,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -85,7 +90,6 @@ public class PlayerController {
         return ResponseEntity.ok(playerDto);
     }
 
-    // TODO: 10/7/2022 Hjelpemetode for testing kan endresog slettes ved behov
     @Operation(summary = "Add player to game")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "201",
@@ -96,8 +100,31 @@ public class PlayerController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
     })
+    @PostMapping("{gameId}/player")
+    public ResponseEntity addPlayer (@PathVariable int gameId, @AuthenticationPrincipal Jwt jwt) {
+        Game tempGame = gameService.findGameById(gameId);
+        String userId = jwt.getClaimAsString("sub");
+        if (tempGame.getGameState() != GameState.REGISTRATION) {
+            return ResponseEntity.badRequest().build();
+        }
+        Player player = playerService.addNewPlayerToGame(tempGame, userId);
+        URI location = URI.create("game/" + tempGame.getId() + "/player/" + player.getId());
+        return ResponseEntity.created(location).build();
+    }
+
+    // TODO: 10/7/2022 Hjelpemetode for testing kan endresog slettes ved behov
+    @Operation(summary = "Add player to game ADMIN ONLY")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Player successfully created",
+                    content = @Content),
+            @ApiResponse(responseCode = "400",
+                    description = "Malformed request",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
+    })
     @PostMapping("player")
-    public ResponseEntity addPlayer (@RequestBody PlayerDto playerDto) {
+    public ResponseEntity addPlayerAdmin (@RequestBody PlayerDto playerDto) {
         Game tempGame = gameService.findGameById(playerDto.getGame());
         if (tempGame.getGameState() != GameState.REGISTRATION) {
             return ResponseEntity.badRequest().build();

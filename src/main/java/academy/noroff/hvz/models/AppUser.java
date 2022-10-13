@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 @Setter
@@ -16,4 +17,8 @@ public class AppUser {
     private String id;
     private String email;
     private String nickname;
+
+    //relations
+    @OneToOne(mappedBy = "user")
+    private Player player;
 }

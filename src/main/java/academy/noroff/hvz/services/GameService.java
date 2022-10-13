@@ -67,7 +67,6 @@ public class GameService {
         gameRepository.deleteById(id);
     }
 
-    // TODO: 10/5/2022 admin only
     /**
      * Update game
      * @param game

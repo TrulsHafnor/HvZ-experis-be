@@ -2,6 +2,8 @@ package academy.noroff.hvz.services;
 
 
 import academy.noroff.hvz.exeptions.PlayerNotFoundException;
+import academy.noroff.hvz.models.AppUser;
+import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.repositories.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +14,11 @@ import java.util.Collection;
 @Service
 public class PlayerService {
     private final PlayerRepository playerRepository;
+    private final UserService userService;
 
-    @Autowired
-    public PlayerService (PlayerRepository playerRepository) {
+    public PlayerService (PlayerRepository playerRepository, UserService userService) {
         this.playerRepository = playerRepository;
+        this.userService = userService;
     }
 
 
@@ -71,6 +74,16 @@ public class PlayerService {
                 player.setBiteCode("holderValue");
             } while (playerRepository.checkIfBiteCodeExists(player.getBiteCode(), player.getGame().getId()) != 0);
         }
+        return playerRepository.save(player);
+    }
+
+    public Player addNewPlayerToGame(Game game, String userId) {
+        AppUser appUser = userService.findById(userId);
+        Player player = new Player();
+        player.setGame(game);
+        player.setUser(appUser);
+        player.setBiteCode("heyo11");
+        player.setHuman(true);
         return playerRepository.save(player);
     }
 

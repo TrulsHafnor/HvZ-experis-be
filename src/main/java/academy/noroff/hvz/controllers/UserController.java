@@ -1,6 +1,8 @@
 package academy.noroff.hvz.controllers;
 
+import academy.noroff.hvz.mappers.AppUserMapper;
 import academy.noroff.hvz.models.AppUser;
+import academy.noroff.hvz.models.dtos.AppUserDto;
 import academy.noroff.hvz.services.UserService;
 import academy.noroff.hvz.utils.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,9 +29,11 @@ import java.security.Principal;
 )
 public class UserController {
     private final UserService userService;
+    private final AppUserMapper appUserMapper;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, AppUserMapper appUserMapper) {
         this.userService = userService;
+        this.appUserMapper = appUserMapper;
     }
 
     @Operation(summary = "Get currently logged in user")
@@ -44,10 +49,10 @@ public class UserController {
     })
     @GetMapping("current")
     public ResponseEntity getCurrentlyLoggedInUser(@AuthenticationPrincipal Jwt jwt) {
+        AppUser appUser = userService.findById(jwt.getClaimAsString("sub"));
+        AppUserDto appUserDto = appUserMapper.AppUserToAppUserDto(appUser);
         return ResponseEntity.ok(
-                userService.findById(
-                        jwt.getClaimAsString("sub")
-                )
+                appUserDto
         );
     }
 
