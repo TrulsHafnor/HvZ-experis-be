@@ -1,10 +1,8 @@
 package academy.noroff.hvz.mappers;
 
-import academy.noroff.hvz.models.Game;
-import academy.noroff.hvz.models.Kill;
-import academy.noroff.hvz.models.Mission;
-import academy.noroff.hvz.models.Player;
+import academy.noroff.hvz.models.*;
 import academy.noroff.hvz.models.dtos.GameDto;
+import academy.noroff.hvz.services.ChatService;
 import academy.noroff.hvz.services.KillService;
 import academy.noroff.hvz.services.MissionService;
 import academy.noroff.hvz.services.PlayerService;
@@ -26,10 +24,13 @@ public abstract class GameMapper {
     protected MissionService missionService;
     @Autowired
     protected KillService killService;
+    @Autowired
+    protected ChatService chatService;
 
     @Mapping(target = "players", source = "players", qualifiedByName = "playersToIDs")
     @Mapping(target = "missions", source = "missions", qualifiedByName = "missionsToIDs")
     @Mapping(target = "kills", source = "kills", qualifiedByName = "killsToIDs")
+    @Mapping(target = "chats", source = "chats", qualifiedByName = "chatsToIDs")
     public abstract GameDto gameToGameDto(Game game);
 
     public abstract Collection<GameDto> gameToGameDto(Collection<Game> games);
@@ -37,6 +38,7 @@ public abstract class GameMapper {
     @Mapping(target = "players", ignore = true)
     @Mapping(target = "missions", ignore = true)
     @Mapping(target = "kills", ignore = true)
+    @Mapping(target = "chats", ignore = true)
     public abstract Game gameDtoToGame(GameDto dto);
 
     @Named("playersToIDs")
@@ -82,6 +84,21 @@ public abstract class GameMapper {
             return Collections.emptySet();
         return source.stream()
                 .map(Kill::getId).collect(Collectors.toSet());
+    }
+
+    @Named("chatIdsToChats")
+    Set<Chat> mapIdsToChats(Set<Integer> id) {
+        return id.stream()
+                .map( i -> chatService.findChatById(i))
+                .collect(Collectors.toSet());
+    }
+
+    @Named("chatsToIDs")
+    Set<Integer> chatsToIDs(Set<Chat> source) {
+        if(source == null)
+            return Collections.emptySet();
+        return source.stream()
+                .map(Chat::getId).collect(Collectors.toSet());
     }
 
 }

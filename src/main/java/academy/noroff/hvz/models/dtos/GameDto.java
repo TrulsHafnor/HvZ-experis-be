@@ -20,4 +20,5 @@ public class GameDto {
     private Set<Integer> players;
     private Set<Integer> missions;
     private Set<Integer> kills;
+    private Set<Integer> chats;
 }
