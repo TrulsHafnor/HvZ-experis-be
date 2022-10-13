@@ -27,12 +27,16 @@ public class Player {
     @JoinColumn(name = "game_id")
     private Game game;
 
-    @NotNull
     @OneToMany(mappedBy = "playerKiller")
     private Set<Kill> kills;
 
+    @OneToOne()
+    @NotNull
+    @JoinColumn(name = "user_id")
+    private AppUser user;
+
     @OneToOne(mappedBy = "playerDeath", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, optional = false)
+            fetch = FetchType.LAZY)
     private Kill death;
 
     public void setBiteCode(String biteCode) {

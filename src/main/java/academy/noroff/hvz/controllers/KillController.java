@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -108,6 +109,7 @@ public class KillController {
                                     schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
     @DeleteMapping("{game_id}/kill/{kill_id}")
+    @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity deleteKill (@PathVariable("game_id") int game_id,@PathVariable("kill_id") int kill_id) {
         // TODO: 10/11/2022 admin only
         Kill tempKill = killService.getKillInGame(game_id, kill_id);
@@ -133,6 +135,7 @@ public class KillController {
                     content = @Content)
     })
     @PutMapping("{game_id}/kill/{kill_id}")
+    @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity updateKill(@RequestBody KillDto killDto,@PathVariable("game_id") int game_id ,@PathVariable("kill_id") int kill_id) {
         // TODO: 10/11/2022 killer og admin skal kunne endre kill fiks også game id
         if(kill_id != killDto.getId())
