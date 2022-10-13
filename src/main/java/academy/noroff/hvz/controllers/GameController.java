@@ -158,12 +158,12 @@ public class GameController {
                             schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
     })
     @PostMapping("/{game_id}/chat")
-    public ResponseEntity addChat (@RequestBody ChatDto chatDto, @PathVariable("game_id") int game_id, int player_id) {
-        if (chatDto.getPlayer() != player_id || chatDto.getGame() != game_id|| chatDto.getGame() != gameService.findGameById(chatDto.getGame()).getId()) {
+    public ResponseEntity addChat (@RequestBody ChatDto chatDto, @PathVariable("game_id") int game_id) {
+        if (chatDto.getGame() != game_id || chatDto.getGame() != gameService.findGameById(chatDto.getGame()).getId()) {
             return ResponseEntity.badRequest().build();
         }
         Chat chat = chatMapper.chatDtoToChat(chatDto);
-        chatService.addChat(chat,player_id);
+        chatService.addChat(chat,chatDto.getPlayer());
         URI location = URI.create("game/player" + chat.getId());
         return ResponseEntity.created(location).build();
     }
