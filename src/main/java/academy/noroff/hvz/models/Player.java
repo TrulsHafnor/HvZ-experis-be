@@ -37,7 +37,7 @@ public class Player {
     @OneToOne(mappedBy = "playerDeath", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     private Kill death;
 
-    @OneToOne()
+    @OneToOne
     @NotNull
     @JoinColumn(name = "user_id")
     private AppUser user;
