@@ -163,7 +163,7 @@ public class PlayerController {
 
     @Operation(summary = "Delete a player by ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
+            @ApiResponse(responseCode = "204",
                     description = "Success",
                     content = {
                             @Content(
