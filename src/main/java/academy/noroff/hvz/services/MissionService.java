@@ -48,7 +48,6 @@ public class MissionService {
      * @return
      */
     public Mission addMission (Mission mission) {
-        // TODO: 10/7/2022 ADMIN ONLY
         return missionRepository.save(mission);
     }
 
@@ -60,7 +59,6 @@ public class MissionService {
      */
     public Mission updateMission (Mission mission) {
         // TODO: 10/5/2022 Sjekk om denne er riktig når vi har aktivt mission
-        // TODO: 10/7/2022 ADMIN ONLY
         return missionRepository.save(mission);
     }
 
@@ -70,7 +68,6 @@ public class MissionService {
      * @param missionId
      */
     public void deleteMission(int missionId, int game_id) {
-        // TODO: 10/7/2022 ADMIN ONLY
         missionRepository.deleteById(missionId);
     }
 

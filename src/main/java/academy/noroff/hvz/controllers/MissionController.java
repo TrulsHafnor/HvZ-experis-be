@@ -11,6 +11,7 @@ import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.services.MissionService;
 import academy.noroff.hvz.services.PlayerService;
 import academy.noroff.hvz.utils.ApiErrorResponse;
+import com.sun.xml.bind.v2.TODO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +21,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -77,6 +79,7 @@ public class MissionController {
         return ResponseEntity.ok(missionMapper.missionToMissionDto(missionCheck));
     }
 
+    //TODO 13.10 flytt denne til missionservice? Separation of concerns...
     public Boolean checkMissionType(MissionVisibility missionVisibility, int player_id, int game_id) {
         if(missionVisibility == MissionVisibility.GLOBAL){
             return true;
@@ -119,6 +122,7 @@ public class MissionController {
                             schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
     })
     @PostMapping("{game_id}/mission")
+    @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity addMission (@RequestBody MissionDto missionDto, @PathVariable int game_id) {
         if (missionDto.getGame() != gameService.findGameById(missionDto.getGame()).getId()) {
             return ResponseEntity.badRequest().build();
@@ -152,8 +156,8 @@ public class MissionController {
     })
 
     @DeleteMapping("{game_id}/mission/{mission_id}")
+    @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity deleteMission (@PathVariable int mission_id, @PathVariable int game_id) {
-        // TODO: 10/10/2022 Admin only
         Mission tempMission = missionService.getMissionInGame(game_id, mission_id);
         if(tempMission == null){
             return ResponseEntity.notFound().build();
@@ -176,6 +180,7 @@ public class MissionController {
                     content = @Content)
     })
     @PutMapping("{game_id}/mission/{mission_id}")
+    @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity updateMission(@RequestBody MissionDto missionDto, @PathVariable int mission_id, @PathVariable int game_id) {
         // Validates if body is correct
         if(mission_id != missionDto.getId())

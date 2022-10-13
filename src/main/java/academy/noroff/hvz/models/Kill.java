@@ -37,7 +37,6 @@ public class Kill {
     @JoinColumn(name = "playerDeath_id")
     private Player playerDeath;
 
-
     public void setTimeOfDeath(String timeOfDeath) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();

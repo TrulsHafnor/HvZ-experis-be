@@ -51,13 +51,11 @@ public class GameService {
      * Delete game from database
      * @param id
      */
-    // TODO: 10/5/2022 Admin skal kun slette games
     public void deleteGame(int id) {
         // TODO: 10/5/2022 Cascade delete (Drøyer denne til vi har mer fyll i applikasjonen)
         gameRepository.deleteById(id);
     }
 
-    // TODO: 10/5/2022 admin only
     /**
      * Update game
      * @param game
