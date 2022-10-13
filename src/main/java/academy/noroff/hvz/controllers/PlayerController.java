@@ -21,12 +21,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.Collection;
+
+import static org.springframework.security.authorization.AuthorityReactiveAuthorizationManager.hasAuthority;
 
 @RestController
 @RequestMapping("/game")
@@ -102,6 +106,10 @@ public class PlayerController {
     })
     @PostMapping("{gameId}/player")
     public ResponseEntity addPlayer (@PathVariable int gameId, @AuthenticationPrincipal Jwt jwt) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("read:admin"))) {
+            System.out.println("DETTE FUNKER JO!!!");
+        }
         Game tempGame = gameService.findGameById(gameId);
         String userId = jwt.getClaimAsString("sub");
         if (tempGame.getGameState() != GameState.REGISTRATION) {
@@ -125,6 +133,7 @@ public class PlayerController {
     })
     @PostMapping("player")
     public ResponseEntity addPlayerAdmin (@RequestBody PlayerDto playerDto) {
+
         Game tempGame = gameService.findGameById(playerDto.getGame());
         if (tempGame.getGameState() != GameState.REGISTRATION) {
             return ResponseEntity.badRequest().build();
