@@ -27,17 +27,20 @@ public class Player {
     @JoinColumn(name = "game_id")
     private Game game;
 
+    @OneToMany(mappedBy = "player")
+    private Set<Chat> messages;
+
+    @NotNull
     @OneToMany(mappedBy = "playerKiller")
     private Set<Kill> kills;
+
+    @OneToOne(mappedBy = "playerDeath", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    private Kill death;
 
     @OneToOne()
     @NotNull
     @JoinColumn(name = "user_id")
     private AppUser user;
-
-    @OneToOne(mappedBy = "playerDeath", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    private Kill death;
 
     public void setBiteCode(String biteCode) {
         this.biteCode = generateBitCode();

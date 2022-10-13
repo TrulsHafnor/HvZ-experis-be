@@ -13,4 +13,5 @@ public class ChatDto {
     private boolean isGlobal;
     private String chatTime;
     private int game;
+    private int player;
 }

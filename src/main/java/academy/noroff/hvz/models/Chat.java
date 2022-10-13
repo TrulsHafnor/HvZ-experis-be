@@ -3,7 +3,6 @@ package academy.noroff.hvz.models;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.text.SimpleDateFormat;
@@ -27,6 +26,10 @@ public class Chat {
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
+
+    @ManyToOne
+    @JoinColumn(name = "player_id")
+    private Player player;
 
     public void setChatTime(String chatTime) {
         this.chatTime = chatTimestamp();
