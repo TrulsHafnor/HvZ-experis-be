@@ -1,5 +1,6 @@
 package academy.noroff.hvz.controllers;
 
+import academy.noroff.hvz.enums.GameState;
 import academy.noroff.hvz.mappers.ChatMapper;
 import academy.noroff.hvz.mappers.GameMapper;
 import academy.noroff.hvz.models.Chat;
@@ -159,7 +160,9 @@ public class GameController {
     })
     @PostMapping("/{game_id}/chat")
     public ResponseEntity addChat (@RequestBody ChatDto chatDto, @PathVariable("game_id") int game_id) {
-        if (chatDto.getGame() != game_id || chatDto.getGame() != gameService.findGameById(chatDto.getGame()).getId()) {
+        if (chatDto.getGame() != game_id
+                || chatDto.getGame() != gameService.findGameById(chatDto.getGame()).getId()
+                || gameService.findGameById(chatDto.getGame()).getGameState() == GameState.COMPLETE) {
             return ResponseEntity.badRequest().build();
         }
         Chat chat = chatMapper.chatDtoToChat(chatDto);
