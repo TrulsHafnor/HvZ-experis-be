@@ -23,10 +23,11 @@ public class Chat {
     private boolean isGlobal;
     @Setter(AccessLevel.NONE)
     private String chatTime;
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
-
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "player_id")
     private Player player;

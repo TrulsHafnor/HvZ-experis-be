@@ -146,8 +146,6 @@ public class GameController {
         return ResponseEntity.noContent().build();
     }
 
-
-
     @Operation(summary = "Post new chat message")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "201",

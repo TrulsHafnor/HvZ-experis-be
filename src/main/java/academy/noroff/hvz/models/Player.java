@@ -30,11 +30,11 @@ public class Player {
     @OneToMany(mappedBy = "player")
     private Set<Chat> messages;
 
-    @NotNull
     @OneToMany(mappedBy = "playerKiller")
     private Set<Kill> kills;
 
-    @OneToOne(mappedBy = "playerDeath", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    //la denne stå skal se om noe bugger seg om jeg ikke har med dette -> , cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false
+    @OneToOne(mappedBy = "playerDeath")
     private Kill death;
 
     @OneToOne

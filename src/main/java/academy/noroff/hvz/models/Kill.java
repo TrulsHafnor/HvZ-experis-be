@@ -33,6 +33,8 @@ public class Kill {
     @JoinColumn(name = "kills_id")
     private Player playerKiller;
 
+    //player that died
+    @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "playerDeath_id")
     private Player playerDeath;
