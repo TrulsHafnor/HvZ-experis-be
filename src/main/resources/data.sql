@@ -19,7 +19,15 @@ VALUES ('Hei1',true, 1),
        ('Hei11',false, 2),
        ('Hei12',false, 2),
        ('Hei13',false, 3),
-       ('Hei14',false, 3);
+       ('Hei14',false, 3),
+       ('Sjekk1',true, 2),
+       ('Sjekk2',true, 2),
+       ('Sjekk3',true, 2),
+       ('Sjekk4',true, 2),
+       ('Sjekk5',true, 2),
+       ('Sjekk6',true, 2),
+       ('Sjekk7',true, 2),
+       ('Sjekk8',true, 2);
 -- Mission
 INSERT INTO mission (end_time, mission_description,
                     mission_lat,mission_lng,
