@@ -26,7 +26,7 @@ import java.net.URI;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/game")
+@RequestMapping("game")
 @CrossOrigin(origins = {
     "https://hvz-fe-noroff.herokuapp.com/",
     "http://localhost:3000"
@@ -113,7 +113,6 @@ public class GameController {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
-
     @DeleteMapping("{game_id}")
     @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity deleteGame (@PathVariable("game_id") int game_id) {

@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,12 +20,11 @@ import java.net.URI;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("user")
+@RequestMapping("/user")
 @CrossOrigin(origins = {
         "https://hvz-fe-noroff.herokuapp.com/",
         "http://localhost:3000"
-}
-)
+})
 public class UserController {
     private final UserService userService;
     private final AppUserMapper appUserMapper;
@@ -41,7 +39,7 @@ public class UserController {
             @ApiResponse(responseCode = "200",
                     description = "Success",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AppUser.class))}),
+                            schema = @Schema(implementation = AppUserDto.class))}),
             @ApiResponse(responseCode = "404",
                     description = "No user logged in",
                     content = {@Content(mediaType = "application/json",
@@ -51,9 +49,7 @@ public class UserController {
     public ResponseEntity getCurrentlyLoggedInUser(@AuthenticationPrincipal Jwt jwt) {
         AppUser appUser = userService.findById(jwt.getClaimAsString("sub"));
         AppUserDto appUserDto = appUserMapper.AppUserToAppUserDto(appUser);
-        return ResponseEntity.ok(
-                appUserDto
-        );
+        return ResponseEntity.ok(appUserDto);
     }
 
     @Operation(summary = "Get user")
@@ -61,7 +57,7 @@ public class UserController {
             @ApiResponse(responseCode = "200",
                     description = "Success",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AppUser.class))}),
+                            schema = @Schema(implementation = AppUserDto.class))}),
             @ApiResponse(responseCode = "404",
                     description = "No user logged in",
                     content = {@Content(mediaType = "application/json",
@@ -95,7 +91,7 @@ public class UserController {
             @ApiResponse(responseCode = "200",
                     description = "Success",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AppUser.class))}),
+                            schema = @Schema(implementation = AppUserDto.class))}),
             @ApiResponse(responseCode = "404",
                     description = "Cant find games",
                     content = @Content)
