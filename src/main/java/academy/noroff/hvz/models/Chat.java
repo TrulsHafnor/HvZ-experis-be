@@ -1,47 +1,43 @@
 package academy.noroff.hvz.models;
 
-import com.sun.istack.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-public class Kill {
+public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "kill_id")
+    @Column(name = "chat_id")
     private int id;
+    @NotNull
+    @Column(length = 150)
+    private String message;
+    private boolean isHuman;
+    private boolean isGlobal;
     @Setter(AccessLevel.NONE)
-    private String timeOfDeath;
-    private float lat;
-    private float lng;
+    private String chatTime;
     @NotNull
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
-
-    //killer
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "kills_id")
-    private Player playerKiller;
+    @JoinColumn(name = "player_id")
+    private Player player;
 
-    //player that died
-    @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "playerDeath_id")
-    private Player playerDeath;
-
-    public void setTimeOfDeath(String timeOfDeath) {
+    public void setChatTime(String chatTime) {
+        this.chatTime = chatTimestamp();
+    }
+    private String chatTimestamp() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         Date date = new Date();
-        this.timeOfDeath = formatter.format(date);
+        return formatter.format(date);
     }
 }

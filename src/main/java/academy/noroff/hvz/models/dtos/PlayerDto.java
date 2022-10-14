@@ -1,5 +1,6 @@
 package academy.noroff.hvz.models.dtos;
 
+import academy.noroff.hvz.models.Chat;
 import academy.noroff.hvz.models.Kill;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,4 +17,5 @@ public class PlayerDto {
     private int game;
     private Set<Integer> kills;
     private int death;
+    private Set<Integer> messages;
 }

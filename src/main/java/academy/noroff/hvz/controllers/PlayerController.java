@@ -131,7 +131,7 @@ public class PlayerController {
     public ResponseEntity addPlayerAdmin(@RequestBody PlayerDto playerDto) {
 
         Game tempGame = gameService.findGameById(playerDto.getGame());
-        if (tempGame.getGameState() != GameState.REGISTRATION) {
+        if (tempGame.getGameState() == GameState.COMPLETE) {
             return ResponseEntity.badRequest().build();
         }
         Player player = playerMapper.playerDtoToPlayer(playerDto);
