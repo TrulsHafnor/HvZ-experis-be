@@ -48,7 +48,7 @@ public class PlayerController {
         this.playerMapper = playerMapper;
     }
 
-    @Operation(summary = "Get all players in game by ID")
+    @Operation(summary = "Get all players in game by game ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
@@ -61,7 +61,7 @@ public class PlayerController {
                     description = "Game not found with supplied ID",
                     content = @Content)
     })
-    @GetMapping("{id}/players")
+    @GetMapping("{id}/player")
     public ResponseEntity getPlayersInGame(@PathVariable int id) {
         // TODO: 10/7/2022 only admin can se if player is patient zero
         Collection<Player> players = gameService.getPlayersInGames(id);
@@ -69,7 +69,7 @@ public class PlayerController {
         return ResponseEntity.ok(playerDtos);
     }
 
-    @Operation(summary = "Find player in game")
+    @Operation(summary = "Find player in game by player ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
@@ -127,16 +127,16 @@ public class PlayerController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class))}),
     })
-    @PostMapping("player/register")
-    public ResponseEntity addPlayerAdmin(@RequestBody PlayerDto playerDto) {
+    @PostMapping("{gameId}/player/register")
+    public ResponseEntity addPlayerAdmin(@PathVariable int gameId, @RequestBody PlayerDto playerDto) {
 
-        Game tempGame = gameService.findGameById(playerDto.getGame());
+        Game tempGame = gameService.findGameById(gameId);
         if (tempGame.getGameState() == GameState.COMPLETE) {
             return ResponseEntity.badRequest().build();
         }
         Player player = playerMapper.playerDtoToPlayer(playerDto);
         playerService.addPlayerToGame(player);
-        URI location = URI.create("game/" + tempGame.getId() + "/player/" + player.getId());
+        URI location = URI.create("game/" + gameId + "/player/" + player.getId());
         return ResponseEntity.created(location).build();
     }
 

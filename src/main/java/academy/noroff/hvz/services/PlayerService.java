@@ -2,6 +2,7 @@ package academy.noroff.hvz.services;
 
 
 import academy.noroff.hvz.exeptions.PlayerNotFoundException;
+import academy.noroff.hvz.exeptions.UserAlreadyHasPlayerException;
 import academy.noroff.hvz.models.AppUser;
 import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Player;
@@ -79,6 +80,9 @@ public class PlayerService {
 
     public Player addNewPlayerToGame(Game game, String userId) {
         AppUser appUser = userService.findById(userId);
+        if (appUser.getPlayer() != null) {
+            throw new UserAlreadyHasPlayerException("User already has a player in game");
+        }
         Player player = new Player();
         player.setGame(game);
         player.setUser(appUser);
