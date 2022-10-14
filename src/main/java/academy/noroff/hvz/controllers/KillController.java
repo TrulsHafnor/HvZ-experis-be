@@ -50,7 +50,7 @@ public class KillController {
                     content = @Content)
     })
     @GetMapping("/{game_id}/kill")
-    public ResponseEntity getPlayersInGame(@PathVariable("game_id") int game_id) {
+    public ResponseEntity getKillsInGame(@PathVariable("game_id") int game_id) {
         Collection<Kill> kills = killService.findAllKillsInGame(game_id);
         Collection<KillDto> killDtos = killMapper.killToKillDto(kills);
         return ResponseEntity.ok(killDtos);
@@ -112,7 +112,6 @@ public class KillController {
     @DeleteMapping("{game_id}/kill/{kill_id}")
     @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity deleteKill (@PathVariable("game_id") int game_id,@PathVariable("kill_id") int kill_id) {
-        // TODO: 10/11/2022 admin only
         Kill tempKill = killService.getKillInGame(game_id, kill_id);
         if(tempKill == null){
             return ResponseEntity.notFound().build();

@@ -94,4 +94,21 @@ public class MissionService {
     public void deleteAllMissionsInGame (int gameId) {
         missionRepository.deleteAllMissionInGame(gameId);
     }
+
+    /**
+     * Method to check type of mission, human or zombie.
+     * @param missionVisibility
+     * @param player_id
+     * @param game_id
+     * @return
+     */
+    public Boolean checkMissionType(MissionVisibility missionVisibility, int player_id, int game_id) {
+        if(missionVisibility == MissionVisibility.GLOBAL){
+            return true;
+        }
+        if(playerService.findPlayerById(player_id).isHuman() && missionVisibility == MissionVisibility.HUMAN) {
+            return true;
+        }
+        return !playerService.findPlayerById(player_id).isHuman() && missionVisibility == MissionVisibility.ZOMBIE;
+    }
 }

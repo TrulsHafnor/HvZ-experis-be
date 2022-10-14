@@ -1,15 +1,12 @@
 package academy.noroff.hvz.controllers;
 
-import academy.noroff.hvz.enums.MissionVisibility;
 import academy.noroff.hvz.mappers.MissionMapper;
 import academy.noroff.hvz.models.Mission;
 import academy.noroff.hvz.models.dtos.MissionDto;
-import academy.noroff.hvz.repositories.MissionRepository;
 import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.services.MissionService;
 import academy.noroff.hvz.services.PlayerService;
 import academy.noroff.hvz.utils.ApiErrorResponse;
-import com.sun.xml.bind.v2.TODO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -36,19 +33,16 @@ public class MissionController {
     protected MissionMapper missionMapper;
     protected MissionService missionService;
     protected GameService gameService;
-    protected MissionRepository missionRepository;
     protected PlayerService playerService;
 
     public MissionController (
             MissionMapper missionMapper,
             MissionService missionService,
             GameService gameService,
-            MissionRepository missionRepository,
             PlayerService playerService){
         this.missionMapper = missionMapper;
         this.missionService = missionService;
         this.gameService=gameService;
-        this.missionRepository = missionRepository;
         this.playerService = playerService;
     }
 
@@ -67,28 +61,14 @@ public class MissionController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
-
     @GetMapping("{game_id}/mission/{mission_id}/player/{player_id}")
     public ResponseEntity getMissionById(@PathVariable int mission_id, @PathVariable int game_id, @PathVariable int player_id) {
         Mission missionCheck = missionService.getMissionInGame(game_id, mission_id);
-        if(playerService.findPlayerById(player_id).getGame().getId() != game_id || !checkMissionType(missionCheck.getMissionVisibility(), player_id, game_id)){
+        if (playerService.findPlayerById(player_id).getGame().getId() != game_id ||
+                !missionService.checkMissionType(missionCheck.getMissionVisibility(), player_id, game_id)){
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
         return ResponseEntity.ok(missionMapper.missionToMissionDto(missionCheck));
-    }
-
-    //TODO 13.10 flytt denne til missionservice? Separation of concerns...
-    public Boolean checkMissionType(MissionVisibility missionVisibility, int player_id, int game_id) {
-        if(missionVisibility == MissionVisibility.GLOBAL){
-            return true;
-        }
-        if(playerService.findPlayerById(player_id).isHuman() && missionVisibility == MissionVisibility.HUMAN) {
-            return true;
-        }
-        if (!playerService.findPlayerById(player_id).isHuman() && missionVisibility == MissionVisibility.ZOMBIE){
-            return true;
-        }
-        return false;
     }
 
     @Operation(summary = "Get all missions in game")
@@ -127,7 +107,7 @@ public class MissionController {
         }
         Mission mission = missionMapper.missionDtoToMission(missionDto);
         missionService.addMission(mission);
-        URI location = URI.create("mission/" + mission.getId());
+        URI location = URI.create("game/" + game_id + "mission/" + mission.getId());
         return ResponseEntity.created(location).build();
     }
 
@@ -152,7 +132,6 @@ public class MissionController {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
-
     @DeleteMapping("{game_id}/mission/{mission_id}")
     @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity deleteMission (@PathVariable int mission_id, @PathVariable int game_id) {
