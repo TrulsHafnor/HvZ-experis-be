@@ -41,8 +41,8 @@ public class GameController {
     public GameController (GameService gameService, GameMapper gameMapper, ChatService chatService, ChatMapper chatMapper) {
         this.gameService = gameService;
         this.gameMapper = gameMapper;
-        this.chatService=chatService;
-        this.chatMapper=chatMapper;
+        this.chatService = chatService;
+        this.chatMapper = chatMapper;
     }
 
     @Operation(summary = "Get a game by ID")
@@ -58,7 +58,8 @@ public class GameController {
     })
     @GetMapping("{game_id}")
     public ResponseEntity getGameById(@PathVariable("game_id") int game_id) {
-        return ResponseEntity.ok(gameMapper.gameToGameDto(gameService.findGameById(game_id)));
+        GameDto game = gameMapper.gameToGameDto(gameService.findGameById(game_id));
+        return ResponseEntity.ok(game);
     }
 
     @Operation(summary = "Get all games")

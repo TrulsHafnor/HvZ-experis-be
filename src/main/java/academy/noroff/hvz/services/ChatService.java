@@ -20,12 +20,13 @@ public class ChatService {
     @Autowired
     public ChatService(ChatRepository chatRepository, PlayerService playerService) {
         this.chatRepository = chatRepository;
-        this.playerService=playerService;
+        this.playerService = playerService;
     }
 
-    public Chat addChat (Chat chat, int playerId) {
+    public Chat addChat(Chat chat, int playerId) {
         return chatRepository.save(setValuesOnChat(chat, playerId));
     }
+
     private Chat setValuesOnChat(Chat chat, int playerId) {
         Player tempPlayer = playerService.findPlayerById(playerId);
         if (tempPlayer.isHuman()) {
@@ -45,6 +46,7 @@ public class ChatService {
         boolean cantSeeOtherFaction = playerService.findPlayerById(playerId).isHuman();
         return chatRepository.findChatInGameForPlayer(gameId,cantSeeOtherFaction);
     }
+
     public List<Chat> findAllChats() {
         return chatRepository.findAll();
     }
