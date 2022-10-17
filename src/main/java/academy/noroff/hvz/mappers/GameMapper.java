@@ -37,7 +37,7 @@ public abstract class GameMapper {
 
     public abstract Collection<GameDto> gameToGameDto(Collection<Game> games);
 
-    @Mapping(target = "players", source = "players", qualifiedByName = "playerIdsToPlayers")
+    @Mapping(target = "players", ignore = true)
     /*@Mapping(target = "missions", ignore = true)
     @Mapping(target = "kills", ignore = true)
     @Mapping(target = "chats", ignore = true)*/
