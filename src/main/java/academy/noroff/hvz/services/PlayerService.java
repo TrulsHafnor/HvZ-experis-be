@@ -89,6 +89,7 @@ public class PlayerService {
         player.setUser(appUser);
         player.setHuman(true);
         player.setPatientZero(false);
+        player.setBiteCode("Dummy value");
         setUniqueBiteCode(player);
         return playerRepository.save(player);
     }
