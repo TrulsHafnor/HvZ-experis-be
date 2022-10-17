@@ -60,9 +60,9 @@ public class PlayerController {
                     description = "Game not found with supplied ID",
                     content = @Content)
     })
-    @GetMapping("{id}/players")
-    public ResponseEntity getPlayersInGame(@PathVariable int id) {
-        Collection<Player> players = gameService.getPlayersInGames(id);
+    @GetMapping("{game_id}/players")
+    public ResponseEntity getPlayersInGame(@PathVariable int game_id) {
+        Collection<Player> players = gameService.getPlayersInGames(game_id);
 
         //check for admin
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -88,9 +88,9 @@ public class PlayerController {
                     description = "Game or Player not found with supplied ID",
                     content = @Content)
     })
-    @GetMapping("{gameId}/players/{playerId}")
-    public ResponseEntity getPlayerInGame(@PathVariable int gameId, @PathVariable int playerId, @AuthenticationPrincipal Jwt jwt) {
-        Player player = playerService.findPlayerInGame(gameId, playerId);
+    @GetMapping("{game_id}/players/{player_id}")
+    public ResponseEntity getPlayerInGame(@PathVariable int game_id, @PathVariable int player_id, @AuthenticationPrincipal Jwt jwt) {
+        Player player = playerService.findPlayerInGame(game_id, player_id);
 
         //check for admin
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -124,10 +124,10 @@ public class PlayerController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)) }),
     })
-    @PostMapping("{gameId}/players")
-    public ResponseEntity addPlayer(@PathVariable int gameId, @AuthenticationPrincipal Jwt jwt) {
+    @PostMapping("{game_id}/players")
+    public ResponseEntity addPlayer(@PathVariable int game_id, @AuthenticationPrincipal Jwt jwt) {
 
-        Game tempGame = gameService.findGameById(gameId);
+        Game tempGame = gameService.findGameById(game_id);
         String userId = jwt.getClaimAsString("sub");
         if (tempGame.getGameState() != GameState.REGISTRATION) {
             return ResponseEntity.badRequest().build();
@@ -151,16 +151,16 @@ public class PlayerController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)) }),
     })
-    @PostMapping("{gameId}/players/register")
-    public ResponseEntity addPlayerAdmin(@PathVariable int gameId, @RequestBody PlayerDto playerDto) {
+    @PostMapping("{game_id}/players/register")
+    public ResponseEntity addPlayerAdmin(@PathVariable int game_id, @RequestBody PlayerDto playerDto) {
 
-        Game tempGame = gameService.findGameById(gameId);
+        Game tempGame = gameService.findGameById(game_id);
         if (tempGame.getGameState() == GameState.COMPLETE) {
             return ResponseEntity.badRequest().build();
         }
         Player player = playerMapper.playerDtoToPlayer(playerDto);
         playerService.addPlayerToGame(player);
-        URI location = URI.create("games/" + gameId + "/players/" + player.getId());
+        URI location = URI.create("games/" + game_id + "/players/" + player.getId());
         return ResponseEntity.created(location).build();
     }
 
@@ -181,10 +181,10 @@ public class PlayerController {
                     description = "Player not found with supplied ID",
                     content = @Content)
     })
-    @PutMapping("{gameId}/players/{playerId}")
+    @PutMapping("{game_id}/players/{player_id}")
     @PreAuthorize("hasAuthority('read:admin')")
-    public ResponseEntity updatePlayer(@RequestBody PlayerDto playerDto, @PathVariable int gameId, @PathVariable int playerId) {
-        if (playerId != playerDto.getId() || gameId != gameService.findGameById(gameId).getId())
+    public ResponseEntity updatePlayer(@RequestBody PlayerDto playerDto, @PathVariable int game_id, @PathVariable int player_id) {
+        if (player_id != playerDto.getId() || game_id != gameService.findGameById(game_id).getId())
             return ResponseEntity.badRequest().build();
         playerService.updatePlayer(
                 playerMapper.playerDtoToPlayer(playerDto)
@@ -211,10 +211,10 @@ public class PlayerController {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ApiErrorResponse.class))})
     })
-    @DeleteMapping("players/{playerId}")
+    @DeleteMapping("{game_id}/players/{player_id}")
     @PreAuthorize("hasAuthority('read:admin')")
-    public ResponseEntity deletePlayer(@PathVariable int playerId) {
-        playerService.deletePlayer(playerId);
+    public ResponseEntity deletePlayer(@PathVariable int player_id, @PathVariable int game_id) {
+        playerService.deletePlayer(player_id);
         return ResponseEntity.noContent().build();
     }
 }
