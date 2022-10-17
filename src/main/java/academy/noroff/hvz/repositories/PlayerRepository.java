@@ -16,7 +16,7 @@ public interface PlayerRepository extends JpaRepository<Player,Integer> {
     Integer checkIfBiteCodeExists(@Param("biteCode") String biteCode, @Param("gameId") int gameId);
 
     @Query(value = "SELECT * FROM Player p WHERE p.bite_code = :biteCode and p.game_id = :gameId Limit 1", nativeQuery = true)
-    Player findPlayerWhitBiteCode(@Param("gameId") int gameId, @Param("biteCode") String biteCode);
+    Optional<Player> findPlayerWhitBiteCode(@Param("gameId") int gameId, @Param("biteCode") String biteCode);
 
     @Modifying
     @Query(value = "DELETE FROM Player p WHERE p.game_id = :gameId", nativeQuery = true)

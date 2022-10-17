@@ -4,6 +4,8 @@ import academy.noroff.hvz.enums.GameState;
 import academy.noroff.hvz.exeptions.KillNotFoundException;
 import academy.noroff.hvz.models.Kill;
 import academy.noroff.hvz.models.Player;
+import academy.noroff.hvz.models.dtos.KillDto;
+import academy.noroff.hvz.models.dtos.RegisterKillDto;
 import academy.noroff.hvz.repositories.KillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -60,16 +62,14 @@ public class KillService {
      * Register a kill whit player and set the player tht died to zombie
      * @param kill
      * @param gameId
-     * @param bitecode
      * @return
      */
-    public boolean createKill(Kill kill, int gameId, String bitecode) {
+    public boolean createKill(Kill kill, int gameId) {
         GameState checkGameState = gameService.findGameById(gameId).getGameState();
         if (checkGameState != GameState.IN_PROGRESS) {
             return false;
         }
-        System.out.println(checkGameState + " og " + GameState.IN_PROGRESS);
-        Player player = playerService.findPlayerWhitBiteCode(gameId,bitecode);
+        Player player = playerService.findPlayerInGame(gameId,kill.getPlayerDeath().getId());
         if (!player.isHuman()) {
             return false;
         }
@@ -129,6 +129,25 @@ public class KillService {
      */
     public void deleteAllKillsWhitGameId(int gameId) {
         killRepository.deleteAllKillInGame(gameId);
+    }
+
+
+    /**
+     * Turn registerKillDto into KillDto
+     * @param registerKillDto
+     * @return
+     */
+    public KillDto registerKillDtoToKillDto(RegisterKillDto registerKillDto) {
+        KillDto killDto = new KillDto();
+        killDto.setLng(registerKillDto.getLng());
+        killDto.setLat(registerKillDto.getLat());
+        killDto.setPlayerKiller(registerKillDto.getPlayerKiller());
+        killDto.setPlayerDeath(playerService.findPlayerWhitBiteCode(
+                registerKillDto.getGame(),
+                registerKillDto.getBiteCode())
+                .getId());
+        killDto.setGame(registerKillDto.getGame());
+        return killDto;
     }
 
 }
