@@ -4,8 +4,9 @@ import academy.noroff.hvz.models.Chat;
 import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Kill;
 import academy.noroff.hvz.models.Player;
+import academy.noroff.hvz.models.dtos.LessDetailsPlayerDto;
 import academy.noroff.hvz.models.dtos.PlayerDto;
-import academy.noroff.hvz.models.dtos.NoPatientZeroPlayerDto;
+import academy.noroff.hvz.models.dtos.UpdatePlayerDto;
 import academy.noroff.hvz.services.ChatService;
 import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.services.KillService;
@@ -80,8 +81,10 @@ public abstract class PlayerMapper {
     @Mapping(target = "kills", source = "kills", qualifiedByName = "killsToIDs")
     @Mapping(target = "death", source = "death.id")
     @Mapping(target = "game", source = "game.id")
-    @Mapping(target = "messages", source = "messages", qualifiedByName = "messagesToIDs")
-    public abstract NoPatientZeroPlayerDto playerToNoPatientZeroPlayerDto(Player player);
+    public abstract LessDetailsPlayerDto playerToLessDetailsPlayerDto(Player player);
 
-    public abstract Collection<NoPatientZeroPlayerDto> playersToNoPatientZeroPlayerDto(Collection<Player> player);
+    public abstract Collection<LessDetailsPlayerDto> playersToLessDetailsPlayerDto(Collection<Player> player);
+
+    @Mapping(target = "game", source = "game", qualifiedByName = "gameToGameIds")
+    public abstract Player updatePlayerDtoToPlayer(UpdatePlayerDto updatePlayerDto);
 }
