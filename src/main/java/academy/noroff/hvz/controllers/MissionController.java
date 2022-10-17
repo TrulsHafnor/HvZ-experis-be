@@ -167,7 +167,7 @@ public class MissionController {
     @PutMapping("{game_id}/missions/{mission_id}")
     @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity updateMission(@RequestBody MissionDto missionDto, @PathVariable int mission_id, @PathVariable int game_id) {
-        if(mission_id != missionDto.getId())
+        if(mission_id != missionDto.getId() || missionDto.getGame() != game_id)
             return ResponseEntity.badRequest().build();
         missionService.updateMission(
                 missionMapper.missionDtoToMission(missionDto)
