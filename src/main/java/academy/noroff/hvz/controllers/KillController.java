@@ -3,6 +3,7 @@ package academy.noroff.hvz.controllers;
 import academy.noroff.hvz.mappers.KillMapper;
 import academy.noroff.hvz.models.Kill;
 import academy.noroff.hvz.models.dtos.KillDto;
+import academy.noroff.hvz.models.dtos.RegisterKillDto;
 import academy.noroff.hvz.services.KillService;
 import academy.noroff.hvz.utils.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -65,13 +66,15 @@ public class KillController {
                     description = "Malformed request",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
+            @ApiResponse(responseCode = "404",
+                    description = "Cant find player in game whit bitecode",
+                    content = @Content)
     })
-    @PostMapping("{game_id}/kill/{biteCode}")
-    public ResponseEntity addKill (@RequestBody KillDto killDto, @PathVariable("game_id") int game_id, @PathVariable("biteCode") String biteCode) {
-        //dette er en dummy value
-        killDto.setPlayerDeath(killDto.getPlayerKiller());
+    @PostMapping("{game_id}/kill")
+    public ResponseEntity addKill (@RequestBody RegisterKillDto registerKillDto, @PathVariable("game_id") int game_id) {
+        KillDto killDto = killService.registerKillDtoToKillDto(registerKillDto);
         Kill kill = killMapper.killDtoToKill(killDto);
-        if(!killService.createKill(kill,game_id,biteCode)) {
+        if(game_id != registerKillDto.getGame() || !killService.createKill(kill,game_id)) {
             return ResponseEntity.badRequest().build();
         }
         URI location = URI.create("kill/" + kill.getId());

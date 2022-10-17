@@ -40,7 +40,8 @@ public class PlayerService {
      * @return
      */
     public Player findPlayerWhitBiteCode(int gameId, String bitecode) {
-        return playerRepository.findPlayerWhitBiteCode(gameId,bitecode);
+        return playerRepository.findPlayerWhitBiteCode(gameId,bitecode).orElseThrow(
+                () -> new PlayerNotFoundException("Cant find player whit bitecode " + bitecode + " in game by id " + gameId));
     }
 
 
