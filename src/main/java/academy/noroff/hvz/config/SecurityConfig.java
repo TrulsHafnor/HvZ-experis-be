@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .authorizeRequests(authorize -> authorize
                         .mvcMatchers("/.well-known/oas", "/.well-known/oas/*", "/.well-known/oas/**").permitAll()
                         .mvcMatchers("/swagger-ui", "/swagger-ui/*", "/swagger-ui/**", "/v3/api-docs" , "/v3/api-docs/**").permitAll()
-                        .mvcMatchers("api/v1/games").permitAll()
+                        .mvcMatchers("/api/v1/games").permitAll()
                         //.mvcMatchers("/api/private").authenticated()
                         //.mvcMatchers("/game").hasAuthority("SCOPE_read:admin")
                         .anyRequest().authenticated()
