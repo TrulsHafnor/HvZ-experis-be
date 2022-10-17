@@ -108,6 +108,7 @@ public class PlayerService {
      * @param id
      */
     public void deletePlayer(int id) {
+        // TODO: 17.10.2022 bruk game id 
         // TODO: 10/5/2022 Cascade delete (Drøyer denne til vi har mer fyll i applikasjonen)
         playerRepository.deleteById(id);
     }
