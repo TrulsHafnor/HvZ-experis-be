@@ -20,7 +20,7 @@ import java.net.URI;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/game")
+@RequestMapping("api/v1/games")
 @CrossOrigin(origins = {
         "https://hvz-fe-noroff.herokuapp.com/",
         "http://localhost:3000"
@@ -49,14 +49,14 @@ public class KillController {
                     description = "Game not found with supplied ID",
                     content = @Content)
     })
-    @GetMapping("/{game_id}/kill")
+    @GetMapping("{game_id}/kills")
     public ResponseEntity getKillsInGame(@PathVariable("game_id") int game_id) {
         Collection<Kill> kills = killService.findAllKillsInGame(game_id);
         Collection<KillDto> killDtos = killMapper.killToKillDto(kills);
         return ResponseEntity.ok(killDtos);
     }
 
-    @Operation(summary = "register a new kill")
+    @Operation(summary = "Register a new kill")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "201",
                     description = "Kill created successfully",
@@ -66,7 +66,7 @@ public class KillController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
     })
-    @PostMapping("{game_id}/kill/{biteCode}")
+    @PostMapping("{game_id}/kills/{biteCode}")
     public ResponseEntity addKill (@RequestBody KillDto killDto, @PathVariable("game_id") int game_id, @PathVariable("biteCode") String biteCode) {
         //dette er en dummy value
         killDto.setPlayerDeath(killDto.getPlayerKiller());
@@ -74,11 +74,11 @@ public class KillController {
         if(!killService.createKill(kill,game_id,biteCode)) {
             return ResponseEntity.badRequest().build();
         }
-        URI location = URI.create("kill/" + kill.getId());
+        URI location = URI.create("kills/" + kill.getId());
         return ResponseEntity.created(location).build();
     }
 
-    @Operation(summary = "Returns a specific kill object.")
+    @Operation(summary = "Get kill object by game and kill ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
@@ -89,7 +89,7 @@ public class KillController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
-    @GetMapping("{game_id}/kill/{kill_id}")
+    @GetMapping("{game_id}/kills/{kill_id}")
     public ResponseEntity getGameById(@PathVariable("game_id") int game_id, @PathVariable("kill_id") int kill_id) {
         return ResponseEntity.ok(killMapper.killToKillDto(killService.findKillInGameById(game_id,kill_id)));
     }
@@ -102,6 +102,10 @@ public class KillController {
                             @Content(
                                     mediaType = "application/json",
                                     array = @ArraySchema(schema = @Schema(implementation = KillDto.class))) }),
+            @ApiResponse(responseCode = "403",
+                    description = "Forbidden access.",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorResponse.class)) }),
             @ApiResponse(responseCode = "404",
                     description = "Kill does not exist with supplied ID",
                     content = {
@@ -109,7 +113,7 @@ public class KillController {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
-    @DeleteMapping("{game_id}/kill/{kill_id}")
+    @DeleteMapping("{game_id}/kills/{kill_id}")
     @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity deleteKill (@PathVariable("game_id") int game_id,@PathVariable("kill_id") int kill_id) {
         Kill tempKill = killService.getKillInGame(game_id, kill_id);
@@ -130,11 +134,15 @@ public class KillController {
                     description = "Malformed request",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
+            @ApiResponse(responseCode = "403",
+                    description = "Forbidden access.",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorResponse.class)) }),
             @ApiResponse(responseCode = "404",
                     description = "Kill not found with supplied ID",
                     content = @Content)
     })
-    @PutMapping("{game_id}/kill/{kill_id}")
+    @PutMapping("{game_id}/kills/{kill_id}")
     @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity updateKill(@RequestBody KillDto killDto,@PathVariable("game_id") int game_id ,@PathVariable("kill_id") int kill_id) {
         // TODO: 10/11/2022 killer og admin skal kunne endre kill fiks også game id

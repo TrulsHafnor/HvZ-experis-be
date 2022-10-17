@@ -20,7 +20,7 @@ import java.net.URI;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("api/v1/users")
 @CrossOrigin(origins = {
         "https://hvz-fe-noroff.herokuapp.com/",
         "http://localhost:3000"
@@ -78,11 +78,11 @@ public class UserController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class))}),
     })
-    @PostMapping("register")
+    @PostMapping()
     public ResponseEntity addNewUserFromJwt(@AuthenticationPrincipal Jwt jwt) {
         String id = jwt.getClaimAsString("sub");
         AppUser appUser = userService.add(id);
-        URI uri = URI.create("user/" + appUser.getId());
+        URI uri = URI.create("users/" + appUser.getId());
         return ResponseEntity.created(uri).build();
     }
 
