@@ -8,6 +8,7 @@ import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.dtos.ChatDto;
 import academy.noroff.hvz.models.dtos.CreateGameDto;
 import academy.noroff.hvz.models.dtos.GameDto;
+import academy.noroff.hvz.models.dtos.UpdateGameDto;
 import academy.noroff.hvz.services.ChatService;
 import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.utils.ApiErrorResponse;
@@ -150,12 +151,12 @@ public class GameController {
     })
     @PutMapping("{game_id}")
     @PreAuthorize("hasAuthority('read:admin')")
-    public ResponseEntity updateGame(@RequestBody GameDto gameDto, @PathVariable("game_id") int game_id) {
+    public ResponseEntity updateGame(@RequestBody UpdateGameDto updateGameDto, @PathVariable("game_id") int game_id) {
         // Validates if body is correct
-        if(game_id != gameDto.getId())
+        if(game_id != updateGameDto.getId())
             return ResponseEntity.badRequest().build();
         gameService.updateGame(
-                gameMapper.gameDtoToGame(gameDto)
+                gameMapper.updateGameDtoToGameDto(updateGameDto)
         );
         return ResponseEntity.noContent().build();
     }
