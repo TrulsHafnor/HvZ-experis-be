@@ -3,6 +3,7 @@ package academy.noroff.hvz.mappers;
 import academy.noroff.hvz.models.*;
 import academy.noroff.hvz.models.dtos.CreateGameDto;
 import academy.noroff.hvz.models.dtos.GameDto;
+import academy.noroff.hvz.models.dtos.UpdateGameDto;
 import academy.noroff.hvz.services.ChatService;
 import academy.noroff.hvz.services.KillService;
 import academy.noroff.hvz.services.MissionService;
@@ -29,17 +30,17 @@ public abstract class GameMapper {
     protected ChatService chatService;
 
     @Mapping(target = "players", source = "players", qualifiedByName = "playersToIDs")
-    @Mapping(target = "missions", source = "missions", qualifiedByName = "missionsToIDs")
+    /*@Mapping(target = "missions", source = "missions", qualifiedByName = "missionsToIDs")
     @Mapping(target = "kills", source = "kills", qualifiedByName = "killsToIDs")
-    @Mapping(target = "chats", source = "chats", qualifiedByName = "chatsToIDs")
+    @Mapping(target = "chats", source = "chats", qualifiedByName = "chatsToIDs")*/
     public abstract GameDto gameToGameDto(Game game);
 
     public abstract Collection<GameDto> gameToGameDto(Collection<Game> games);
 
-    @Mapping(target = "players", ignore = true)
-    @Mapping(target = "missions", ignore = true)
+    @Mapping(target = "players", source = "players", qualifiedByName = "playerIdsToPlayers")
+    /*@Mapping(target = "missions", ignore = true)
     @Mapping(target = "kills", ignore = true)
-    @Mapping(target = "chats", ignore = true)
+    @Mapping(target = "chats", ignore = true)*/
     public abstract Game gameDtoToGame(GameDto dto);
 
     @Named("playersToIDs")
@@ -51,7 +52,7 @@ public abstract class GameMapper {
     }
 
     @Named("playerIdsToPlayers")
-    Set<Player> mapIdsToMovies(Set<Integer> id) {
+    Set<Player> mapIdsToPlayers(Set<Integer> id) {
         return id.stream()
                 .map( i -> playerService.findPlayerById(i))
                 .collect(Collectors.toSet());
@@ -110,4 +111,6 @@ public abstract class GameMapper {
                 createGameDto.getSe_lat(),
                 createGameDto.getSe_lng());
     }
+
+    public abstract Game updateGameDtoToGameDto(UpdateGameDto updateGameDto);
 }

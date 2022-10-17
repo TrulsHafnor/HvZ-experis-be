@@ -114,6 +114,13 @@ public class PlayerService {
         playerRepository.deleteById(id);
     }
 
+    public void leavePlayer(int gameId, int playerId) {
+        Player player = playerRepository.getPlayerInGame(gameId, playerId). orElseThrow(
+                () -> new PlayerNotFoundException("Cant find player by id "+ playerId + " ing game by id" + gameId));
+        player.setUser(null);
+        playerRepository.save(player);
+    }
+
     /**
      * Delete all players in game
      * @param gameId

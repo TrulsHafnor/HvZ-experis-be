@@ -1,15 +1,16 @@
 package academy.noroff.hvz.controllers;
 
 import academy.noroff.hvz.enums.GameState;
-import academy.noroff.hvz.mappers.GameMapper;
 import academy.noroff.hvz.mappers.PlayerMapper;
 import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Player;
-import academy.noroff.hvz.models.dtos.NoPatientZeroPlayerDto;
+import academy.noroff.hvz.models.dtos.LessDetailsPlayerDto;
 import academy.noroff.hvz.models.dtos.PlayerDto;
+import academy.noroff.hvz.models.dtos.UpdatePlayerDto;
 import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.services.PlayerService;
 import academy.noroff.hvz.utils.ApiErrorResponse;
+import academy.noroff.hvz.utils.ExtractId;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -71,8 +72,8 @@ public class PlayerController {
             return ResponseEntity.ok(playerDtos);
         }
 
-        Collection<NoPatientZeroPlayerDto> noPatientZeroPlayerDtos = playerMapper.playersToNoPatientZeroPlayerDto(players);
-        return ResponseEntity.ok(noPatientZeroPlayerDtos);
+        Collection<LessDetailsPlayerDto> lessDetailsPlayerDtos = playerMapper.playersToLessDetailsPlayerDto(players);
+        return ResponseEntity.ok(lessDetailsPlayerDtos);
     }
 
     @Operation(summary = "Find player in game by game and player ID")
@@ -100,13 +101,13 @@ public class PlayerController {
         }
 
         //check if current user is correct
-        String userId = jwt.getClaimAsString("sub");
+        String userId = ExtractId.extractId(jwt.getClaimAsString("sub"));
         if (userId.equals(player.getUser().getId())) {
             PlayerDto playerDto = playerMapper.playerToPlayerDto(player);
             return ResponseEntity.ok(playerDto);
         }
 
-        NoPatientZeroPlayerDto noPatientZeroplayerDto = playerMapper.playerToNoPatientZeroPlayerDto(player);
+        LessDetailsPlayerDto noPatientZeroplayerDto = playerMapper.playerToLessDetailsPlayerDto(player);
         return ResponseEntity.ok(noPatientZeroplayerDto);
     }
 
@@ -152,13 +153,13 @@ public class PlayerController {
                             schema = @Schema(implementation = ApiErrorResponse.class)) }),
     })
     @PostMapping("{game_id}/players/register")
-    public ResponseEntity addPlayerAdmin(@PathVariable int game_id, @RequestBody PlayerDto playerDto) {
+    public ResponseEntity addPlayerAdmin(@PathVariable int game_id, @RequestBody UpdatePlayerDto updatePlayerDto) {
 
         Game tempGame = gameService.findGameById(game_id);
         if (tempGame.getGameState() == GameState.COMPLETE) {
             return ResponseEntity.badRequest().build();
         }
-        Player player = playerMapper.playerDtoToPlayer(playerDto);
+        Player player = playerMapper.updatePlayerDtoToPlayer(updatePlayerDto);
         playerService.addPlayerToGame(player);
         URI location = URI.create("games/" + game_id + "/players/" + player.getId());
         return ResponseEntity.created(location).build();
@@ -183,11 +184,11 @@ public class PlayerController {
     })
     @PutMapping("{game_id}/players/{player_id}")
     @PreAuthorize("hasAuthority('read:admin')")
-    public ResponseEntity updatePlayer(@RequestBody PlayerDto playerDto, @PathVariable int game_id, @PathVariable int player_id) {
-        if (player_id != playerDto.getId() || game_id != gameService.findGameById(game_id).getId())
+    public ResponseEntity updatePlayer(@RequestBody UpdatePlayerDto updatePlayerDto, @PathVariable int game_id, @PathVariable int player_id) {
+        if (player_id != updatePlayerDto.getId() || game_id != gameService.findGameById(game_id).getId())
             return ResponseEntity.badRequest().build();
         playerService.updatePlayer(
-                playerMapper.playerDtoToPlayer(playerDto)
+                playerMapper.updatePlayerDtoToPlayer(updatePlayerDto)
         );
         return ResponseEntity.noContent().build();
     }
@@ -212,9 +213,16 @@ public class PlayerController {
                                     schema = @Schema(implementation = ApiErrorResponse.class))})
     })
     @DeleteMapping("{game_id}/players/{player_id}")
-    @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity deletePlayer(@PathVariable int player_id, @PathVariable int game_id) {
-        playerService.deletePlayer(player_id);
+
+        //check for admin
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("read:admin"))) {
+            playerService.deletePlayer(player_id);
+            return ResponseEntity.noContent().build();
+        }
+
+        playerService.leavePlayer(game_id, player_id);
         return ResponseEntity.noContent().build();
     }
 }
