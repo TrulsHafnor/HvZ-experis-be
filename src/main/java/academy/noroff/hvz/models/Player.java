@@ -23,6 +23,10 @@ public class Player {
     @NotNull
     private boolean isHuman;
     @NotNull
+    private boolean isPatientZero;
+
+    //relations
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;

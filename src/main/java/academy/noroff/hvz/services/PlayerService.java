@@ -71,11 +71,11 @@ public class PlayerService {
      * @return
      */
     public Player addPlayerToGame (Player player) {
-        if (playerRepository.checkIfBiteCodeExists(player.getBiteCode(), player.getGame().getId()) !=0) {
-            do {
-                player.setBiteCode("holderValue");
-            } while (playerRepository.checkIfBiteCodeExists(player.getBiteCode(), player.getGame().getId()) != 0);
+        AppUser appUser = userService.findById(player.getUser().getId());
+        if (appUser.getPlayer() != null) {
+            throw new UserAlreadyHasPlayerException("User already has a player in game");
         }
+        setUniqueBiteCode(player);
         return playerRepository.save(player);
     }
 
@@ -87,8 +87,9 @@ public class PlayerService {
         Player player = new Player();
         player.setGame(game);
         player.setUser(appUser);
-        player.setBiteCode("heyo11");
         player.setHuman(true);
+        player.setPatientZero(false);
+        setUniqueBiteCode(player);
         return playerRepository.save(player);
     }
 
@@ -108,6 +109,7 @@ public class PlayerService {
      * @param id
      */
     public void deletePlayer(int id) {
+        // TODO: 17.10.2022 bruk game id 
         // TODO: 10/5/2022 Cascade delete (Drøyer denne til vi har mer fyll i applikasjonen)
         playerRepository.deleteById(id);
     }
@@ -118,5 +120,13 @@ public class PlayerService {
      */
     public void deleteAllPlayersInGame(int gameId) {
         playerRepository.deleteAllPlayersInGame(gameId);
+    }
+
+    private void setUniqueBiteCode(Player player) {
+        if (playerRepository.checkIfBiteCodeExists(player.getBiteCode(), player.getGame().getId()) !=0) {
+            do {
+                player.setBiteCode("holderValue");
+            } while (playerRepository.checkIfBiteCodeExists(player.getBiteCode(), player.getGame().getId()) != 0);
+        }
     }
 }

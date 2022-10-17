@@ -27,7 +27,7 @@ import java.net.URI;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("game")
+@RequestMapping("api/v1/games")
 @CrossOrigin(origins = {
     "https://hvz-fe-noroff.herokuapp.com/",
     "http://localhost:3000"
@@ -86,6 +86,10 @@ public class GameController {
             @ApiResponse(responseCode = "201",
                     description = "Game successfully created",
                     content = @Content),
+            @ApiResponse(responseCode = "403",
+                    description = "Forbidden access.",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorResponse.class)) }),
             @ApiResponse(responseCode = "400",
                     description = "Malformed request",
                     content = { @Content(mediaType = "application/json",
@@ -97,7 +101,7 @@ public class GameController {
         GameDto gameDto = gameMapper.createGameDtoTpGameDto(createGameDto);
         Game game = gameMapper.gameDtoToGame(gameDto);
         gameService.addGame(game);
-        URI location = URI.create("game/" + game.getId());
+        URI location = URI.create("games/" + game.getId());
         return ResponseEntity.created(location).build();
     }
 
@@ -109,6 +113,10 @@ public class GameController {
                             @Content(
                                     mediaType = "application/json",
                                     array = @ArraySchema(schema = @Schema(implementation = GameDto.class))) }),
+            @ApiResponse(responseCode = "403",
+                    description = "Forbidden access.",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorResponse.class)) }),
             @ApiResponse(responseCode = "404",
                     description = "Game does not exist with supplied ID",
                     content = {
@@ -132,6 +140,10 @@ public class GameController {
                     description = "Malformed request",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
+            @ApiResponse(responseCode = "403",
+                    description = "Forbidden access.",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorResponse.class)) }),
             @ApiResponse(responseCode = "404",
                     description = "Game not found with supplied ID",
                     content = @Content)
@@ -153,12 +165,16 @@ public class GameController {
             @ApiResponse(responseCode = "201",
                     description = "Chat message successfully created",
                     content = @Content),
+            @ApiResponse(responseCode = "403",
+                    description = "Forbidden access.",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorResponse.class)) }),
             @ApiResponse(responseCode = "400",
                     description = "Malformed request",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
     })
-    @PostMapping("/{game_id}/chat")
+    @PostMapping("{game_id}/chat")
     public ResponseEntity addChat (@RequestBody ChatDto chatDto, @PathVariable("game_id") int game_id) {
         if (chatDto.getGame() != game_id
                 || chatDto.getGame() != gameService.findGameById(chatDto.getGame()).getId()
@@ -167,21 +183,25 @@ public class GameController {
         }
         Chat chat = chatMapper.chatDtoToChat(chatDto);
         chatService.addChat(chat,chatDto.getPlayer());
-        URI location = URI.create("game/player" + chat.getId());
+        URI location = URI.create("games/" + game_id + "chat/" + chat.getId());
         return ResponseEntity.created(location).build();
     }
 
-    @Operation(summary = "Get chat")
+    @Operation(summary = "Get chat from game")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = Chat.class)) }),
+            @ApiResponse(responseCode = "403",
+                    description = "Forbidden access.",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorResponse.class)) }),
             @ApiResponse(responseCode = "404",
                     description = "Cant find chat",
                     content = @Content)
     })
-    @GetMapping("/{game_id}/chat")
+    @GetMapping("{game_id}/chat")
     public ResponseEntity getAllChats(@PathVariable("game_id") int game_id, int player_id) {
         Collection<ChatDto> chats = chatMapper.chatToChatDto(chatService.findAllChatsForPlayer(game_id, player_id));
         return ResponseEntity.ok(chats);
