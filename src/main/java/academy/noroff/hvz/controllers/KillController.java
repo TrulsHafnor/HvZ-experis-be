@@ -4,6 +4,7 @@ import academy.noroff.hvz.mappers.KillMapper;
 import academy.noroff.hvz.models.Kill;
 import academy.noroff.hvz.models.dtos.KillDto;
 import academy.noroff.hvz.models.dtos.RegisterKillDto;
+import academy.noroff.hvz.models.dtos.UpdateKillDto;
 import academy.noroff.hvz.services.KillService;
 import academy.noroff.hvz.utils.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -147,12 +148,11 @@ public class KillController {
     })
     @PutMapping("{game_id}/kills/{kill_id}")
     @PreAuthorize("hasAuthority('read:admin')")
-    public ResponseEntity updateKill(@RequestBody KillDto killDto,@PathVariable("game_id") int game_id ,@PathVariable("kill_id") int kill_id) {
-        // TODO: 10/11/2022 killer og admin skal kunne endre kill fiks også game id
-        if(kill_id != killDto.getId())
+    public ResponseEntity updateKill(@RequestBody UpdateKillDto updateKillDto, @PathVariable("game_id") int game_id , @PathVariable("kill_id") int kill_id) {
+        if(kill_id != updateKillDto.getId() || updateKillDto.getGame() != game_id)
             return ResponseEntity.badRequest().build();
         killService.updateKill(
-                killMapper.killDtoToKill(killDto)
+                killMapper.updateKillDtoToKill(updateKillDto)
         );
         return ResponseEntity.noContent().build();
     }

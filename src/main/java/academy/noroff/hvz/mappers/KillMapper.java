@@ -5,6 +5,7 @@ import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Kill;
 import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.models.dtos.KillDto;
+import academy.noroff.hvz.models.dtos.UpdateKillDto;
 import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.services.KillService;
 import academy.noroff.hvz.services.PlayerService;
@@ -50,5 +51,12 @@ public abstract class KillMapper {
     @Named("deathToDeathIds")
     Player deathToDeathIds(Integer id) {
         return playerService.findPlayerById(id);
+    }
+
+    public Kill updateKillDtoToKill(UpdateKillDto updateKillDto) {
+        Kill kill = killService.findKillById(updateKillDto.getId());
+        kill.setLng(updateKillDto.getLng());
+        kill.setLat(updateKillDto.getLat());
+        return kill;
     }
 }
