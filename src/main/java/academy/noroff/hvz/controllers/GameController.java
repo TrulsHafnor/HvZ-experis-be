@@ -6,6 +6,7 @@ import academy.noroff.hvz.mappers.GameMapper;
 import academy.noroff.hvz.models.Chat;
 import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.dtos.ChatDto;
+import academy.noroff.hvz.models.dtos.CreateGameDto;
 import academy.noroff.hvz.models.dtos.GameDto;
 import academy.noroff.hvz.services.ChatService;
 import academy.noroff.hvz.services.GameService;
@@ -92,7 +93,8 @@ public class GameController {
     })
     @PostMapping
     @PreAuthorize("hasAuthority('read:admin')")
-    public ResponseEntity addGame (@RequestBody GameDto gameDto) {
+    public ResponseEntity addGame (@RequestBody CreateGameDto createGameDto) {
+        GameDto gameDto = gameMapper.createGameDtoTpGameDto(createGameDto);
         Game game = gameMapper.gameDtoToGame(gameDto);
         gameService.addGame(game);
         URI location = URI.create("game/" + game.getId());

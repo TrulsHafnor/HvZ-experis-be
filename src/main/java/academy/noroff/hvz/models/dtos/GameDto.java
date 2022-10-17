@@ -21,4 +21,15 @@ public class GameDto {
     private Set<Integer> missions;
     private Set<Integer> kills;
     private Set<Integer> chats;
+
+    public GameDto () {}
+
+    public GameDto (String gameTitle, String gameDescription, float nw_lat, float nw_lng, float se_lat, float se_lng) {
+        this.gameTitle = gameTitle;
+        this.gameDescription = gameDescription;
+        this.nw_lat = nw_lat;
+        this.nw_lng = nw_lng;
+        this.se_lat=se_lat;
+        this.se_lng = se_lng;
+    }
 }

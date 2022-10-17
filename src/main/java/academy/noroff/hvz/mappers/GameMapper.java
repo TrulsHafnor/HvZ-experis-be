@@ -1,6 +1,7 @@
 package academy.noroff.hvz.mappers;
 
 import academy.noroff.hvz.models.*;
+import academy.noroff.hvz.models.dtos.CreateGameDto;
 import academy.noroff.hvz.models.dtos.GameDto;
 import academy.noroff.hvz.services.ChatService;
 import academy.noroff.hvz.services.KillService;
@@ -101,4 +102,12 @@ public abstract class GameMapper {
                 .map(Chat::getId).collect(Collectors.toSet());
     }
 
+    public GameDto createGameDtoTpGameDto(CreateGameDto createGameDto) {
+        return new GameDto(createGameDto.getGameTitle(),
+                createGameDto.getGameDescription(),
+                createGameDto.getNw_lat(),
+                createGameDto.getNw_lng(),
+                createGameDto.getSe_lat(),
+                createGameDto.getSe_lng());
+    }
 }
