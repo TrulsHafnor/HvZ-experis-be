@@ -23,7 +23,7 @@ import java.net.URI;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/game")
+@RequestMapping("api/v1/games")
 @CrossOrigin(origins = {
     "https://hvz-fe-noroff.herokuapp.com/",
     "http://localhost:3000"
@@ -61,7 +61,7 @@ public class MissionController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
-    @GetMapping("{game_id}/mission/{mission_id}/player/{player_id}")
+    @GetMapping("{game_id}/missions/{mission_id}/players/{player_id}")
     public ResponseEntity getMissionById(@PathVariable int mission_id, @PathVariable int game_id, @PathVariable int player_id) {
         Mission missionCheck = missionService.getMissionInGame(game_id, mission_id);
         if (playerService.findPlayerById(player_id).getGame().getId() != game_id ||
@@ -81,7 +81,7 @@ public class MissionController {
                     description = "Can't find missions",
                     content = @Content)
     })
-    @GetMapping("{game_id}/mission/{player_id}")
+    @GetMapping("{game_id}/missions/{player_id}")
     public ResponseEntity getAllMissions(@PathVariable int game_id,@PathVariable int player_id) {
         Collection<MissionDto> missions = missionMapper.missionToMissionDto(
                 missionService.findAllMissionsInGame(game_id, player_id)
@@ -94,12 +94,16 @@ public class MissionController {
             @ApiResponse(responseCode = "201",
                     description = "Mission created successfully",
                     content = @Content),
+            @ApiResponse(responseCode = "403",
+                    description = "Forbidden access.",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorResponse.class)) }),
             @ApiResponse(responseCode = "400",
                     description = "Malformed request",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
     })
-    @PostMapping("{game_id}/mission")
+    @PostMapping("{game_id}/missions")
     @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity addMission (@RequestBody MissionDto missionDto, @PathVariable int game_id) {
         if (missionDto.getGame() != gameService.findGameById(missionDto.getGame()).getId()) {
@@ -107,7 +111,7 @@ public class MissionController {
         }
         Mission mission = missionMapper.missionDtoToMission(missionDto);
         missionService.addMission(mission);
-        URI location = URI.create("game/" + game_id + "mission/" + mission.getId());
+        URI location = URI.create("games/" + game_id + "missions/" + mission.getId());
         return ResponseEntity.created(location).build();
     }
 
@@ -120,7 +124,7 @@ public class MissionController {
                                     mediaType = "application/json",
                                     array = @ArraySchema(schema = @Schema(implementation = MissionDto.class))) }),
             @ApiResponse(responseCode = "403",
-                    description = "Mission does not exist in this game",
+                    description = "Access forbidden",
                     content = {
                             @Content(
                                     mediaType = "application/json",
@@ -132,7 +136,7 @@ public class MissionController {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
-    @DeleteMapping("{game_id}/mission/{mission_id}")
+    @DeleteMapping("{game_id}/missions/{mission_id}")
     @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity deleteMission (@PathVariable int mission_id, @PathVariable int game_id) {
         Mission tempMission = missionService.getMissionInGame(game_id, mission_id);
@@ -152,11 +156,15 @@ public class MissionController {
                     description = "Malformed request",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
+            @ApiResponse(responseCode = "403",
+                    description = "Forbidden access.",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorResponse.class)) }),
             @ApiResponse(responseCode = "404",
                     description = "Mission not found with supplied ID",
                     content = @Content)
     })
-    @PutMapping("{game_id}/mission/{mission_id}")
+    @PutMapping("{game_id}/missions/{mission_id}")
     @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity updateMission(@RequestBody MissionDto missionDto, @PathVariable int mission_id, @PathVariable int game_id) {
         if(mission_id != missionDto.getId())

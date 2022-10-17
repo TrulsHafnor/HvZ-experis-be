@@ -7,11 +7,10 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class PlayerDto {
+public class NoPatientZeroPlayerDto {
     private int id;
     private String biteCode;
     private boolean isHuman;
-    private boolean isPatientZero;
     private int game;
     private Set<Integer> kills;
     private int death;
