@@ -42,7 +42,6 @@ public class Player {
     private Kill death;
 
     @OneToOne
-    @NotNull
     @JoinColumn(name = "user_id")
     private AppUser user;
 
