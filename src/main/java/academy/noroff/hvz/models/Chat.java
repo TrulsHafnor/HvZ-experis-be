@@ -16,21 +16,29 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "chat_id")
     private int id;
+
     @NotNull
     @Column(length = 150)
     private String message;
     private boolean isHuman;
     private boolean isGlobal;
+
     @Setter(AccessLevel.NONE)
     private String chatTime;
+
     @NotNull
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
+
     @NotNull
     @ManyToOne
     @JoinColumn(name = "player_id")
     private Player player;
+
+    @ManyToOne
+    @JoinColumn(name = "squad_id")
+    private Squad squad;
 
     public void setChatTime(String chatTime) {
         this.chatTime = chatTimestamp();

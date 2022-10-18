@@ -7,7 +7,6 @@ import academy.noroff.hvz.models.AppUser;
 import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.repositories.PlayerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;

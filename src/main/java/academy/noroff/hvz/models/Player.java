@@ -41,9 +41,15 @@ public class Player {
     @OneToOne(mappedBy = "playerDeath")
     private Kill death;
 
+    @OneToOne(mappedBy = "member")
+    private SquadMember membership;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private AppUser user;
+
+    @OneToMany(mappedBy = "player")
+    private Set<Squad> squads;
 
     public void setBiteCode(String biteCode) {
         this.biteCode = generateBitCode();
