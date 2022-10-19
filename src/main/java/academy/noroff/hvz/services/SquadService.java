@@ -59,11 +59,20 @@ public class SquadService {
         return squadRepository.save(squad);
     }
 
-    public void leaveGame(int squadId, int playerID) {
-        checkForCompleteGame(playerService.findPlayerById(playerID).getGame().getId());
+    @Transactional
+    public void leaveSquad(int gameId, int playerID) {
+        //does player exist in that game?
+        playerService.findPlayerInGame(gameId,playerID);
+        //check game status
+        checkForCompleteGame(gameId);
+        int squadId = squadRepository.findSquadIdWhitPlayerIdAndGameId(gameId,playerID);
         SquadMember squadMember = squadMemberService.findSquadMemberByIds(squadId, playerID);
         squadMemberService.deleteSquadMember(squadMember);
+        if (findSquadById(squadId).getMembers().size() -1 == 0) {
+            deleteSquad(findSquadById(squadId).getGame().getId(),squadId);
+        }
     }
+
 
     public Squad findSquadInGame(int gameId, int squadId) {
         return squadRepository.findSquadInGame(gameId,squadId).orElseThrow(

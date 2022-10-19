@@ -17,4 +17,7 @@ public interface SquadRepository extends JpaRepository<Squad, Integer> {
     @Query(value = "SELECT * FROM Squad s WHERE s.game_id = :gameId", nativeQuery = true)
     Collection<Squad> findAllSquadsInGame(@Param("gameId") Integer gameId);
 
+    @Query(value = "SELECT squad_id FROM Squad s WHERE s.game_id = :gameId and s.player_id = :playerId", nativeQuery = true)
+    Integer findSquadIdWhitPlayerIdAndGameId(@Param("gameId") Integer gameId, @Param("playerId") Integer playerId);
+
 }

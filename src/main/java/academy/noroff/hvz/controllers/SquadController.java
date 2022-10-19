@@ -165,10 +165,10 @@ public class SquadController {
         // TODO: 10/18/2022  er denne sikker nok Sondre?
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("read:admin"))) {
-            squadService.leaveGame(game_id, player_id);
+            squadService.leaveSquad(game_id, player_id);
             return ResponseEntity.noContent().build();
         }
-        squadService.leaveGame(game_id, player_id);
+        squadService.leaveSquad(game_id, player_id);
         return ResponseEntity.noContent().build();
     }
 

@@ -27,7 +27,6 @@ public class SquadMemberService {
                 () -> new SquadMemberNotFoundException("Squad member by id "+ id + " was not found"));
     }
 
-
     public SquadMember addSquadMember(SquadMember squadMember) {
         return squadMemberRepository.save(squadMember);
     }
