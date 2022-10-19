@@ -1,7 +1,9 @@
 package academy.noroff.hvz.controllers;
 
+import academy.noroff.hvz.mappers.SquadCheckinMapper;
 import academy.noroff.hvz.mappers.SquadMapper;
 import academy.noroff.hvz.models.Squad;
+import academy.noroff.hvz.models.SquadCheckin;
 import academy.noroff.hvz.models.dtos.*;
 import academy.noroff.hvz.services.SquadService;
 import academy.noroff.hvz.utils.ApiErrorResponse;
@@ -32,11 +34,13 @@ import java.util.Collection;
 public class SquadController {
     private final SquadService squadService;
     private final SquadMapper squadMapper;
+    private final SquadCheckinMapper squadCheckinMapper;
 
     @Autowired
-    public SquadController(SquadService squadService, SquadMapper squadMapper) {
+    public SquadController(SquadService squadService, SquadMapper squadMapper, SquadCheckinMapper squadCheckinMapper) {
         this.squadService=squadService;
         this.squadMapper=squadMapper;
+        this.squadCheckinMapper=squadCheckinMapper;
     }
 
     @Operation(summary = "Create new squad")
@@ -221,11 +225,44 @@ public class SquadController {
     })
     @PutMapping("/{game_id}/squad/{squad_id}")
     @PreAuthorize("hasAuthority('read:admin')")
-    public ResponseEntity updateSquad(@RequestBody UpdateSquadDto updateSquadDto,@PathVariable int game_id, @PathVariable int player_id) {
+    public ResponseEntity updateSquad(@RequestBody UpdateSquadDto updateSquadDto,@PathVariable int game_id, @PathVariable int squad_id) {
         if (game_id != updateSquadDto.getGame())
             return ResponseEntity.badRequest().build();
         squadService.updateSquad(squadMapper.updateSquadDtoToSquadDto(updateSquadDto));
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Create squad checkin")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Squad checkin was successfully created",
+                    content = @Content),
+            @ApiResponse(responseCode = "400",
+                    description = "Malformed request",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
+            @ApiResponse(responseCode = "403",
+                    description = "Forbidden access.",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorResponse.class)) }),
+            @ApiResponse(responseCode = "404",
+                    description = "Squad does not exist with supplied ID in game",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ApiErrorResponse.class)) })
+
+    })
+    @PostMapping("/{game_id}/squad/{squad_id}/check-in")
+    public ResponseEntity createSquadCheckin (@RequestBody CreateCheckinDto createCheckinDto, @PathVariable("game_id") int game_id, @PathVariable("squad_id") int squad_id) {
+        if (createCheckinDto.getGame() != game_id) {
+            return ResponseEntity.badRequest().build();
+        }
+        SquadCheckin tempSquadCheckin = squadCheckinMapper.createCheckinDtoToSquadCheckin(createCheckinDto);
+        SquadCheckin squadCheckin = squadService.creatSquadCheckin(tempSquadCheckin);
+        // TODO: 10/14/2022 wrong uri
+        URI location = URI.create("game/squad");
+        return ResponseEntity.created(location).build();
     }
 
 }

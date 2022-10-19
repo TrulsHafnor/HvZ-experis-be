@@ -3,6 +3,7 @@ package academy.noroff.hvz.mappers;
 import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.SquadCheckin;
 import academy.noroff.hvz.models.SquadMember;
+import academy.noroff.hvz.models.dtos.CreateCheckinDto;
 import academy.noroff.hvz.models.dtos.SquadCheckinDto;
 import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.services.SquadMemberService;
@@ -29,6 +30,12 @@ public abstract class SquadCheckinMapper {
     @Mapping(target = "squadMember", source = "squadMember", qualifiedByName = "squadMemberToSquadMemberIds")
     @Mapping(target = "game", source = "game", qualifiedByName = "gameToGameIds")
     public abstract SquadCheckin squadCheckinDtoToSquadCheckin(SquadCheckinDto squadCheckinDto);
+
+    @Mapping(target = "squadMember", source = "squadMember", qualifiedByName = "squadMemberToSquadMemberIds")
+    @Mapping(target = "game", source = "game", qualifiedByName = "gameToGameIds")
+    public abstract SquadCheckin createCheckinDtoToSquadCheckin(CreateCheckinDto createCheckinDto);
+
+
 
     @Named("squadMemberToSquadMemberIds")
     SquadMember mapIdToSquadMember(Integer id){return squadMemberService.findSquadMember(id);}

@@ -1,10 +1,13 @@
 package academy.noroff.hvz.models;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Entity
 @Setter
@@ -16,6 +19,16 @@ public class SquadCheckin {
     private int id;
 
     @NotNull
+    private float lat;
+    @NotNull
+    private float lng;
+    @NotNull
+    @Setter(AccessLevel.NONE)
+    private String startTime;
+    @NotNull
+    private String endTime;
+
+    @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "squadMember_id")
     private SquadMember squadMember;
@@ -24,4 +37,21 @@ public class SquadCheckin {
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
+
+    public SquadCheckin(){}
+
+    public SquadCheckin (float lat, float lng, String endTime, String startTime, SquadMember squadMember ,Game game) {
+        this.lat = lat;
+        this.lng=lng;
+        this.startTime = startTime;
+        this.endTime =endTime;
+        this.squadMember=squadMember;
+        this.game=game;
+    }
+
+    public void setStartTime(String startTime) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date date = new Date();
+        this.startTime = formatter.format(date);;
+    }
 }

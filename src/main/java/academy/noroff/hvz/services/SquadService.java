@@ -7,6 +7,7 @@ import academy.noroff.hvz.exeptions.SquadMemberNotFoundException;
 import academy.noroff.hvz.exeptions.SquadNotFoundException;
 import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.models.Squad;
+import academy.noroff.hvz.models.SquadCheckin;
 import academy.noroff.hvz.models.SquadMember;
 import academy.noroff.hvz.models.dtos.JoinSquadDto;
 import academy.noroff.hvz.repositories.SquadRepository;
@@ -23,13 +24,17 @@ public class SquadService {
     private final PlayerService playerService;
     private final SquadMemberService squadMemberService;
     private final GameService gameService;
+    private final SquadCheckinService squadCheckinService;
 
     @Autowired
-    public SquadService(SquadRepository squadRepository, PlayerService playerService, SquadMemberService squadMemberService, GameService gameService) {
+    public SquadService(SquadRepository squadRepository, PlayerService playerService,
+                        SquadMemberService squadMemberService, GameService gameService,
+                        SquadCheckinService squadCheckinService) {
         this.squadRepository =squadRepository;
         this.playerService=playerService;
         this.squadMemberService=squadMemberService;
         this.gameService=gameService;
+        this.squadCheckinService=squadCheckinService;
     }
 
     public Squad findSquadById (int id) {
@@ -73,7 +78,6 @@ public class SquadService {
         }
     }
 
-
     public Squad findSquadInGame(int gameId, int squadId) {
         return squadRepository.findSquadInGame(gameId,squadId).orElseThrow(
                 () -> new SquadNotFoundException("Squad by id "+ squadId + " was not found in game by id " + gameId));
@@ -111,5 +115,10 @@ public class SquadService {
     private void checkIfAllreadyInSquad(int playerID) {
         if(!squadMemberService.checkIfPlayerIsInSquad(playerID))
             throw new CantJoinSquadException("You are all ready in a squad");
+    }
+
+    public SquadCheckin creatSquadCheckin(SquadCheckin squadCheckin) {
+        checkForCompleteGame(squadCheckin.getGame().getId());
+        return squadCheckinService.createSquadCheckin(squadCheckin);
     }
 }
