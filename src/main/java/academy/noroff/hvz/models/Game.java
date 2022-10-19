@@ -23,7 +23,6 @@ public class Game {
     @NotNull
     @Column(length = 50, nullable = false)
     private String gameTitle;
-    @Setter(AccessLevel.NONE)
     @NotNull
     @Enumerated(EnumType.STRING)
     private GameState gameState;
@@ -46,7 +45,7 @@ public class Game {
     @OneToMany(mappedBy = "game")
     private Set<Chat> chats;
 
-    public void setGameState(GameState gameState) {
+    public void setStartState() {
         this.gameState = GameState.REGISTRATION;
     }
 }
