@@ -102,6 +102,7 @@ public class PlayerService {
     public Player updatePlayer (Player player) {
         if (player.isHuman())
             player.setBiteCode("dummy");
+        player.setUser(playerRepository.findById(player.getId()).get().getUser());
         return playerRepository.save(player);
     }
 
