@@ -24,8 +24,10 @@ public class SquadCheckin {
     private float lng;
     @NotNull
     @Setter(AccessLevel.NONE)
+    @Column(length = 19)
     private String startTime;
     @NotNull
+    @Column(length = 19)
     private String endTime;
 
     @NotNull
