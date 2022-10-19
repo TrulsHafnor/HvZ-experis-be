@@ -100,6 +100,8 @@ public class PlayerService {
      * @return
      */
     public Player updatePlayer (Player player) {
+        if (player.isHuman())
+            player.setBiteCode("dummy");
         return playerRepository.save(player);
     }
 
