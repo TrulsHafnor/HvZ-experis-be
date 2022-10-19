@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @Controller
 @CrossOrigin(origins = {
         "https://hvz-fe-noroff.herokuapp.com/",
-        "http://localhost:3000"
+        "http://localhost:3000",
+        "http://localhost:3000/chatroom"
 }
 )
 public class ChatController {

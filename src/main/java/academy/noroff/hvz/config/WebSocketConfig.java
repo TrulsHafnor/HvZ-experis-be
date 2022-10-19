@@ -23,7 +23,13 @@ public class WebSocketConfig extends AbstractSecurityWebSocketMessageBrokerConfi
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app");
         registry.enableSimpleBroker("/chatroom","/user");
+        //registry.enableSimpleBroker("/global","/zombie", "/human", "/squad");
         registry.setUserDestinationPrefix("/user");
+    }
+
+    @Override
+    protected boolean sameOriginDisabled() {
+        return true;
     }
 
     @Override
