@@ -39,11 +39,11 @@ public class SquadService {
 
     @Transactional
     public Squad createSquad (Squad squad) {
+        //check for complete game
         checkForCompleteGame(squad.getGame().getId());
-        if (checkIfAllreadyInSquad(squad.getPlayer().getId(), squad.getGame().getId())) {
-            throw new CantJoinSquadException("You are all ready in a squad");
-        }
-        SquadMember squadMember = new SquadMember("Leader",squad);
+        //Check if player is in squad
+        checkIfAllreadyInSquad(squad.getPlayer().getId());
+        SquadMember squadMember = new SquadMember("Leader",squad,squad.getPlayer());
         squadMemberService.addSquadMember(squadMember);
         return squadRepository.save(squad);
     }
@@ -59,9 +59,9 @@ public class SquadService {
         return squadRepository.save(squad);
     }
 
-    public void leaveGame(int gameId, int playerID) {
-        checkForCompleteGame(gameId);
-        SquadMember squadMember = squadMemberService.findSquadMemberById()
+    public void leaveGame(int squadId, int playerID) {
+        checkForCompleteGame(playerService.findPlayerById(playerID).getGame().getId());
+        SquadMember squadMember = squadMemberService.findSquadMemberByIds(squadId, playerID);
         squadMemberService.deleteSquadMember(squadMember);
     }
 
@@ -81,10 +81,9 @@ public class SquadService {
         Squad squad = findSquadInGame(gameId,squadId);
         //throws exeption if not valid squad
         checkForValidSquad(squad, player);
-        if (checkIfAllreadyInSquad(player.getId(), gameId)) {
-            throw new CantJoinSquadException("You are all ready in a squad");
-        }
-        SquadMember squadMember = new SquadMember("Member", squad);
+        //Check if player is in squad
+        checkIfAllreadyInSquad(player.getId());
+        SquadMember squadMember = new SquadMember("Member", squad, player);
         return squadMemberService.addSquadMember(squadMember);
     }
 
@@ -100,7 +99,8 @@ public class SquadService {
         }
     }
 
-    private boolean checkIfAllreadyInSquad(int playerID, int gameId) {
-        return squadMemberService.findSquadMemberInGame(gameId,playerID).isEmpty();
+    private void checkIfAllreadyInSquad(int playerID) {
+        if(!squadMemberService.checkIfPlayerIsInSquad(playerID))
+            throw new CantJoinSquadException("You are all ready in a squad");
     }
 }

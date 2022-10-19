@@ -33,8 +33,9 @@ public class SquadMember {
 
     public  SquadMember() {}
 
-    public SquadMember(String rank, Squad squad) {
+    public SquadMember(String rank, Squad squad, Player member) {
         this.rank = rank;
         this.squad=squad;
+        this.member=member;
     }
 }

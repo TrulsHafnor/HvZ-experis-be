@@ -31,7 +31,7 @@ public abstract class SquadCheckinMapper {
     public abstract SquadCheckin squadCheckinDtoToSquadCheckin(SquadCheckinDto squadCheckinDto);
 
     @Named("squadMemberToSquadMemberIds")
-    SquadMember mapIdToSquadMember(Integer id){return squadMemberService.findSquadMemberById(id);}
+    SquadMember mapIdToSquadMember(Integer id){return squadMemberService.findSquadMember(id);}
 
     @Named("gameToGameIds")
     Game mapIdToGame(Integer id) {

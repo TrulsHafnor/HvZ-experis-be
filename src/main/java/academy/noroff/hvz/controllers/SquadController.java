@@ -2,7 +2,6 @@ package academy.noroff.hvz.controllers;
 
 import academy.noroff.hvz.mappers.SquadMapper;
 import academy.noroff.hvz.models.Squad;
-import academy.noroff.hvz.models.SquadMember;
 import academy.noroff.hvz.models.dtos.*;
 import academy.noroff.hvz.services.SquadService;
 import academy.noroff.hvz.utils.ApiErrorResponse;
@@ -24,7 +23,7 @@ import java.net.URI;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("game")
+@RequestMapping("api/v1/games")
 @CrossOrigin(origins = {
         "https://hvz-fe-noroff.herokuapp.com/",
         "http://localhost:3000"
@@ -49,6 +48,10 @@ public class SquadController {
                     description = "Malformed request",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
+            @ApiResponse(responseCode = "403",
+                    description = "Forbidden access.",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorResponse.class)) }),
             @ApiResponse(responseCode = "404",
                     description = "Squad does not exist with supplied ID in game",
                     content = {
@@ -82,7 +85,7 @@ public class SquadController {
                     description = "'Squad not found in game whith supplied ID",
                     content = @Content)
     })
-    @GetMapping("{game_id}/squad/{squad_id}")
+    @GetMapping("/{game_id}/squad/{squad_id}")
     public ResponseEntity getSquadInGame(@PathVariable int game_id, @PathVariable int squad_id) {
         Squad squad = squadService.findSquadInGame(game_id, squad_id);
         SquadDto squadDto = squadMapper.squadToSquadDto(squad);
@@ -102,7 +105,7 @@ public class SquadController {
                     description = "Game not found with supplied ID",
                     content = @Content)
     })
-    @GetMapping("{gameId}/squads")
+    @GetMapping("/{gameId}/squads")
     public ResponseEntity getSquadsInGame(@PathVariable int gameId) {
         Collection<Squad> squads = squadService.findAllSquadsInGame(gameId);
         Collection<SquadDto> squadDto = squadMapper.squadToSquadDto(squads);
@@ -118,6 +121,10 @@ public class SquadController {
                     description = "Malformed request",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class)) }),
+            @ApiResponse(responseCode = "403",
+                    description = "Forbidden access.",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorResponse.class)) }),
             @ApiResponse(responseCode = "404",
                     description = "Squad does not exist with supplied ID in game",
                     content = {
@@ -134,7 +141,7 @@ public class SquadController {
         return ResponseEntity.created(location).build();
     }
 
-    @Operation(summary = "Leave squad whit player id")
+    @Operation(summary = "Leave squad with player id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204",
                     description = "Success",
@@ -153,7 +160,7 @@ public class SquadController {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ApiErrorResponse.class))})
     })
-    @DeleteMapping("{game_id}/squad/{player_id}/leave")
+    @DeleteMapping("/{game_id}/squad/{player_id}/leave")
     public ResponseEntity leaveSquad(@PathVariable int game_id, @PathVariable int player_id) {
         // TODO: 10/18/2022  er denne sikker nok Sondre?
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -184,7 +191,7 @@ public class SquadController {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ApiErrorResponse.class))})
     })
-    @DeleteMapping("{game_id}/squad/{squad_id}")
+    @DeleteMapping("/{game_id}/squad/{squad_id}")
     public ResponseEntity deleteSquad(@PathVariable int game_id, @PathVariable int squad_id) {
         //check for admin
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -212,7 +219,7 @@ public class SquadController {
                     description = "Player not found with supplied ID",
                     content = @Content)
     })
-    @PutMapping("{game_id}/squad/{squad_id}")
+    @PutMapping("/{game_id}/squad/{squad_id}")
     @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity updateSquad(@RequestBody UpdateSquadDto updateSquadDto,@PathVariable int game_id, @PathVariable int player_id) {
         if (game_id != updateSquadDto.getGame())

@@ -17,20 +17,25 @@ public class SquadMemberService {
         this.squadMemberRepository = squadMemberRepository;
     }
 
-    public SquadMember findSquadMemberById(int id) {
+    public SquadMember findSquadMemberByIds(int squadId, int playerId) {
+        return squadMemberRepository.getSquadMemberInSquadWhitId(squadId, playerId).orElseThrow(
+                () -> new SquadMemberNotFoundException("Squad member by id "+ playerId + " was not found in squad by id " + squadId));
+    }
+
+    public SquadMember findSquadMember(int id) {
         return squadMemberRepository.findById(id).orElseThrow(
                 () -> new SquadMemberNotFoundException("Squad member by id "+ id + " was not found"));
     }
 
+
     public SquadMember addSquadMember(SquadMember squadMember) {
         return squadMemberRepository.save(squadMember);
     }
-/*
-    public Optional<SquadMember> findSquadMemberInGame(int gameId, int playerID) {
-        //needs to return empty Optional if it cant find game
-        return squadMemberRepository.findSquadMemberInGame(gameId,playerID);
+
+    public boolean checkIfPlayerIsInSquad(int playerID) {
+        return squadMemberRepository.checkIfPlayerIsInSquad(playerID).isEmpty();
     }
-  */
+
     public void deleteSquadMember(SquadMember squadMember) {
         // TODO: 10/18/2022 delete more? 
         squadMemberRepository.delete(squadMember);

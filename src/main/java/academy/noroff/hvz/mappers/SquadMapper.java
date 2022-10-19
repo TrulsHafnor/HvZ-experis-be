@@ -84,7 +84,7 @@ public abstract class SquadMapper {
     @Named("membersIdsToMembers")
     Set<SquadMember> mapIdsToMembers(Set<Integer> id) {
         return id.stream()
-                .map( i -> squadMemberService.findSquadMemberById(i))
+                .map( i -> squadMemberService.findSquadMember(i))
                 .collect(Collectors.toSet());
     }
 
