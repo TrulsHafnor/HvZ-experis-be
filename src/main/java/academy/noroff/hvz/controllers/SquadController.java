@@ -109,9 +109,9 @@ public class SquadController {
                     description = "Game not found with supplied ID",
                     content = @Content)
     })
-    @GetMapping("/{gameId}/squads")
-    public ResponseEntity getSquadsInGame(@PathVariable int gameId) {
-        Collection<Squad> squads = squadService.findAllSquadsInGame(gameId);
+    @GetMapping("/{game_id}/squads")
+    public ResponseEntity getSquadsInGame(@PathVariable int game_id) {
+        Collection<Squad> squads = squadService.findAllSquadsInGame(game_id);
         Collection<SquadDto> squadDto = squadMapper.squadToSquadDto(squads);
         return ResponseEntity.ok(squadDto);
     }
@@ -264,5 +264,27 @@ public class SquadController {
         URI location = URI.create("game/squad");
         return ResponseEntity.created(location).build();
     }
+
+    @Operation(summary = "Get all squads check-ins in game by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Success",
+                    content = @Content),
+            @ApiResponse(responseCode = "400",
+                    description = "Malformed request",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorAttributeOptions.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "Cant find any squad check ins",
+                    content = @Content)
+    })
+    @GetMapping("/{game_id}/squad/{squad_id}/check-in")
+    public ResponseEntity getSquadCheckinsInGame(@PathVariable int game_id, @PathVariable int squad_id) {
+        Collection<SquadCheckin> squadCheckins = squadService.findAllSquadsCheckinsInSquadByGameId(game_id, squad_id);
+        Collection<SquadCheckinDto> squadCheckinDtos = squadCheckinMapper.squadCheckinToSquadCheckinDto(squadCheckins);
+        return ResponseEntity.ok(squadCheckinDtos);
+    }
+
+
 
 }

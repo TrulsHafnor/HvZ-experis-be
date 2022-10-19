@@ -8,6 +8,7 @@ import academy.noroff.hvz.repositories.SquadCheckinRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @Service
@@ -35,5 +36,9 @@ public class SquadCheckinService {
 
     public void deleteSquadCheckin(SquadCheckin squadCheckin) {
         squadCheckinRepository.delete(squadCheckin);
+    }
+
+    public Collection<SquadCheckin> getAllSquadCheckinsWhitSquadAndPlayerId(int gameId, int squadId) {
+        return squadCheckinRepository.findAllCheckinsInSquadWhitGameId(gameId, squadId);
     }
 }

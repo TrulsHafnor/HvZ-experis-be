@@ -121,4 +121,8 @@ public class SquadService {
         checkForCompleteGame(squadCheckin.getGame().getId());
         return squadCheckinService.createSquadCheckin(squadCheckin);
     }
+
+    public Collection<SquadCheckin> findAllSquadsCheckinsInSquadByGameId(int gameId, int squadId) {
+        return squadCheckinService.getAllSquadCheckinsWhitSquadAndPlayerId(gameId, squadId);
+    }
 }

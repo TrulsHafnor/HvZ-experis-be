@@ -7,10 +7,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @Repository
 public interface SquadCheckinRepository extends JpaRepository<SquadCheckin,Integer> {
     @Query(value = "SELECT * FROM Squad_checkin s WHERE s.game_id = :gameId and s.squad_member_id = :playerId", nativeQuery = true)
     Optional<SquadCheckin> getSquadCheckinByGameIdAndPlayerId(@Param("gameId") Integer gameId, @Param("playerId") Integer playerId);
+
+    @Query(value = "SELECT * FROM Squad_checkin s WHERE s.game_id = :gameId UNION SELECT * s.squad_member_id = :squadId", nativeQuery = true)
+    Collection<SquadCheckin> findAllCheckinsInSquadWhitGameId(@Param("gameId") Integer gameId, @Param("squadId") Integer squadId);
+
+    //SELECT phone FROM Customers
+    //UNION SELECT item FROM Orders
 }
