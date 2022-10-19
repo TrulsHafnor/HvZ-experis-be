@@ -2,7 +2,6 @@ package academy.noroff.hvz.services;
 
 import academy.noroff.hvz.exeptions.GameNotFoundException;
 import academy.noroff.hvz.models.Chat;
-import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.repositories.ChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class ChatService {

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
@@ -19,6 +21,7 @@ public class Kill {
     @Column(name = "kill_id")
     private int id;
     @Setter(AccessLevel.NONE)
+    @Column(length = 19)
     private String timeOfDeath;
     private float lat;
     private float lng;
