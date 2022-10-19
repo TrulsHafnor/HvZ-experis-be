@@ -22,6 +22,11 @@ public class SquadMemberService {
                 () -> new SquadMemberNotFoundException("Squad member by id "+ playerId + " was not found in squad by id " + squadId));
     }
 
+    public SquadMember findSquadMemberWhitPlayerId(int playerId) {
+        return squadMemberRepository.getSquadMemberWhitPlayerID(playerId).orElseThrow(
+                () -> new SquadMemberNotFoundException("Cant find squad member whit player id " + playerId));
+    }
+
     public SquadMember findSquadMember(int id) {
         return squadMemberRepository.findById(id).orElseThrow(
                 () -> new SquadMemberNotFoundException("Squad member by id "+ id + " was not found"));

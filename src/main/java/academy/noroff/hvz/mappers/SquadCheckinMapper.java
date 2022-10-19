@@ -31,11 +31,12 @@ public abstract class SquadCheckinMapper {
     @Mapping(target = "game", source = "game", qualifiedByName = "gameToGameIds")
     public abstract SquadCheckin squadCheckinDtoToSquadCheckin(SquadCheckinDto squadCheckinDto);
 
-    @Mapping(target = "squadMember", source = "squadMember", qualifiedByName = "squadMemberToSquadMemberIds")
+    @Mapping(target = "squadMember", source = "squadMember", qualifiedByName = "playerIdToSquadMemberId")
     @Mapping(target = "game", source = "game", qualifiedByName = "gameToGameIds")
     public abstract SquadCheckin createCheckinDtoToSquadCheckin(CreateCheckinDto createCheckinDto);
 
-
+    @Named("playerIdToSquadMemberId")
+    SquadMember mapPlayerIdToSquadMember(Integer id){return squadMemberService.findSquadMemberWhitPlayerId(id);}
 
     @Named("squadMemberToSquadMemberIds")
     SquadMember mapIdToSquadMember(Integer id){return squadMemberService.findSquadMember(id);}

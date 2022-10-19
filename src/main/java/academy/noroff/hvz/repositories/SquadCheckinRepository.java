@@ -15,9 +15,7 @@ public interface SquadCheckinRepository extends JpaRepository<SquadCheckin,Integ
     @Query(value = "SELECT * FROM Squad_checkin s WHERE s.game_id = :gameId and s.squad_member_id = :playerId", nativeQuery = true)
     Optional<SquadCheckin> getSquadCheckinByGameIdAndPlayerId(@Param("gameId") Integer gameId, @Param("playerId") Integer playerId);
 
-    @Query(value = "SELECT * FROM Squad_checkin s INNER JOIN Squad_member sm ON s.squad_member_id = sm.member_id WHERE s.game_id = :gameId and sm.squad_id = :squadId", nativeQuery = true)
+    @Query(value = "SELECT * FROM Squad_checkin s INNER JOIN Squad_member sm ON s.squad_member_id = sm.squad_member_id WHERE s.game_id = :gameId and sm.squad_id = :squadId", nativeQuery = true)
     Collection<SquadCheckin> findAllCheckinsInSquadWhitGameId(@Param("gameId") Integer gameId, @Param("squadId") Integer squadId);
-    //SELECT ID FROM Customers INNER
-    //JOIN Orders ON Customers.ID = Orders.ID
 
 }
