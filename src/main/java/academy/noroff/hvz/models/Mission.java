@@ -19,6 +19,7 @@ public class Mission {
     @Column(length = 50, nullable = false)
     private String missionName;
     @Enumerated(EnumType.STRING)
+    @NotNull
     private MissionVisibility missionVisibility;
     @Column(length = 250)
     private String missionDescription;
