@@ -61,6 +61,12 @@ public class SquadController {
                     content = {
                             @Content(
                                     mediaType = "application/json",
+                                    schema = @Schema(implementation = ApiErrorResponse.class)) }),
+            @ApiResponse(responseCode = "409",
+                    description = "You are already in a squad",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
                                     schema = @Schema(implementation = ApiErrorResponse.class)) })
 
     })
@@ -131,6 +137,12 @@ public class SquadController {
                             schema = @Schema(implementation = ApiErrorResponse.class)) }),
             @ApiResponse(responseCode = "404",
                     description = "Squad does not exist with supplied ID in game",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ApiErrorResponse.class)) }),
+            @ApiResponse(responseCode = "409",
+                    description = "You are already in a squad",
                     content = {
                             @Content(
                                     mediaType = "application/json",
@@ -250,8 +262,7 @@ public class SquadController {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ApiErrorResponse.class)) })
-
+                                    schema = @Schema(implementation = ApiErrorResponse.class)) }),
     })
     @PostMapping("/{game_id}/squad/{squad_id}/check-in")
     public ResponseEntity createSquadCheckin (@RequestBody CreateCheckinDto createCheckinDto, @PathVariable("game_id") int game_id, @PathVariable("squad_id") int squad_id) {
