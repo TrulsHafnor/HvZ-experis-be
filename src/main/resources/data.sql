@@ -6,7 +6,7 @@ VALUES ('REGISTRATION', 'Game one', '59.932792', '10.754136', '59.928405', '10.7
 
 -- Player
 INSERT INTO player(bite_code, is_human, game_id, is_patient_zero)
-VALUES ('Hei1',true, 1, false),
+    VALUES ('Hei1',true, 1, false),
        ('Hei2', false, 1, false),
        ('Hei3', true, 2, false),
        ('Hei4', false, 2, false),
@@ -46,8 +46,8 @@ values ('02/04/1996','It is time to embrace the Eat', 59.931146,10.756830,'Code 
 -- Kill
 INSERT INTO kill(lat, lng, time_of_death, game_id, player_death_id, kills_id)
 VALUES ('59.932723','10.756447', '12:13:00',1,8,2),
-       ('59.932723','10.756447', '12:13:00',1,9,2),
-       ('59.932723','10.756447', '12:13:00',1,10,9),
+       ('59.926519','10.752038', '12:13:00',1,9,2),
+       ('59.925939','10.750561', '12:13:00',1,10,9),
        ('59.932723','10.756447', '12:13:00',2,11,4),
        ('59.932723','10.756447', '12:13:00',2,12,11),
        ('59.932723','10.756447', '12:13:00',3,13,6),
