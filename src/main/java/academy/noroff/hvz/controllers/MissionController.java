@@ -78,7 +78,7 @@ public class MissionController {
             @ApiResponse(responseCode = "200",
                     description = "Success",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Mission.class)) }),
+                            schema = @Schema(implementation = MissionDto.class)) }),
             @ApiResponse(responseCode = "404",
                     description = "Can't find missions",
                     content = @Content)
