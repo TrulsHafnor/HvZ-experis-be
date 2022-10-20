@@ -77,8 +77,7 @@ public class SquadController {
         }
         Squad squad = squadMapper.createSquadDtoToSquadDto(createSquadDto);
         squad = squadService.createSquad(squad);
-        // TODO: 10/14/2022 wrong uri
-        URI location = URI.create("game/squad" + squad.getId());
+        URI location = URI.create("games/"+game_id+"/squad/" + squad.getId());
         return ResponseEntity.created(location).build();
     }
 
@@ -152,8 +151,7 @@ public class SquadController {
     @PostMapping("/{game_id}/squad/{squad_id}/join")
     public ResponseEntity joinSquad (@RequestBody JoinSquadDto joinSquadDto, @PathVariable("game_id") int game_id, @PathVariable("squad_id") int squad_id) {
         squadService.joinSquad(game_id, squad_id, joinSquadDto);
-       //URI location = URI.create("game/squad" + squad.getId());
-       URI location = URI.create("game/squad");
+       URI location = URI.create("games/"+game_id+"/squad/"+squad_id+"/join");
         return ResponseEntity.created(location).build();
     }
 
@@ -264,15 +262,14 @@ public class SquadController {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ApiErrorResponse.class)) }),
     })
-    @PostMapping("/{game_id}/squad/{squad_id}/check-in")
+    @PostMapping("/{game_id}/squads/{squad_id}/check-in")
     public ResponseEntity createSquadCheckin (@RequestBody CreateCheckinDto createCheckinDto, @PathVariable("game_id") int game_id, @PathVariable("squad_id") int squad_id) {
         if (createCheckinDto.getGame() != game_id) {
             return ResponseEntity.badRequest().build();
         }
         SquadCheckin tempSquadCheckin = squadCheckinMapper.createCheckinDtoToSquadCheckin(createCheckinDto);
-        SquadCheckin squadCheckin = squadService.creatSquadCheckin(tempSquadCheckin);
-        // TODO: 10/14/2022 wrong uri
-        URI location = URI.create("game/squad");
+        squadService.creatSquadCheckin(tempSquadCheckin);
+        URI location = URI.create("games/"+game_id+"/squads/"+squad_id+"/squadMembers/"+createCheckinDto.getSquadMember()+"/check-in");
         return ResponseEntity.created(location).build();
     }
 
