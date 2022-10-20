@@ -17,6 +17,8 @@ import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -83,6 +85,13 @@ public class MissionController {
     })
     @GetMapping("{game_id}/missions/{player_id}")
     public ResponseEntity getAllMissions(@PathVariable int game_id,@PathVariable int player_id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("read:admin"))) {
+            Collection<MissionDto> missions = missionMapper.missionToMissionDto(
+                    missionService.findAllMissionsInGameAdmin(game_id)
+            );
+            return ResponseEntity.ok(missions);
+        }
         Collection<MissionDto> missions = missionMapper.missionToMissionDto(
                 missionService.findAllMissionsInGame(game_id, player_id)
         );
@@ -174,5 +183,4 @@ public class MissionController {
         );
         return ResponseEntity.noContent().build();
     }
-
 }

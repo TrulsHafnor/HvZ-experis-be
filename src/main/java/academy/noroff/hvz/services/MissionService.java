@@ -23,7 +23,7 @@ public class MissionService {
     }
 
     /**
-     * Returns a List of missions
+     * Returns a List of missions and checks for faction
      * @return
      */
     public Set<Mission> findAllMissionsInGame(int gameId, int playerId) {
@@ -33,6 +33,16 @@ public class MissionService {
         }
         return missionRepository.getVisibilityOfMission(gameId, MissionVisibility.HUMAN.toString());
     }
+
+    /**
+     * Returns a List of missions and checks for faction
+     * @return
+     */
+    public Set<Mission> findAllMissionsInGameAdmin(int gameId) {
+        return missionRepository.getAllMissionsInGame(gameId);
+    }
+
+
 
     /**
      * Takes an ID of type int and returns mission with same id.
