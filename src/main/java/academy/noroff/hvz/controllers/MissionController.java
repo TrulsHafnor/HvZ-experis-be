@@ -64,13 +64,19 @@ public class MissionController {
                             schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
     @GetMapping("{game_id}/missions/{mission_id}/players/{player_id}")
-    public ResponseEntity getMissionById(@PathVariable int mission_id, @PathVariable int game_id, @PathVariable int player_id) {
-        Mission missionCheck = missionService.getMissionInGame(game_id, mission_id);
+    public ResponseEntity getMissionById(@PathVariable int game_id,@PathVariable int mission_id, @PathVariable int player_id) {
+        MissionDto missionCheck = missionMapper.missionToMissionDto(missionService.getMissionInGame(game_id, mission_id));
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("read:admin"))) {
+            return ResponseEntity.ok(missionCheck);
+        }
+
         if (playerService.findPlayerById(player_id).getGame().getId() != game_id ||
                 !missionService.checkMissionType(missionCheck.getMissionVisibility(), player_id, game_id)){
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
-        return ResponseEntity.ok(missionMapper.missionToMissionDto(missionCheck));
+        return ResponseEntity.ok(missionCheck);
     }
 
     @Operation(summary = "Get all missions in game")
