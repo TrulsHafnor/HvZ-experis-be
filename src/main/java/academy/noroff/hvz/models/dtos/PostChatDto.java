@@ -1,13 +1,13 @@
 package academy.noroff.hvz.models.dtos;
 
-
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Setter
 @Getter
-public class ChatDto {
-    private int id;
+@ToString
+public class PostChatDto {
     private String senderName;
     private String message;
     private boolean isHuman;

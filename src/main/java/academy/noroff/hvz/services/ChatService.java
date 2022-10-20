@@ -24,6 +24,7 @@ public class ChatService {
     }
 
     public Chat addChat(Chat chat, int playerId) {
+        chat.setChatTime("dummy");
         return chatRepository.save(setValuesOnChat(chat, playerId));
     }
 
@@ -39,7 +40,7 @@ public class ChatService {
 
     public Chat findChatById (int id) {
         return chatRepository.findById(id).orElseThrow(
-                () -> new GameNotFoundException("Chat whit id "+ id + " was not found"));
+                () -> new GameNotFoundException("Chat with id "+ id + " was not found"));
     }
 
     public Collection<Chat> findAllChatsForPlayer(int gameId, int playerId) {

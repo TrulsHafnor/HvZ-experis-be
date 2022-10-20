@@ -202,8 +202,8 @@ public class GameController {
                     description = "Cant find chat",
                     content = @Content)
     })
-    @GetMapping("{game_id}/chat")
-    public ResponseEntity getAllChats(@PathVariable("game_id") int game_id, int player_id) {
+    @GetMapping("{game_id}/chat/{player_id}")
+    public ResponseEntity getAllChats(@PathVariable("game_id") int game_id, @PathVariable("player_id") int player_id) {
         Collection<ChatDto> chats = chatMapper.chatToChatDto(chatService.findAllChatsForPlayer(game_id, player_id));
         return ResponseEntity.ok(chats);
     }

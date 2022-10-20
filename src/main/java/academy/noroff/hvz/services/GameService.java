@@ -41,6 +41,7 @@ public class GameService {
      * @return
      */
     public Game findGameById (int id) {
+        System.out.println("DETTE ER GAME ID I service" + id);
         return gameRepository.findById(id).orElseThrow(
                 () -> new GameNotFoundException("Game by id "+ id + " was not found"));
     }

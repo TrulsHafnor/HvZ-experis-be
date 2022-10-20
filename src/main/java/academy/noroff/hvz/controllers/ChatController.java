@@ -1,7 +1,11 @@
 package academy.noroff.hvz.controllers;
 
 import academy.noroff.hvz.enums.Status;
+import academy.noroff.hvz.mappers.ChatMapper;
+import academy.noroff.hvz.models.Chat;
 import academy.noroff.hvz.models.Message;
+import academy.noroff.hvz.models.dtos.PostChatDto;
+import academy.noroff.hvz.services.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -22,10 +26,18 @@ import static java.lang.String.format;
 })
 public class ChatController {
 
+    private final ChatService chatService;
+    private final ChatMapper chatMapper;
+
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
+
+    public ChatController(ChatService chatService, ChatMapper chatMapper) {
+        this.chatService = chatService;
+        this.chatMapper = chatMapper;
+    }
 
     @MessageMapping("/message")
     @SendTo("/chatroom/public")
@@ -35,14 +47,25 @@ public class ChatController {
 
     @MessageMapping("/private-message")
     public Message recMessage(@Payload Message message){
-        simpMessagingTemplate.convertAndSendToUser(message.getReceiverName(),"/private",message);
+        //simpMessagingTemplate.convertAndSendToUser(message.getReceiverName(),"/private",message);
         System.out.println(message.toString());
         return message;
     }
 
-    @MessageMapping("/chat/{roomId}/sendMessage")
+    @MessageMapping("/chat/{roomId}/sendMessage/te")
     public void sendMessage(@DestinationVariable String roomId, @Payload Message chatMessage) {
+        //chatService.addChat()
+        System.out.println(chatMessage);
         messagingTemplate.convertAndSend(format("/chatroom/%s", roomId), chatMessage);
+    }
+
+    @MessageMapping("/chat/{roomId}/sendMessage")
+    public void sendMessageDto(@DestinationVariable String roomId, @Payload PostChatDto chatDto) {
+        Chat chat = chatMapper.postChatDtoToChat(chatDto);
+        System.out.println(chat.getGame().getId() + "DETTE ER GAME!!!");
+        System.out.println(chatDto);
+        chatService.addChat(chat, chat.getPlayer().getId());
+        messagingTemplate.convertAndSend(format("/chatroom/%s", roomId), chatDto);
     }
 
     @MessageMapping("/chat/{roomId}/human/sendMessage")
