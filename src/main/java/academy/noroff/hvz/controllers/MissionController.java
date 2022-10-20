@@ -126,7 +126,7 @@ public class MissionController {
 
     @Operation(summary = "Delete a mission by ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
+            @ApiResponse(responseCode = "204",
                     description = "Success",
                     content = {
                             @Content(
@@ -147,7 +147,7 @@ public class MissionController {
     })
     @DeleteMapping("{game_id}/missions/{mission_id}")
     @PreAuthorize("hasAuthority('read:admin')")
-    public ResponseEntity deleteMission (@PathVariable int mission_id, @PathVariable int game_id) {
+    public ResponseEntity deleteMission (@PathVariable int game_id, @PathVariable int mission_id) {
         Mission tempMission = missionService.getMissionInGame(game_id, mission_id);
         if(tempMission == null){
             return ResponseEntity.notFound().build();
