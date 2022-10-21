@@ -53,8 +53,8 @@ public class SquadService {
         return squadRepository.save(squad);
     }
 
+    @Transactional
     public void deleteSquad(int gameId, int squadID) {
-        // TODO: 10/18/2022 slette alt som har med squad
         checkForCompleteGame(gameId);
         squadRepository.delete(findSquadInGame(gameId,squadID));
     }

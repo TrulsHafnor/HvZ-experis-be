@@ -16,14 +16,14 @@ public class SquadMember {
     private int id;
 
     @NotNull
-    String rank;
+    private String rank;
 
     @NotNull
     @ManyToOne
     @JoinColumn(name = "squad_id")
     private Squad squad;
 
-    @OneToOne(mappedBy = "squadMember")
+    @OneToOne(mappedBy = "squadMember", cascade = CascadeType.ALL, orphanRemoval = true)
     private SquadCheckin squadCheckin;
 
     @NotNull

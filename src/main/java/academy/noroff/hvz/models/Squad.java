@@ -2,6 +2,7 @@ package academy.noroff.hvz.models;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -36,7 +37,7 @@ public class Squad {
     private Set<Chat> chat;
 
     @NotNull
-    @OneToMany(mappedBy = "squad")
+    @OneToMany(mappedBy = "squad", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<SquadMember> members;
 
 }
