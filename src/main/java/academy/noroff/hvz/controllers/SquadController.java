@@ -139,7 +139,7 @@ public class SquadController {
                     content = @Content)
     })
     @GetMapping("/{game_id}/squad/{squad_id}/players")
-    public ResponseEntity getSquadsInGame(@PathVariable int game_id, @PathVariable int squad_id) {
+    public ResponseEntity getAllplayersInSquad (@PathVariable int game_id, @PathVariable int squad_id) {
         Collection<LessDetailsPlayerDto> playersDto = playerMapper.playersToLessDetailsPlayerDto(squadService.getAllPlayersInSquad(game_id,squad_id));
 
         return ResponseEntity.ok(playersDto);
