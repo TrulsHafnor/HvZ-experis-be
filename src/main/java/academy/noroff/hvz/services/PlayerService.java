@@ -139,4 +139,8 @@ public class PlayerService {
             } while (playerRepository.checkIfBiteCodeExists(player.getBiteCode(), player.getGame().getId()) != 0);
         }
     }
+
+    public Collection<Player> getAllPlayersInSquad(int gameId, int squadId) {
+        return playerRepository.getAllPlayersInSquadWhitPlayerAndSquadId(gameId, squadId);
+    }
 }

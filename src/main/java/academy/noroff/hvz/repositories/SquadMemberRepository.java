@@ -21,6 +21,4 @@ public interface SquadMemberRepository extends JpaRepository<SquadMember, Intege
     //findSquadMemberWhitPlayerId
     @Query(value = "SELECT * FROM Squad_member s WHERE s.member_id = :playerId", nativeQuery = true)
     Optional<SquadMember> getSquadMemberWhitPlayerID(@Param("playerId") Integer playerId);
-
-
 }
