@@ -188,7 +188,7 @@ public class GameController {
         return ResponseEntity.created(location).build();
     }
 
-    @Operation(summary = "Get chat from game")
+    @Operation(summary = "Get faction chat from game")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
@@ -202,9 +202,29 @@ public class GameController {
                     description = "Cant find chat",
                     content = @Content)
     })
-    @GetMapping("{game_id}/chat/{player_id}")
+    @GetMapping("{game_id}/chat/{player_id}/faction")
     public ResponseEntity getAllChats(@PathVariable("game_id") int game_id, @PathVariable("player_id") int player_id) {
         Collection<ChatDto> chats = chatMapper.chatToChatDto(chatService.findAllChatsForPlayer(game_id, player_id));
+        return ResponseEntity.ok(chats);
+    }
+
+    @Operation(summary = "Get global chats from game")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Success",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Chat.class)) }),
+            @ApiResponse(responseCode = "403",
+                    description = "Forbidden access.",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ApiErrorResponse.class)) }),
+            @ApiResponse(responseCode = "404",
+                    description = "Cant find chat",
+                    content = @Content)
+    })
+    @GetMapping("{game_id}/chat/{player_id}/global")
+    public ResponseEntity getAllChatsGlobal(@PathVariable("game_id") int game_id, @PathVariable("player_id") int player_id) {
+        Collection<ChatDto> chats = chatMapper.chatToChatDto(chatService.findAllChats(game_id));
         return ResponseEntity.ok(chats);
     }
 }

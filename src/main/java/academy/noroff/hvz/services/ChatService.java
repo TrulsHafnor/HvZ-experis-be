@@ -1,5 +1,6 @@
 package academy.noroff.hvz.services;
 
+import academy.noroff.hvz.enums.Status;
 import academy.noroff.hvz.exeptions.GameNotFoundException;
 import academy.noroff.hvz.models.Chat;
 import academy.noroff.hvz.models.Game;
@@ -23,9 +24,10 @@ public class ChatService {
         this.playerService = playerService;
     }
 
-    public Chat addChat(Chat chat, int playerId) {
+    public void addChat(Chat chat, int playerId) {
+        if (chat.getStatus().equals(Status.JOIN)) return;
         chat.setChatTime("dummy");
-        return chatRepository.save(setValuesOnChat(chat, playerId));
+        chatRepository.save(setValuesOnChat(chat, playerId));
     }
 
     private Chat setValuesOnChat(Chat chat, int playerId) {
@@ -48,7 +50,7 @@ public class ChatService {
         return chatRepository.findChatInGameForPlayer(gameId,cantSeeOtherFaction);
     }
 
-    public List<Chat> findAllChats() {
-        return chatRepository.findAll();
+    public Collection<Chat> findAllChats(int gameId) {
+        return chatRepository.findGlobalChats(gameId);
     }
 }

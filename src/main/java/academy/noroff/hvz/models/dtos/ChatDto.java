@@ -10,6 +10,7 @@ public class ChatDto {
     private int id;
     private String senderName;
     private String message;
+    private String chatTime;
     private boolean isHuman;
     private boolean isGlobal;
     private String Status;
