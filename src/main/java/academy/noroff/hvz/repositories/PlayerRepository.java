@@ -26,7 +26,5 @@ public interface PlayerRepository extends JpaRepository<Player,Integer> {
     @Query(value = "DELETE FROM Player p WHERE p.game_id = :gameId", nativeQuery = true)
     void deleteAllPlayersInGame(@Param("gameId") int gameId);
 
-    @Query(value = "SELECT * FROM Player p INNER JOIN Squad_member sm ON p.player_id = sm.member_id WHERE p.game_id = :gameId and sm.squad_id = :squadId", nativeQuery = true)
-    Collection<Player> getAllPlayersInSquadWhitPlayerAndSquadId(@Param("gameId") Integer gameId, @Param("squadId") Integer squadId);
 
 }

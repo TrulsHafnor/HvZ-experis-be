@@ -46,4 +46,8 @@ public class SquadMemberService {
         // TODO: 10/18/2022 delete more? 
         squadMemberRepository.delete(squadMember);
     }
+
+    public Collection<SquadMember> getAllSquadMembers(int squadId) {
+        return squadMemberRepository.getAllSquadMembersInSquad(squadId);
+    }
 }
