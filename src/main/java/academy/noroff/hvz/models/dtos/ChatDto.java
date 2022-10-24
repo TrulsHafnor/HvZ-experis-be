@@ -11,8 +11,8 @@ public class ChatDto {
     private String senderName;
     private String message;
     private String chatTime;
-    private boolean isHuman;
-    private boolean isGlobal;
+    private boolean human;
+    private boolean global;
     private String Status;
     private int game;
     private int player;

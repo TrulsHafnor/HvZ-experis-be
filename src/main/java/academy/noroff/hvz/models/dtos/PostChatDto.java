@@ -10,8 +10,8 @@ import lombok.ToString;
 public class PostChatDto {
     private String senderName;
     private String message;
-    private boolean isHuman;
-    private boolean isGlobal;
+    private boolean human;
+    private boolean global;
     private String Status;
     private int game;
     private int player;

@@ -21,8 +21,8 @@ public class Chat {
     @Column(length = 150)
     private String message;
     private String senderName;
-    private boolean isHuman;
-    private boolean isGlobal;
+    private boolean human;
+    private boolean global;
     @Enumerated(EnumType.STRING)
     private Status status;
     @Setter(AccessLevel.NONE)
