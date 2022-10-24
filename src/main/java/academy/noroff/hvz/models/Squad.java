@@ -28,7 +28,7 @@ public class Squad {
     @JoinColumn(name = "game_id")
     private Game game;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "player_id")
     private Player player;
 

@@ -48,8 +48,8 @@ public class Player {
     @JoinColumn(name = "user_id")
     private AppUser user;
 
-    @OneToMany(mappedBy = "player")
-    private Set<Squad> squads;
+    @OneToOne(mappedBy = "player")
+    private Squad squad;
 
     public void setBiteCode(String biteCode) {
         this.biteCode = generateBitCode();

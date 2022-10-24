@@ -205,7 +205,6 @@ public class SquadController {
     })
     @DeleteMapping("/{game_id}/squad/{player_id}/leave")
     public ResponseEntity leaveSquad(@PathVariable int game_id, @PathVariable int player_id) {
-        // TODO: 10/18/2022  er denne sikker nok Sondre?
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("read:admin"))) {
             squadService.leaveSquad(game_id, player_id);

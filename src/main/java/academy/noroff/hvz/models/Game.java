@@ -45,6 +45,9 @@ public class Game {
     @OneToMany(mappedBy = "game")
     private Set<Chat> chats;
 
+    @OneToMany(mappedBy = "game")
+    private Set<Squad> squads;
+
     public void setStartState() {
         this.gameState = GameState.REGISTRATION;
     }
