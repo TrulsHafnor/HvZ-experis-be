@@ -71,7 +71,6 @@ public class PlayerController {
             Collection<PlayerDto> playerDtos = playerMapper.playersToPlayerDto(players);
             return ResponseEntity.ok(playerDtos);
         }
-
         Collection<LessDetailsPlayerDto> lessDetailsPlayerDtos = playerMapper.playersToLessDetailsPlayerDto(players);
         return ResponseEntity.ok(lessDetailsPlayerDtos);
     }

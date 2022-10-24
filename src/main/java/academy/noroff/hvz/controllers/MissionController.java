@@ -17,6 +17,8 @@ import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -62,13 +64,19 @@ public class MissionController {
                             schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
     @GetMapping("{game_id}/missions/{mission_id}/players/{player_id}")
-    public ResponseEntity getMissionById(@PathVariable int mission_id, @PathVariable int game_id, @PathVariable int player_id) {
-        Mission missionCheck = missionService.getMissionInGame(game_id, mission_id);
+    public ResponseEntity getMissionById(@PathVariable int game_id,@PathVariable int mission_id, @PathVariable int player_id) {
+        MissionDto missionCheck = missionMapper.missionToMissionDto(missionService.getMissionInGame(game_id, mission_id));
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("read:admin"))) {
+            return ResponseEntity.ok(missionCheck);
+        }
+
         if (playerService.findPlayerById(player_id).getGame().getId() != game_id ||
                 !missionService.checkMissionType(missionCheck.getMissionVisibility(), player_id, game_id)){
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
-        return ResponseEntity.ok(missionMapper.missionToMissionDto(missionCheck));
+        return ResponseEntity.ok(missionCheck);
     }
 
     @Operation(summary = "Get all missions in game")
@@ -76,13 +84,20 @@ public class MissionController {
             @ApiResponse(responseCode = "200",
                     description = "Success",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Mission.class)) }),
+                            schema = @Schema(implementation = MissionDto.class)) }),
             @ApiResponse(responseCode = "404",
                     description = "Can't find missions",
                     content = @Content)
     })
     @GetMapping("{game_id}/missions/{player_id}")
     public ResponseEntity getAllMissions(@PathVariable int game_id,@PathVariable int player_id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("read:admin"))) {
+            Collection<MissionDto> missions = missionMapper.missionToMissionDto(
+                    missionService.findAllMissionsInGameAdmin(game_id)
+            );
+            return ResponseEntity.ok(missions);
+        }
         Collection<MissionDto> missions = missionMapper.missionToMissionDto(
                 missionService.findAllMissionsInGame(game_id, player_id)
         );
@@ -117,7 +132,7 @@ public class MissionController {
 
     @Operation(summary = "Delete a mission by ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
+            @ApiResponse(responseCode = "204",
                     description = "Success",
                     content = {
                             @Content(
@@ -138,7 +153,7 @@ public class MissionController {
     })
     @DeleteMapping("{game_id}/missions/{mission_id}")
     @PreAuthorize("hasAuthority('read:admin')")
-    public ResponseEntity deleteMission (@PathVariable int mission_id, @PathVariable int game_id) {
+    public ResponseEntity deleteMission (@PathVariable int game_id, @PathVariable int mission_id) {
         Mission tempMission = missionService.getMissionInGame(game_id, mission_id);
         if(tempMission == null){
             return ResponseEntity.notFound().build();
@@ -174,5 +189,4 @@ public class MissionController {
         );
         return ResponseEntity.noContent().build();
     }
-
 }

@@ -99,8 +99,8 @@ public class GameController {
     @PostMapping
     @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity addGame (@RequestBody CreateGameDto createGameDto) {
-        GameDto gameDto = gameMapper.createGameDtoTpGameDto(createGameDto);
-        Game game = gameMapper.gameDtoToGame(gameDto);
+        Game game = gameMapper.createGameDtoTpGame(createGameDto);
+        game.setStartState();
         gameService.addGame(game);
         URI location = URI.create("games/" + game.getId());
         return ResponseEntity.created(location).build();

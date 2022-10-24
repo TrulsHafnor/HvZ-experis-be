@@ -7,7 +7,6 @@ import academy.noroff.hvz.models.AppUser;
 import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.repositories.PlayerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -101,6 +100,9 @@ public class PlayerService {
      * @return
      */
     public Player updatePlayer (Player player) {
+        if (player.isHuman())
+            player.setBiteCode("dummy");
+        player.setUser(playerRepository.findById(player.getId()).get().getUser());
         return playerRepository.save(player);
     }
 

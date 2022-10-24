@@ -103,14 +103,16 @@ public abstract class GameMapper {
                 .map(Chat::getId).collect(Collectors.toSet());
     }
 
-    public GameDto createGameDtoTpGameDto(CreateGameDto createGameDto) {
-        return new GameDto(createGameDto.getGameTitle(),
+    public abstract Game createGameDtoTpGame(CreateGameDto createGameDto);
+
+    /*
+           return new GameDto(createGameDto.getGameTitle(),
                 createGameDto.getGameDescription(),
                 createGameDto.getNw_lat(),
                 createGameDto.getNw_lng(),
                 createGameDto.getSe_lat(),
                 createGameDto.getSe_lng());
-    }
+     */
 
     public abstract Game updateGameDtoToGameDto(UpdateGameDto updateGameDto);
 }
