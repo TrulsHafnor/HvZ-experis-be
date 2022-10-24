@@ -1,5 +1,6 @@
 package academy.noroff.hvz.models;
 
+import academy.noroff.hvz.enums.Status;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
