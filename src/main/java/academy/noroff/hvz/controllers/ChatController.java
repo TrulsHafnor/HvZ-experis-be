@@ -4,6 +4,7 @@ import academy.noroff.hvz.enums.Status;
 import academy.noroff.hvz.mappers.ChatMapper;
 import academy.noroff.hvz.models.Chat;
 import academy.noroff.hvz.models.Message;
+import academy.noroff.hvz.models.dtos.ChatDto;
 import academy.noroff.hvz.models.dtos.PostChatDto;
 import academy.noroff.hvz.services.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,33 +54,37 @@ public class ChatController {
     }
     
     @MessageMapping("/chat/{gameId}/sendMessage")
-    public void sendMessage(@DestinationVariable String gameId, @Payload PostChatDto chatDto) {
-        Chat chat = chatMapper.postChatDtoToChat(chatDto);
+    public void sendMessage(@DestinationVariable String gameId, @Payload PostChatDto postChatDto) {
+        Chat chat = chatMapper.postChatDtoToChat(postChatDto);
         //System.out.println(chat.getGame().getId() + "DETTE ER GAME!!!");
         //System.out.println(chatDto);
         chatService.addChat(chat, chat.getPlayer().getId());
+        ChatDto chatDto = chatMapper.chatToChatDto(chat);
         messagingTemplate.convertAndSend(format("/chatroom/%s", gameId), chatDto);
     }
 
     @MessageMapping("/chat/{gameId}/human/sendMessage")
-    public void sendMessageHuman(@DestinationVariable String gameId, @Payload PostChatDto chatDto) {
-        Chat chat = chatMapper.postChatDtoToChat(chatDto);
+    public void sendMessageHuman(@DestinationVariable String gameId, @Payload PostChatDto postChatDto) {
+        Chat chat = chatMapper.postChatDtoToChat(postChatDto);
         chatService.addChat(chat, chat.getPlayer().getId());
+        ChatDto chatDto = chatMapper.chatToChatDto(chat);
         messagingTemplate.convertAndSend(format("/chatroom/%s/human", gameId), chatDto);
     }
 
     @MessageMapping("/chat/{gameId}/zombie/sendMessage")
-    public void sendMessageZombie(@DestinationVariable String gameId, @Payload PostChatDto chatDto) {
-        Chat chat = chatMapper.postChatDtoToChat(chatDto);
+    public void sendMessageZombie(@DestinationVariable String gameId, @Payload PostChatDto postChatDto) {
+        Chat chat = chatMapper.postChatDtoToChat(postChatDto);
         chatService.addChat(chat, chat.getPlayer().getId());
+        ChatDto chatDto = chatMapper.chatToChatDto(chat);
         messagingTemplate.convertAndSend(format("/chatroom/%s/zombie", gameId), chatDto);
     }
 
     @MessageMapping("/chat/{gameId}/{squadId}/sendMessage")
     public void sendMessageSquad(@DestinationVariable String gameId, @DestinationVariable String squadId,
-                                 @Payload PostChatDto chatDto) {
-        Chat chat = chatMapper.postChatDtoToChat(chatDto);
+                                 @Payload PostChatDto postChatDto) {
+        Chat chat = chatMapper.postChatDtoToChat(postChatDto);
         chatService.addChat(chat, chat.getPlayer().getId());
+        ChatDto chatDto = chatMapper.chatToChatDto(chat);
         messagingTemplate.convertAndSend(format("/chatroom/%s/%s", gameId, squadId), chatDto);
     }
 

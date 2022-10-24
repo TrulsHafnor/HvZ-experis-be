@@ -37,7 +37,6 @@ public abstract class ChatMapper {
 
     @Named("gameToGameIds")
     Game mapIdToGame(Integer id) {
-        System.out.println("DETTE ER GAME ID I MAPPER" + id);
         return gameService.findGameById(id);
     }
     @Named("playerToPlayerIds")
