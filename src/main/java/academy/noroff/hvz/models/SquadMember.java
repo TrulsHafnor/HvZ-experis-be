@@ -16,7 +16,7 @@ public class SquadMember {
     private int id;
 
     @NotNull
-    String rank;
+    private String rank;
 
     @NotNull
     @ManyToOne

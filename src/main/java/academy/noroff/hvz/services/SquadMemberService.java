@@ -1,11 +1,13 @@
 package academy.noroff.hvz.services;
 
 import academy.noroff.hvz.exeptions.SquadMemberNotFoundException;
+import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.models.SquadMember;
 import academy.noroff.hvz.repositories.SquadMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @Service
@@ -43,5 +45,9 @@ public class SquadMemberService {
     public void deleteSquadMember(SquadMember squadMember) {
         // TODO: 10/18/2022 delete more? 
         squadMemberRepository.delete(squadMember);
+    }
+
+    public Collection<SquadMember> getAllSquadMembers(int squadId) {
+        return squadMemberRepository.getAllSquadMembersInSquad(squadId);
     }
 }

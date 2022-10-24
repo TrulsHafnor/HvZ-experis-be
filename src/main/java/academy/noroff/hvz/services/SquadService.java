@@ -125,4 +125,10 @@ public class SquadService {
     public Collection<SquadCheckin> findAllSquadsCheckinsInSquadByGameId(int gameId, int squadId) {
         return squadCheckinService.getAllSquadCheckinsWhitSquadAndPlayerId(gameId, squadId);
     }
+
+    public Collection<SquadMember> getAllPlayersInSquad(int gameId, int squadId) {
+        //this will throw exeption if squad is not in game
+        findSquadInGame(gameId, squadId);
+        return squadMemberService.getAllSquadMembers(squadId);
+    }
 }

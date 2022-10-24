@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @Repository
@@ -22,5 +23,6 @@ public interface SquadMemberRepository extends JpaRepository<SquadMember, Intege
     @Query(value = "SELECT * FROM Squad_member s WHERE s.member_id = :playerId", nativeQuery = true)
     Optional<SquadMember> getSquadMemberWhitPlayerID(@Param("playerId") Integer playerId);
 
-
+    @Query(value = "SELECT * FROM Squad_member s WHERE s.squad_id = :squadId", nativeQuery = true)
+    Collection<SquadMember> getAllSquadMembersInSquad(@Param("squadId") Integer squadId);
 }
