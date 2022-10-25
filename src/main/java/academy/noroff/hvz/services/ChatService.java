@@ -51,4 +51,6 @@ public class ChatService {
     public Collection<Chat> findAllChats(int gameId) {
         return chatRepository.findGlobalChats(gameId);
     }
+
+    public Collection<Chat> findSquadChats(int gameId, int squadId) {return chatRepository.findSquadChats(gameId, squadId); }
 }

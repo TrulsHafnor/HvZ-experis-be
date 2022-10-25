@@ -3,12 +3,8 @@ package academy.noroff.hvz.services;
 import academy.noroff.hvz.enums.GameState;
 import academy.noroff.hvz.exeptions.CantJoinSquadException;
 import academy.noroff.hvz.exeptions.CantWriteToGameException;
-import academy.noroff.hvz.exeptions.SquadMemberNotFoundException;
 import academy.noroff.hvz.exeptions.SquadNotFoundException;
-import academy.noroff.hvz.models.Player;
-import academy.noroff.hvz.models.Squad;
-import academy.noroff.hvz.models.SquadCheckin;
-import academy.noroff.hvz.models.SquadMember;
+import academy.noroff.hvz.models.*;
 import academy.noroff.hvz.models.dtos.JoinSquadDto;
 import academy.noroff.hvz.repositories.SquadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @Service
 public class SquadService {
@@ -25,16 +20,18 @@ public class SquadService {
     private final SquadMemberService squadMemberService;
     private final GameService gameService;
     private final SquadCheckinService squadCheckinService;
+    private final ChatService chatService;
 
     @Autowired
     public SquadService(SquadRepository squadRepository, PlayerService playerService,
                         SquadMemberService squadMemberService, GameService gameService,
-                        SquadCheckinService squadCheckinService) {
+                        SquadCheckinService squadCheckinService, ChatService chatService) {
         this.squadRepository =squadRepository;
         this.playerService=playerService;
         this.squadMemberService=squadMemberService;
         this.gameService=gameService;
         this.squadCheckinService=squadCheckinService;
+        this.chatService = chatService;
     }
 
     public Squad findSquadById (int id) {
@@ -124,5 +121,9 @@ public class SquadService {
 
     public Collection<SquadCheckin> findAllSquadsCheckinsInSquadByGameId(int gameId, int squadId) {
         return squadCheckinService.getAllSquadCheckinsWhitSquadAndPlayerId(gameId, squadId);
+    }
+
+    public Collection<Chat> getChats(int gameId, int squadId) {
+        return chatService.findSquadChats(gameId, squadId);
     }
 }

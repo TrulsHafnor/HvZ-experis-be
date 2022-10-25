@@ -1,5 +1,6 @@
 package academy.noroff.hvz.controllers;
 
+import academy.noroff.hvz.mappers.ChatMapper;
 import academy.noroff.hvz.mappers.SquadCheckinMapper;
 import academy.noroff.hvz.mappers.SquadMapper;
 import academy.noroff.hvz.models.Squad;
@@ -35,12 +36,14 @@ public class SquadController {
     private final SquadService squadService;
     private final SquadMapper squadMapper;
     private final SquadCheckinMapper squadCheckinMapper;
+    private final ChatMapper chatMapper;
 
     @Autowired
-    public SquadController(SquadService squadService, SquadMapper squadMapper, SquadCheckinMapper squadCheckinMapper) {
+    public SquadController(SquadService squadService, SquadMapper squadMapper, SquadCheckinMapper squadCheckinMapper, ChatMapper chatMapper) {
         this.squadService=squadService;
         this.squadMapper=squadMapper;
         this.squadCheckinMapper=squadCheckinMapper;
+        this.chatMapper = chatMapper;
     }
 
     @Operation(summary = "Create new squad")
@@ -293,6 +296,22 @@ public class SquadController {
         return ResponseEntity.ok(squadCheckinDtos);
     }
 
-
-
+    @Operation(summary = "Get squad chat by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Success",
+                    content = @Content),
+            @ApiResponse(responseCode = "400",
+                    description = "Malformed request",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorAttributeOptions.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "Cant find any squad check chat",
+                    content = @Content)
+    })
+    @GetMapping("/{game_id}/squad/{squad_id}/chat")
+    public ResponseEntity getSquadChat(@PathVariable int game_id, @PathVariable int squad_id) {
+        Collection<PostSquadChatDto> chats = chatMapper.chatsToPostSquadChatDtos(squadService.getChats(game_id, squad_id));
+        return ResponseEntity.ok(chats);
+    }
 }

@@ -6,6 +6,7 @@ import academy.noroff.hvz.models.Chat;
 import academy.noroff.hvz.models.Message;
 import academy.noroff.hvz.models.dtos.ChatDto;
 import academy.noroff.hvz.models.dtos.PostChatDto;
+import academy.noroff.hvz.models.dtos.PostSquadChatDto;
 import academy.noroff.hvz.services.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -81,8 +82,9 @@ public class ChatController {
 
     @MessageMapping("/chat/{gameId}/{squadId}/sendMessage")
     public void sendMessageSquad(@DestinationVariable String gameId, @DestinationVariable String squadId,
-                                 @Payload PostChatDto postChatDto) {
-        Chat chat = chatMapper.postChatDtoToChat(postChatDto);
+                                 @Payload PostSquadChatDto postSquadChatDto) {
+        postSquadChatDto.setSquad(Integer.parseInt(squadId));
+        Chat chat = chatMapper.postSquadChatDtoToChat(postSquadChatDto);
         chatService.addChat(chat, chat.getPlayer().getId());
         ChatDto chatDto = chatMapper.chatToChatDto(chat);
         messagingTemplate.convertAndSend(format("/chatroom/%s/%s", gameId, squadId), chatDto);
