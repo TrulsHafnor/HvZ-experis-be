@@ -1,5 +1,6 @@
 package academy.noroff.hvz.models;
 
+import academy.noroff.hvz.enums.Status;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,9 +21,11 @@ public class Chat {
     @NotNull
     @Column(length = 150)
     private String message;
-    private boolean isHuman;
-    private boolean isGlobal;
-
+    private String senderName;
+    private boolean human;
+    private boolean global;
+    @Enumerated(EnumType.STRING)
+    private Status status;
     @Setter(AccessLevel.NONE)
     private String chatTime;
 

@@ -1,12 +1,11 @@
 package academy.noroff.hvz.models.dtos;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class ChatDto {
+public class SquadChatDto {
     private int id;
     private String senderName;
     private String message;
@@ -16,4 +15,5 @@ public class ChatDto {
     private String Status;
     private int game;
     private int player;
+    private int squad;
 }

@@ -81,7 +81,8 @@ public class UserController {
     @PostMapping()
     public ResponseEntity addNewUserFromJwt(@AuthenticationPrincipal Jwt jwt) {
         String id = jwt.getClaimAsString("sub");
-        AppUser appUser = userService.add(id);
+        String nickname = jwt.getClaimAsString("nickname");
+        AppUser appUser = userService.add(id, nickname);
         URI uri = URI.create("users/" + appUser.getId());
         return ResponseEntity.created(uri).build();
     }

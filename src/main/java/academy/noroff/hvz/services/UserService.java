@@ -32,13 +32,14 @@ public class UserService {
         return userRepository.save(appUser);
     }
 
-    public AppUser add(String id) {
+    public AppUser add(String id, String nickname) {
         // Prevents internal server error for duplicates
         if (userRepository.existsById(id))
             throw new UserAlreadyExistsException("User by id " + id + " already exist");
         // Create new user
         AppUser appUser = new AppUser();
         appUser.setId(extractId(id));
+        appUser.setNickname(nickname);
         return userRepository.save(appUser);
     }
 
