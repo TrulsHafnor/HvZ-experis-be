@@ -69,17 +69,16 @@ public class SquadService {
         return squadRepository.save(squad);
     }
 
-    public Squad updateSquadBeforeDeletingLeader(Squad squad) {
+    public void updateSquadBeforeDeletingLeader(Squad squad) {
         List<SquadMember> squadMembers = (List<SquadMember>) getAllPlayersInSquad(squad.getGame().getId(), squad.getId());
-        if (squadMembers.size()>1)
-            squad.setPlayer(squadMembers.get(1).getMember());
-        return updateSquad(squad);
+            squad.setPlayer(squadMembers.get(0).getMember());
+            updateSquad(squad);
     }
 
     @Transactional
     public void leaveSquad(int gameId, int playerID) {
         //does player exist in that game?
-        playerService.findPlayerInGame(gameId,playerID);
+        Player player = playerService.findPlayerInGame(gameId,playerID);
         //check game status
         checkForCompleteGame(gameId);
 
@@ -93,6 +92,9 @@ public class SquadService {
         squadMemberService.deleteSquadMember(squadMember);
         if (findSquadById(squadId).getMembers().isEmpty()) {
             deleteSquad(squad.getGame().getId(),squadId);
+        }
+        else if(squad.getPlayer().getId() == player.getId()) {
+            updateSquadBeforeDeletingLeader(squad);
         }
     }
 

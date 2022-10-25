@@ -111,13 +111,13 @@ public class PlayerService {
     public void deletePlayer(int gameId, int playerId) {
         Player player = findPlayerInGame(gameId,playerId);
         if (player.getMembership() != null) {
-            //checks game id and player id
+           /* //checks game id and player id
             // TODO: 10/24/2022 demme retunerer null
             Squad squad = squadService.findSquadInGame(gameId, player.getMembership().getSquad().getId());
 
             if (squad.getPlayer().getId()== playerId) {
                 squadService.updateSquadBeforeDeletingLeader(squad);
-            }
+            }*/
 
             squadService.leaveSquad(gameId, playerId);
 
