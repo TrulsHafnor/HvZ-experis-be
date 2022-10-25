@@ -1,8 +1,10 @@
 package academy.noroff.hvz.controllers;
 
 import academy.noroff.hvz.mappers.ChatMapper;
+import academy.noroff.hvz.mappers.PlayerMapper;
 import academy.noroff.hvz.mappers.SquadCheckinMapper;
 import academy.noroff.hvz.mappers.SquadMapper;
+import academy.noroff.hvz.mappers.SquadMemberMapper;
 import academy.noroff.hvz.models.Squad;
 import academy.noroff.hvz.models.SquadCheckin;
 import academy.noroff.hvz.models.dtos.*;
@@ -37,13 +39,15 @@ public class SquadController {
     private final SquadMapper squadMapper;
     private final SquadCheckinMapper squadCheckinMapper;
     private final ChatMapper chatMapper;
+    private final SquadMemberMapper squadMemberMapper;
 
     @Autowired
-    public SquadController(SquadService squadService, SquadMapper squadMapper, SquadCheckinMapper squadCheckinMapper, ChatMapper chatMapper) {
+    public SquadController(SquadService squadService, SquadMapper squadMapper, SquadCheckinMapper squadCheckinMapper, SquadMemberMapper squadMemberMapper, ChatMapper chatMapper) {
         this.squadService=squadService;
         this.squadMapper=squadMapper;
         this.squadCheckinMapper=squadCheckinMapper;
         this.chatMapper = chatMapper;
+        this.squadMemberMapper=squadMemberMapper;
     }
 
     @Operation(summary = "Create new squad")
@@ -122,6 +126,28 @@ public class SquadController {
         Collection<Squad> squads = squadService.findAllSquadsInGame(game_id);
         Collection<SquadDto> squadDto = squadMapper.squadToSquadDto(squads);
         return ResponseEntity.ok(squadDto);
+    }
+
+
+    @Operation(summary = "Get all players in squad")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Success",
+                    content = @Content),
+            @ApiResponse(responseCode = "400",
+                    description = "Malformed request",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorAttributeOptions.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "Game not found with supplied ID",
+                    content = @Content)
+    })
+    @GetMapping("/{game_id}/squad/{squad_id}/players")
+    public ResponseEntity getAllplayersInSquad (@PathVariable int game_id, @PathVariable int squad_id) {
+        Collection<SquadMemberLessDetailsDto> squadMemberLessDetailsDtos = squadMemberMapper.squadMemberToSquadMemberLessDetailsDtos(squadService.getAllPlayersInSquad(game_id, squad_id));
+        //Collection<LessDetailsPlayerDto> playersDto = playerMapper.playersToLessDetailsPlayerDto(squadService.getAllPlayersInSquad(game_id,squad_id));
+
+        return ResponseEntity.ok(squadMemberLessDetailsDtos);
     }
 
     @Operation(summary = "Join squad")

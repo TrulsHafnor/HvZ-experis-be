@@ -3,6 +3,7 @@ package academy.noroff.hvz.services;
 import academy.noroff.hvz.enums.GameState;
 import academy.noroff.hvz.exeptions.CantJoinSquadException;
 import academy.noroff.hvz.exeptions.CantWriteToGameException;
+import academy.noroff.hvz.exeptions.SquadMemberNotFoundException;
 import academy.noroff.hvz.exeptions.SquadNotFoundException;
 import academy.noroff.hvz.models.*;
 import academy.noroff.hvz.models.dtos.JoinSquadDto;
@@ -125,5 +126,11 @@ public class SquadService {
 
     public Collection<Chat> getChats(int gameId, int squadId) {
         return chatService.findSquadChats(gameId, squadId);
+    }
+
+    public Collection<SquadMember> getAllPlayersInSquad(int gameId, int squadId) {
+        //this will throw exeption if squad is not in game
+        findSquadInGame(gameId, squadId);
+        return squadMemberService.getAllSquadMembers(squadId);
     }
 }
