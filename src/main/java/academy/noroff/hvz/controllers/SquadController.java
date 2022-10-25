@@ -209,7 +209,7 @@ public class SquadController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Delete a squad by player ID")
+    @Operation(summary = "Delete squad whit squad and game id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204",
                     description = "Success",

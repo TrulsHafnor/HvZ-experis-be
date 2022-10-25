@@ -53,6 +53,7 @@ public class SquadMemberService {
     }
 
     //if u use this check squadId before u delete from database!
+    @Transactional
     public void deleteAllSquadMembersInSquad(int squadId) {
         squadCheckinService.deleteAllSquadCheckinsFromSquad(squadId);
         squadMemberRepository.deleteAllSquadMembersInSquad(squadId);

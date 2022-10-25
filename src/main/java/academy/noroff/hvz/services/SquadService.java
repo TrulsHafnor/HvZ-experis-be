@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class SquadService {
@@ -67,6 +69,13 @@ public class SquadService {
         return squadRepository.save(squad);
     }
 
+    public Squad updateSquadBeforeDeletingLeader(Squad squad) {
+        List<SquadMember> squadMembers = (List<SquadMember>) getAllPlayersInSquad(squad.getGame().getId(), squad.getId());
+        if (squadMembers.size()>1)
+            squad.setPlayer(squadMembers.get(1).getMember());
+        return updateSquad(squad);
+    }
+
     @Transactional
     public void leaveSquad(int gameId, int playerID) {
         //does player exist in that game?
@@ -76,13 +85,14 @@ public class SquadService {
 
         Squad squad = squadRepository.findSquadWhitPlayerIdAndGameId(gameId,playerID).orElseThrow(
                 () -> new SquadNotFoundException("Squad not found whit player id " + playerID + " and game id " + gameId));
+
         int squadId = squad.getId();
 
         SquadMember squadMember = squadMemberService.findSquadMemberByIds(squadId, playerID);
         //first delete squad checkin
         squadMemberService.deleteSquadMember(squadMember);
-        if (findSquadById(squadId).getMembers().size() == 0) {
-            deleteSquad(findSquadById(squadId).getGame().getId(),squadId);
+        if (findSquadById(squadId).getMembers().isEmpty()) {
+            deleteSquad(squad.getGame().getId(),squadId);
         }
     }
 

@@ -109,14 +109,19 @@ public class PlayerService {
      */
     @Transactional
     public void deletePlayer(int gameId, int playerId) {
-        //checks game id and player id
-        Squad squad = squadService.findSquadInGame(gameId, findPlayerInGame(gameId,playerId).getSquad().getId());
-        // kanskje litt overdrevet?
-        if (squad.getPlayer().getId()== playerId) {
-            squad.setPlayer(new Player());
-            squadService.updateSquad(squad);
+        Player player = findPlayerInGame(gameId,playerId);
+        if (player.getMembership() != null) {
+            //checks game id and player id
+            // TODO: 10/24/2022 demme retunerer null
+            Squad squad = squadService.findSquadInGame(gameId, player.getMembership().getSquad().getId());
+
+            if (squad.getPlayer().getId()== playerId) {
+                squadService.updateSquadBeforeDeletingLeader(squad);
+            }
+
+            squadService.leaveSquad(gameId, playerId);
+
         }
-        squadService.leaveSquad(gameId, playerId);
         playerRepository.deleteById(playerId);
     }
 
