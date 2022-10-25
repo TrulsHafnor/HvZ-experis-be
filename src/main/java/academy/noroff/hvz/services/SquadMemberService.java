@@ -45,7 +45,7 @@ public class SquadMemberService {
         return squadMemberRepository.checkIfPlayerIsInSquad(playerID).isEmpty();
     }
 
-    @Transactional
+
     public void deleteSquadMember(SquadMember squadMember) {
         squadCheckinService.deleteSquadCheckinWhitPlayerId(squadMember.getId());
         squadMemberRepository.deleteSquadMemberById(squadMember.getId());
