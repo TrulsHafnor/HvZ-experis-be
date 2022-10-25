@@ -79,26 +79,28 @@ public class SquadService {
     }
 
     @Transactional
-    public void leaveSquad(int gameId, int playerID) {
-        //does player exist in that game?
-        Player player = playerService.findPlayerInGame(gameId,playerID);
+    public void leaveSquad(int gameId, int playerId) {
         //check game status
         checkForCompleteGame(gameId);
+        Squad squad = findSquadWhitPlayerIdAndGameId(gameId, playerId);
 
-        Squad squad = squadRepository.findSquadWhitPlayerIdAndGameId(gameId,playerID).orElseThrow(
-                () -> new SquadNotFoundException("Squad not found whit player id " + playerID + " and game id " + gameId));
-
-        int squadId = squad.getId();
-
-        SquadMember squadMember = squadMemberService.findSquadMemberByIds(squadId, playerID);
         //first delete squad checkin
-        squadMemberService.deleteSquadMember(squadMember);
-        if (findSquadById(squadId).getMembers().isEmpty()) {
-            deleteSquad(squad.getGame().getId(),squadId);
+        squadMemberService.deleteSquadMember(squadMemberService.findSquadMemberByIds(squad.getId(), playerId));
+        if (squad.getMembers().size()<=1) {
+            deleteOnlySquad(findSquadById(squad.getId()));
         }
-        else if(squad.getPlayer().getId() == player.getId()) {
+        else if(squad.getPlayer().getId() == playerId) {
             updateSquadBeforeDeletingLeader(squad);
         }
+    }
+
+    private void deleteOnlySquad(Squad squad) {
+        squadRepository.delete(squad);
+    }
+
+    public Squad findSquadWhitPlayerIdAndGameId(int gameId, int playerId) {
+        return squadRepository.findSquadWhitPlayerIdAndGameId(gameId,playerId).orElseThrow(
+                () -> new SquadNotFoundException("Squad not found whit player id " + playerId + " and game id " + gameId));
     }
 
     public Squad findSquadInGame(int gameId, int squadId) {
