@@ -73,6 +73,9 @@ public class SquadService {
         List<SquadMember> squadMembers = (List<SquadMember>) getAllPlayersInSquad(squad.getGame().getId(), squad.getId());
             squad.setPlayer(squadMembers.get(0).getMember());
             updateSquad(squad);
+            SquadMember squadMember = squadMemberService.findSquadMemberByIds(squad.getId(),squad.getPlayer().getId());
+            squadMember.setRank("Leader");
+            squadMemberService.updateSquadMember(squadMember);
     }
 
     @Transactional

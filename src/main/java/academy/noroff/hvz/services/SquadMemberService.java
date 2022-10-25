@@ -62,4 +62,8 @@ public class SquadMemberService {
     public Collection<SquadMember> getAllSquadMembers(int squadId) {
         return squadMemberRepository.getAllSquadMembersInSquad(squadId);
     }
+
+    public SquadMember updateSquadMember(SquadMember squadMember) {
+        return squadMemberRepository.save(squadMember);
+    }
 }
