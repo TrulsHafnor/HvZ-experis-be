@@ -337,7 +337,7 @@ public class SquadController {
     })
     @GetMapping("/{game_id}/squad/{squad_id}/chat")
     public ResponseEntity getSquadChat(@PathVariable int game_id, @PathVariable int squad_id) {
-        Collection<PostSquadChatDto> chats = chatMapper.chatsToPostSquadChatDtos(squadService.getChats(game_id, squad_id));
+        Collection<SquadChatDto> chats = chatMapper.chatsToSquadChatDtos(squadService.getChats(game_id, squad_id));
         return ResponseEntity.ok(chats);
     }
 }
