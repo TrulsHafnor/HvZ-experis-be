@@ -5,14 +5,19 @@ import academy.noroff.hvz.exeptions.CantJoinSquadException;
 import academy.noroff.hvz.exeptions.CantWriteToGameException;
 import academy.noroff.hvz.exeptions.SquadMemberNotFoundException;
 import academy.noroff.hvz.exeptions.SquadNotFoundException;
-import academy.noroff.hvz.models.*;
+import academy.noroff.hvz.models.Player;
+import academy.noroff.hvz.models.Squad;
+import academy.noroff.hvz.models.SquadCheckin;
+import academy.noroff.hvz.models.SquadMember;
 import academy.noroff.hvz.models.dtos.JoinSquadDto;
 import academy.noroff.hvz.repositories.SquadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Service
 public class SquadService {
@@ -21,18 +26,16 @@ public class SquadService {
     private final SquadMemberService squadMemberService;
     private final GameService gameService;
     private final SquadCheckinService squadCheckinService;
-    private final ChatService chatService;
 
     @Autowired
-    public SquadService(SquadRepository squadRepository, PlayerService playerService,
-                        SquadMemberService squadMemberService, GameService gameService,
-                        SquadCheckinService squadCheckinService, ChatService chatService) {
+    public SquadService(SquadRepository squadRepository, @Lazy PlayerService playerService,
+                        SquadMemberService squadMemberService,@Lazy GameService gameService,
+                        SquadCheckinService squadCheckinService) {
         this.squadRepository =squadRepository;
         this.playerService=playerService;
         this.squadMemberService=squadMemberService;
         this.gameService=gameService;
         this.squadCheckinService=squadCheckinService;
-        this.chatService = chatService;
     }
 
     public Squad findSquadById (int id) {
@@ -51,9 +54,11 @@ public class SquadService {
         return squadRepository.save(squad);
     }
 
+    @Transactional
     public void deleteSquad(int gameId, int squadID) {
-        // TODO: 10/18/2022 slette alt som har med squad
         checkForCompleteGame(gameId);
+        //check if gameId and squadId is valid
+        squadMemberService.deleteAllSquadMembersInSquad(findSquadInGame(gameId,squadID).getId());
         squadRepository.delete(findSquadInGame(gameId,squadID));
     }
 
@@ -68,10 +73,15 @@ public class SquadService {
         playerService.findPlayerInGame(gameId,playerID);
         //check game status
         checkForCompleteGame(gameId);
-        int squadId = squadRepository.findSquadIdWhitPlayerIdAndGameId(gameId,playerID);
+
+        Squad squad = squadRepository.findSquadWhitPlayerIdAndGameId(gameId,playerID).orElseThrow(
+                () -> new SquadNotFoundException("Squad not found whit player id " + playerID + " and game id " + gameId));
+        int squadId = squad.getId();
+
         SquadMember squadMember = squadMemberService.findSquadMemberByIds(squadId, playerID);
+        //first delete squad checkin
         squadMemberService.deleteSquadMember(squadMember);
-        if (findSquadById(squadId).getMembers().size() -1 == 0) {
+        if (findSquadById(squadId).getMembers().size() == 0) {
             deleteSquad(findSquadById(squadId).getGame().getId(),squadId);
         }
     }
@@ -122,10 +132,6 @@ public class SquadService {
 
     public Collection<SquadCheckin> findAllSquadsCheckinsInSquadByGameId(int gameId, int squadId) {
         return squadCheckinService.getAllSquadCheckinsWhitSquadAndPlayerId(gameId, squadId);
-    }
-
-    public Collection<Chat> getChats(int gameId, int squadId) {
-        return chatService.findSquadChats(gameId, squadId);
     }
 
     public Collection<SquadMember> getAllPlayersInSquad(int gameId, int squadId) {
