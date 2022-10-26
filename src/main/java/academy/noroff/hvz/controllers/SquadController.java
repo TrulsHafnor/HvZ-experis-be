@@ -205,11 +205,6 @@ public class SquadController {
     })
     @DeleteMapping("/{game_id}/squad/{player_id}/leave")
     public ResponseEntity leaveSquad(@PathVariable int game_id, @PathVariable int player_id) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("read:admin"))) {
-            squadService.leaveSquad(game_id, player_id);
-            return ResponseEntity.noContent().build();
-        }
         squadService.leaveSquad(game_id, player_id);
         return ResponseEntity.noContent().build();
     }

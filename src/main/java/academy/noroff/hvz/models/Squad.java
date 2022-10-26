@@ -32,11 +32,14 @@ public class Squad {
     @JoinColumn(name = "player_id")
     private Player player;
 
-    @OneToMany(mappedBy = "squad")
+    @OneToMany(mappedBy = "squad", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Chat> chat;
 
     @NotNull
-    @OneToMany(mappedBy = "squad")
+    @OneToMany(mappedBy = "squad", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<SquadMember> members;
+
+    @OneToMany(mappedBy = "squad", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SquadCheckin> squadCheckins;
 
 }

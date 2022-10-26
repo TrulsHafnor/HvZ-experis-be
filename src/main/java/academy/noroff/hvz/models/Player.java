@@ -4,6 +4,7 @@ import com.sun.istack.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.Random;
@@ -34,14 +35,13 @@ public class Player {
     @OneToMany(mappedBy = "player")
     private Set<Chat> messages;
 
-    @OneToMany(mappedBy = "playerKiller")
+    @OneToMany(mappedBy = "playerKiller", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Kill> kills;
 
-    //la denne stå skal se om noe bugger seg om jeg ikke har med dette -> , cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false
-    @OneToOne(mappedBy = "playerDeath")
+    @OneToOne(mappedBy = "playerDeath", cascade = CascadeType.ALL, orphanRemoval = true)
     private Kill death;
 
-    @OneToOne(mappedBy = "member")
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private SquadMember membership;
 
     @OneToOne

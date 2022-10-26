@@ -27,7 +27,7 @@ public class SquadMember {
     private SquadCheckin squadCheckin;
 
     @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "member_id")
     private Player member;
 

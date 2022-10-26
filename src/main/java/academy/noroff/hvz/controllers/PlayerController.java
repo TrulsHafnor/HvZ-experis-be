@@ -217,7 +217,7 @@ public class PlayerController {
         //check for admin
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("read:admin"))) {
-            playerService.deletePlayer(player_id);
+            playerService.deletePlayer(game_id, player_id);
             return ResponseEntity.noContent().build();
         }
 

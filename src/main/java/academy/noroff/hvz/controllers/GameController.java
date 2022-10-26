@@ -108,7 +108,7 @@ public class GameController {
 
     @Operation(summary = "Delete a game by ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
+            @ApiResponse(responseCode = "204",
                     description = "Success",
                     content = {
                             @Content(
