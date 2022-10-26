@@ -85,7 +85,7 @@ public class SquadService {
 
         //first delete squad checkin
         squadMemberService.deleteSquadMember(squadMemberService.findSquadMemberByIds(squad.getId(), playerId));
-        if (squad.getMembers().size()<=1) {
+        if (squad.getMembers().size()<1) { // TODO: 10/26/2022 denne er feil
             deleteOnlySquad(findSquadById(squad.getId()));
         }
         else if(squad.getPlayer().getId() == playerId) {
