@@ -12,7 +12,7 @@ import java.util.Collection;
 @Repository
 public interface ChatRepository extends JpaRepository<Chat,Integer> {
 
-    @Query(value = "SELECT * FROM Chat c WHERE c.game_id = :gameId AND c.human = :cantSee AND c.global = false", nativeQuery = true)
+    @Query(value = "SELECT * FROM Chat c WHERE c.game_id = :gameId AND c.human = :cantSee AND c.global = false AND c.squad_id IS NULL", nativeQuery = true)
     Collection<Chat> findChatInGameForPlayer(@Param("gameId") Integer gameId, @Param("cantSee") boolean cantSee);
 
     @Query(value = "SELECT * FROM Chat c WHERE c.game_id = :gameId AND c.global", nativeQuery = true)
