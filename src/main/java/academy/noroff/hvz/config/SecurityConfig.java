@@ -38,11 +38,8 @@ public class SecurityConfig {
                         .mvcMatchers("/swagger-ui", "/swagger-ui/*", "/swagger-ui/**", "/v3/api-docs" , "/v3/api-docs/**").permitAll()
                         .mvcMatchers("/api/v1/games").permitAll()
                         .antMatchers("/ws/**").permitAll()
-                        //.mvcMatchers("/api/private").authenticated()
-                        //.mvcMatchers("/game").hasAuthority("SCOPE_read:admin")
                         .anyRequest().authenticated()
                 )
-
                 .oauth2ResourceServer().jwt()
                 .jwtAuthenticationConverter(makePermissionsConverter());
         return http.build();
@@ -54,7 +51,6 @@ public class SecurityConfig {
         By default, Spring Security does not validate the "aud" claim of the token, to ensure that this token is
         indeed intended for our app. Adding our own validator is easy to do:
         */
-
         NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuer);
 
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(audience);

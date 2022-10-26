@@ -7,6 +7,7 @@ import academy.noroff.hvz.models.Squad;
 import academy.noroff.hvz.models.dtos.ChatDto;
 import academy.noroff.hvz.models.dtos.PostChatDto;
 import academy.noroff.hvz.models.dtos.PostSquadChatDto;
+import academy.noroff.hvz.models.dtos.SquadChatDto;
 import academy.noroff.hvz.services.GameService;
 import academy.noroff.hvz.services.PlayerService;
 import academy.noroff.hvz.services.SquadService;
@@ -54,6 +55,13 @@ public abstract class ChatMapper {
     public abstract PostSquadChatDto chatToPostSquadChatDto(Chat chat);
 
     public abstract Collection<PostSquadChatDto> chatsToPostSquadChatDtos(Collection<Chat> chat);
+
+    @Mapping(target = "game", source = "game.id")
+    @Mapping(target = "player", source = "player.id")
+    @Mapping(target = "squad", source= "squad.id")
+    public abstract SquadChatDto chatToSquadChatDto(Chat chat);
+
+    public abstract Collection<SquadChatDto> chatsToSquadChatDtos(Collection<Chat> chat);
 
     @Named("gameToGameIds")
     Game mapIdToGame(Integer id) {
