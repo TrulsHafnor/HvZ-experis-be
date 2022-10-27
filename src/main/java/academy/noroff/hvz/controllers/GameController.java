@@ -47,7 +47,7 @@ public class GameController {
         this.chatMapper = chatMapper;
     }
 
-    @Operation(summary = "Get one game whit game id (Open for all)")
+    @Operation(summary = "Get one game whit game id (Open for all   )")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
