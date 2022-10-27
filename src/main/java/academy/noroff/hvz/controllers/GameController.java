@@ -47,7 +47,7 @@ public class GameController {
         this.chatMapper = chatMapper;
     }
 
-    @Operation(summary = "Get a game by ID")
+    @Operation(summary = "Get one game whit game id (Open for all)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
@@ -82,10 +82,10 @@ public class GameController {
         return ResponseEntity.ok(games);
     }
 
-    @Operation(summary = "Create new game")
+    @Operation(summary = "Create new game (Admin only)")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "201",
-                    description = "Game successfully created",
+                    description = "Game was successfully created",
                     content = @Content),
             @ApiResponse(responseCode = "403",
                     description = "Forbidden access.",
@@ -106,7 +106,7 @@ public class GameController {
         return ResponseEntity.created(location).build();
     }
 
-    @Operation(summary = "Delete a game by ID")
+    @Operation(summary = "Delete game whit game id (Admin only)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204",
                     description = "Success",
@@ -132,10 +132,10 @@ public class GameController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Update a game by ID")
+    @Operation(summary = "Update game whit game id (Admin only)")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "204",
-                    description = "Game successfully updated",
+                    description = "Game was successfully updated",
                     content = @Content),
             @ApiResponse(responseCode = "400",
                     description = "Malformed request",
@@ -161,10 +161,10 @@ public class GameController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Post new chat message")
+    @Operation(summary = "Post new chat message to game")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "201",
-                    description = "Chat message successfully created",
+                    description = "Chat message successfully posted",
                     content = @Content),
             @ApiResponse(responseCode = "403",
                     description = "Forbidden access.",
@@ -188,7 +188,7 @@ public class GameController {
         return ResponseEntity.created(location).build();
     }
 
-    @Operation(summary = "Get faction chat from game")
+    @Operation(summary = "Get faction chat from game whit game id and player id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
@@ -208,7 +208,7 @@ public class GameController {
         return ResponseEntity.ok(chats);
     }
 
-    @Operation(summary = "Get global chats from game")
+    @Operation(summary = "Get global chat from game whit game id and player id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
