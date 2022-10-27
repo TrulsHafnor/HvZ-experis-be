@@ -50,6 +50,6 @@ VALUES (TRUE, 'HumanForce', 1, 1),
 -- Squadmember
 INSERT INTO squad_member(rank, member_id, squad_id)
 VALUES ('Leader', 1, 1),
-       ('Zombie', 2, 2),
+       ('Leader', 2, 2),
        ('Leader', 3, 3),
-       ('Zombie', 4, 4);
+       ('Leader', 4, 4);
