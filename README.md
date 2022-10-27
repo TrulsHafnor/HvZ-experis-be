@@ -36,22 +36,28 @@ style.
 - Initialize SDK
 
 ## Usage
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
-Also, you can visit the deployed application: 
-https://ligj-pokemon-trainer-app.herokuapp.com/ 
+- Run project. The application will run standard on localhost port 8080. 
 
 ## Integration
 The application is hosted on heroku: please follow this link. 
-https://ligj-pokemon-trainer-app.herokuapp.com/
+[Human vs. Zombies API](https://hvz-api-noroff.herokuapp.com/)
+
+Also, you can visit the deployed front end application: 
+[Human vs. Zombies App](https://hvz-fe-noroff.herokuapp.com/)
 
 ## Built with
 
--Java 17
-- Spring boot
-- Swagger
-- Heroku + Docker?
 - IDE: Intellij Ultimate
-- PgAdmin PostgreSql
+- Java 17
+- Spring Boot
+- Spring Web
+- Spring Security
+- Auth0
+- PgAdmin 
+- PostgreSql
+- Swagger
+- GitHub
+- Heroku
 
 ## Contributing
 - [Lars-Inge Gammelsæter Jonsen](https://github.com/Kaladinge)
