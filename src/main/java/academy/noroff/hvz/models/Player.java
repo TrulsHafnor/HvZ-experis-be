@@ -41,7 +41,7 @@ public class Player {
     @OneToOne(mappedBy = "playerDeath")
     private Kill death;
 
-    @OneToOne(mappedBy = "member")
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private SquadMember membership;
 
     @OneToOne
