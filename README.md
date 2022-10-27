@@ -25,33 +25,40 @@ The Catalogue page lists the Pokémon name and avatar* of the original 151 pokem
 #### Profile page
 A user may only view this page if there is a Trainer name that exists. It redirects the user back to the Landing page if they do not have a Trainer name stored in localStorage. 
 The Trainer page lists the Pokémons that the trainer has collected. For each collected Pokémon,the Pokémon name and image are displayed. A user is also able to remove a Pokémon from their collection from the Trainer page. The user can also log out from this page. 
-### Component tree: With figma
-The pdf file called "component tree" is a component tree of the application. The component tree shows the pages and feature components we planned to create in our application. Changes was done under development in a modern agile 
-style.  
+### API Documentation
+A full description of the API Documentation can be found on Swagger here: [Human vs. Zombies API Documentation](https://hvz-api-noroff.herokuapp.com/swagger-ui/index.html#/)  
 
 ## Install
 - Open PgAdmin
 - Create database "HvZ" locally
 - Clone repo and open in intellj
 - Initialize SDK
+- Build project with Gradle
 
 ## Usage
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
-Also, you can visit the deployed application: 
-https://ligj-pokemon-trainer-app.herokuapp.com/ 
+- Run project. The application will run standard on localhost port 8080. 
 
 ## Integration
 The application is hosted on heroku: please follow this link. 
-https://ligj-pokemon-trainer-app.herokuapp.com/
+[Human vs. Zombies API](https://hvz-api-noroff.herokuapp.com/)
+
+Also, you can visit the deployed front end application: 
+[Human vs. Zombies App](https://hvz-fe-noroff.herokuapp.com/)
 
 ## Built with
 
--Java 17
-- Spring boot
-- Swagger
-- Heroku + Docker?
 - IDE: Intellij Ultimate
-- PgAdmin PostgreSql
+- Java 17
+- Spring Boot
+- Spring Web
+- Spring Security
+- Auth0
+- PgAdmin 
+- PostgreSql
+- Gradle
+- Swagger
+- GitHub
+- Heroku
 
 ## Contributing
 - [Lars-Inge Gammelsæter Jonsen](https://github.com/Kaladinge)
