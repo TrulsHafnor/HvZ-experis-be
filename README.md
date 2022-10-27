@@ -13,18 +13,15 @@
 - [License](#license)
 
 ## About
-This project is about building a Pokémon Trainer web app using the Angular Framework. The application communicates with the server through the REST API found here: https://sm-lost-in-translation-api.herokuapp.com/ to store trainers and pokemons collected. The available pokemons and information about pokemons is found from the REST API: https://pokeapi.co/
+This project is about building a software solution for players and administrators of the game Human vs. Zombies (HvZ). We have designed and implemened a software solution for managing the state and communication of one or more concurrent games of HvZ. The main components of the system are as follows:
+- A static, single-page, front-end using react. This documentation can be found here: [Human vs. Zombies Front End](https://github.com/JakobDenGode/hvz-experis-fe)
+- RESTful  API  service,  through  which  the  front  end  may  interact  with  the database. 
+- PostGres database
 
-### Appendix A: Requirements for the Pokemon Trainer Application
-The application allows a user to collect Pokémon received from the PokeAPI. Users must enter username before being able to collect any Pokémon. Users are also able to view the Pokémon that have been collected. The application contains three main screens: 
-#### Landing page
-The first thing the user can see is the “Login page” where the user must enter their “Trainer” name. There is a button that saves the Trainer name to the Trainer API. The app then redirects to the main page, the Pokémon Catalogue page.
-#### Pokémon Catalogue Page
-A user can only view this page if they are currently logged into the app. The user is  redirected back to the login page if now active login session exists in the browser storage.
-The Catalogue page lists the Pokémon name and avatar* of the original 151 pokemons. There is a button on each Pokémon that, when clicked, adds the Pokémon to the trainer’s collection. This also updates the Trainer API with the collected Pokémon.
-#### Profile page
-A user may only view this page if there is a Trainer name that exists. It redirects the user back to the Landing page if they do not have a Trainer name stored in localStorage. 
-The Trainer page lists the Pokémons that the trainer has collected. For each collected Pokémon,the Pokémon name and image are displayed. A user is also able to remove a Pokémon from their collection from the Trainer page. The user can also log out from this page. 
+This repository contains our RESTful API service, through which the front end may interact with the database. The deployed API can be found here [Human vs. Zombies API](https://hvz-api-noroff.herokuapp.com/)
+
+The deployed front-end application can be found here: [Human vs. Zombies App](https://hvz-fe-noroff.herokuapp.com/)
+
 ### API Documentation
 A full description of the API Documentation can be found on Swagger here: [Human vs. Zombies API Documentation](https://hvz-api-noroff.herokuapp.com/swagger-ui/index.html#/)  
 
