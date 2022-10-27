@@ -48,7 +48,7 @@ public class MissionController {
         this.playerService = playerService;
     }
 
-    @Operation(summary = "Get a mission by ID")
+    @Operation(summary = "Get mission whit game id, mission id and player id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
@@ -79,14 +79,14 @@ public class MissionController {
         return ResponseEntity.ok(missionCheck);
     }
 
-    @Operation(summary = "Get all missions in game")
+    @Operation(summary = "Get all missions in game whit game id and player id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = MissionDto.class)) }),
             @ApiResponse(responseCode = "404",
-                    description = "Can't find missions",
+                    description = "Can't find missions in game",
                     content = @Content)
     })
     @GetMapping("{game_id}/missions/{player_id}")
@@ -104,7 +104,7 @@ public class MissionController {
         return ResponseEntity.ok(missions);
     }
 
-    @Operation(summary = "Create a new mission")
+    @Operation(summary = "Create new mission (Admin only)")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "201",
                     description = "Mission created successfully",
@@ -130,7 +130,7 @@ public class MissionController {
         return ResponseEntity.created(location).build();
     }
 
-    @Operation(summary = "Delete a mission by ID")
+    @Operation(summary = "Delete mission by ID (Admin only)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204",
                     description = "Success",
@@ -162,7 +162,7 @@ public class MissionController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Update a mission by ID")
+    @Operation(summary = "Update mission by ID (Admin only)")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "204",
                     description = "Mission successfully updated",

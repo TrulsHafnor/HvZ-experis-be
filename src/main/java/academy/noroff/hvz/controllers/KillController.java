@@ -38,7 +38,7 @@ public class KillController {
     }
 
 
-    @Operation(summary = "Get all kills in game by ID")
+    @Operation(summary = "Get all kills in game whit game id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
@@ -82,14 +82,14 @@ public class KillController {
         return ResponseEntity.created(location).build();
     }
 
-    @Operation(summary = "Get kill object by game and kill ID.")
+    @Operation(summary = "Get kill object by game id and kill id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = KillDto.class)) }),
             @ApiResponse(responseCode = "404",
-                    description = "Kill does not exist with supplied ID",
+                    description = "Kill does not exist with supplied ID in game",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)) })
     })
@@ -98,7 +98,7 @@ public class KillController {
         return ResponseEntity.ok(killMapper.killToKillDto(killService.findKillInGameById(game_id,kill_id)));
     }
 
-    @Operation(summary = "Delete kill by ID")
+    @Operation(summary = "Delete kill whit game and kill id (Admin only)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
@@ -129,7 +129,7 @@ public class KillController {
     }
 
 
-    @Operation(summary = "Update a kill by ID")
+    @Operation(summary = "Update kill with game and kill id  (Admin only)")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "204",
                     description = "Kill successfully updated",
@@ -143,7 +143,7 @@ public class KillController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)) }),
             @ApiResponse(responseCode = "404",
-                    description = "Kill not found with supplied ID",
+                    description = "Kill not found with supplied ID in game",
                     content = @Content)
     })
     @PutMapping("{game_id}/kills/{kill_id}")

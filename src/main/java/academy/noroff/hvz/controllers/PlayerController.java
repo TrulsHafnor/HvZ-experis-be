@@ -58,7 +58,7 @@ public class PlayerController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class))}),
             @ApiResponse(responseCode = "404",
-                    description = "Game not found with supplied ID",
+                    description = "Players not found in game whit supplied id",
                     content = @Content)
     })
     @GetMapping("{game_id}/players")
@@ -75,7 +75,7 @@ public class PlayerController {
         return ResponseEntity.ok(lessDetailsPlayerDtos);
     }
 
-    @Operation(summary = "Find player in game by game and player ID")
+    @Operation(summary = "Find player in game with game and player ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
@@ -85,7 +85,7 @@ public class PlayerController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class))}),
             @ApiResponse(responseCode = "404",
-                    description = "Game or Player not found with supplied ID",
+                    description = "Player not found in game whit supplied ids",
                     content = @Content)
     })
     @GetMapping("{game_id}/players/{player_id}")
@@ -110,7 +110,7 @@ public class PlayerController {
         return ResponseEntity.ok(noPatientZeroplayerDto);
     }
 
-    @Operation(summary = "Add player to game by game ID")
+    @Operation(summary = "Add player to game with gameId")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
                     description = "Player successfully created",
@@ -126,7 +126,6 @@ public class PlayerController {
     })
     @PostMapping("{game_id}/players")
     public ResponseEntity addPlayer(@PathVariable int game_id, @AuthenticationPrincipal Jwt jwt) {
-
         Game tempGame = gameService.findGameById(game_id);
         String userId = jwt.getClaimAsString("sub");
         if (tempGame.getGameState() != GameState.REGISTRATION) {
@@ -137,7 +136,7 @@ public class PlayerController {
         return ResponseEntity.created(location).build();
     }
 
-    @Operation(summary = "Add player to game ADMIN ONLY")
+    @Operation(summary = "Add player to game (Admin only)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
                     description = "Player successfully created",
@@ -152,6 +151,7 @@ public class PlayerController {
                             schema = @Schema(implementation = ApiErrorResponse.class)) }),
     })
     @PostMapping("{game_id}/players/register")
+    @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity addPlayerAdmin(@PathVariable int game_id, @RequestBody UpdatePlayerDto updatePlayerDto) {
 
         Game tempGame = gameService.findGameById(game_id);
@@ -178,7 +178,7 @@ public class PlayerController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)) }),
             @ApiResponse(responseCode = "404",
-                    description = "Player not found with supplied ID",
+                    description = "Player not found with supplied id in game",
                     content = @Content)
     })
     @PutMapping("{game_id}/players/{player_id}")
@@ -192,7 +192,7 @@ public class PlayerController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Delete a player by player ID")
+    @Operation(summary = "Delete player with player with game and player id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204",
                     description = "Success",
