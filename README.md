@@ -33,7 +33,7 @@ A full description of the API Documentation can be found on Swagger here: [Human
 - Build project with Gradle
 
 ## Usage
-- Run project. The application will run standard on localhost port 8080. 
+- Run project. The application will run standard on port 8080. 
 
 ## Integration
 The application is hosted on heroku: please follow this link. 
