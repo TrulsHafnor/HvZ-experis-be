@@ -25,15 +25,15 @@ The Catalogue page lists the Pokémon name and avatar* of the original 151 pokem
 #### Profile page
 A user may only view this page if there is a Trainer name that exists. It redirects the user back to the Landing page if they do not have a Trainer name stored in localStorage. 
 The Trainer page lists the Pokémons that the trainer has collected. For each collected Pokémon,the Pokémon name and image are displayed. A user is also able to remove a Pokémon from their collection from the Trainer page. The user can also log out from this page. 
-### Component tree: With figma
-The pdf file called "component tree" is a component tree of the application. The component tree shows the pages and feature components we planned to create in our application. Changes was done under development in a modern agile 
-style.  
+### API Documentation
+A full description of the API Documentation can be found on Swagger by this link: [Human vs. Zombies API Documentation] (https://hvz-api-noroff.herokuapp.com/swagger-ui/index.html#/)  
 
 ## Install
 - Open PgAdmin
 - Create database "HvZ" locally
 - Clone repo and open in intellj
 - Initialize SDK
+- Build project with Gradle
 
 ## Usage
 - Run project. The application will run standard on localhost port 8080. 
@@ -55,6 +55,7 @@ Also, you can visit the deployed front end application:
 - Auth0
 - PgAdmin 
 - PostgreSql
+- Gradle
 - Swagger
 - GitHub
 - Heroku
