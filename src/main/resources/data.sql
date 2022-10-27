@@ -19,9 +19,9 @@ INSERT INTO player(bite_code, is_human, game_id, is_patient_zero)
        ('wk2xq', true, 2, false),
        ('eeRTs', false, 2, false),
        ('pq124', false, 3, false),
-       ('okqw0', false, 3, false)
+       ('okqw0', false, 3, false),
        ('pqiwh', false, 3, false),
-       ('okenz', false, 3, false)
+       ('okenz', false, 3, false),
        ('pqiw2', false, 3, false),
        ('ok3n0', false, 3, false);
 
@@ -49,7 +49,7 @@ VALUES (TRUE, 'HumanForce', 1, 1),
 
 -- Squadmember
 INSERT INTO squad_member(rank, member_id, squad_id)
-VALUES ('Creator', 1, 1),
-       ('Zomber', 2, 2),
-       ('Creator', 3, 3),
-       ('Zomber', 4, 4);
+VALUES ('Leader', 1, 1),
+       ('Leader', 2, 2),
+       ('Leader', 3, 3),
+       ('Leader', 4, 4);
