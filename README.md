@@ -49,6 +49,8 @@ Also, you can visit the deployed front end application:
 - Spring Boot
 - Spring Web
 - Spring Security
+- Spring Websocket
+- Spring Messaging
 - Auth0
 - PgAdmin 
 - PostgreSql
