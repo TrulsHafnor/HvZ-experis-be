@@ -35,13 +35,13 @@ public class Player {
     @OneToMany(mappedBy = "player")
     private Set<Chat> messages;
 
-    @OneToMany(mappedBy = "playerKiller", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "playerKiller")
     private Set<Kill> kills;
 
-    @OneToOne(mappedBy = "playerDeath", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "playerDeath")
     private Kill death;
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "member")
     private SquadMember membership;
 
     @OneToOne
