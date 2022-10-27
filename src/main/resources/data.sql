@@ -53,7 +53,6 @@ VALUES ('59.932723','10.756447', '12:13:00',1,8,2),
        ('59.932723','10.756447', '12:13:00',3,13,6),
        ('59.932723','10.756447', '12:13:00',3,14,13);
 
--- Squad
 INSERT INTO squad(is_human, "name", game_id, player_id)
 VALUES (TRUE, 'HumanForce', 1, 1),
        (FALSE, 'ZombieForce', 1, 2),
@@ -68,18 +67,14 @@ VALUES ('Creator', 1, 1),
        ('Zomber', 4, 4);
 
 -- Squad check in
-INSERT INTO squad_checkin(end_time, lat, lng, start_time, game_id, squad_member_id)
-VALUES ('12:00', 59.926519, 10.752038, '11:55', 1, 1),
-       ('12:05', 59.925939, 10.750561, '12:00', 1, 2),
-       ('12:10', 59.926516, 10.752034, '12:05', 2, 3),
-       ('12:15', 59.925932, 10.750560, '12:10', 2, 4);
+INSERT INTO squad_checkin(end_time, lat, lng, start_time, game_id, squad_member_id, squad_id)
+VALUES ('12:00', 59.926519, 10.752038, '11:55', 1, 1, 1),
+       ('12:05', 59.925939, 10.750561, '12:00', 1, 2, 2),
+       ('12:10', 59.926516, 10.752034, '12:05', 2, 3, 3),
+       ('12:15', 59.925932, 10.750560, '12:10', 2, 4, 4);
 
--- Chat
 INSERT INTO chat(chat_time, global, human, message, game_id, player_id, squad_id)
 VALUES ('12:34', TRUE, TRUE, 'Big bois only', 1, 1, 1),
        ('12:54', FALSE, FALSE, 'Looks like meat is back on the menu', 1, 2, 2),
        ('13:34', FALSE, TRUE, 'YO BOIS WE HUMAN', 2, 3, 3),
        ('13:54', FALSE, FALSE, 'Looks like meat is back on the menu', 2, 4, 4);
-
-
-

@@ -61,9 +61,9 @@ public class GameService {
     // TODO: 10/5/2022 Admin skal kun slette games
     @Transactional
     public void deleteGame(int id) {
-        killService.deleteAllKillsWhitGameId(id);
-        missionService.deleteAllMissionsInGame(id);
-        playerService.deleteAllPlayersInGame(id);
+        //killService.deleteAllKillsWhitGameId(id);
+        //missionService.deleteAllMissionsInGame(id);
+        //playerService.deleteAllPlayersInGame(id);
         gameRepository.deleteById(id);
     }
 

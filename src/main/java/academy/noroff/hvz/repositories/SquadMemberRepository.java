@@ -3,6 +3,7 @@ package academy.noroff.hvz.repositories;
 import academy.noroff.hvz.models.Player;
 import academy.noroff.hvz.models.SquadMember;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -25,4 +26,12 @@ public interface SquadMemberRepository extends JpaRepository<SquadMember, Intege
 
     @Query(value = "SELECT * FROM Squad_member s WHERE s.squad_id = :squadId", nativeQuery = true)
     Collection<SquadMember> getAllSquadMembersInSquad(@Param("squadId") Integer squadId);
+
+    @Modifying
+    @Query(value = "DELETE FROM Squad_member s WHERE s.squad_id = :squadId", nativeQuery = true)
+    void deleteAllSquadMembersInSquad(@Param("squadId") int squadId);
+
+    @Modifying
+    @Query(value = "DELETE FROM Squad_member s WHERE s.squad_member_id = :squadMemberID", nativeQuery = true)
+    void deleteSquadMemberById(@Param("squadMemberID") int squadMemberID);
 }

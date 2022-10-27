@@ -212,12 +212,11 @@ public class PlayerController {
                                     schema = @Schema(implementation = ApiErrorResponse.class))})
     })
     @DeleteMapping("{game_id}/players/{player_id}")
-    public ResponseEntity deletePlayer(@PathVariable int player_id, @PathVariable int game_id) {
-
+    public ResponseEntity deletePlayer(@PathVariable int game_id, @PathVariable int player_id) {
         //check for admin
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("read:admin"))) {
-            playerService.deletePlayer(player_id);
+            playerService.deletePlayer(game_id, player_id);
             return ResponseEntity.noContent().build();
         }
 

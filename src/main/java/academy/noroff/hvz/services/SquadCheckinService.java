@@ -41,4 +41,12 @@ public class SquadCheckinService {
     public Collection<SquadCheckin> getAllSquadCheckinsWhitSquadAndPlayerId(int gameId, int squadId) {
         return squadCheckinRepository.findAllCheckinsInSquadWhitGameId(gameId, squadId);
     }
+
+    public void deleteAllSquadCheckinsFromSquad(int squadId) {
+        squadCheckinRepository.deleteAllSquadCheckinsFromSquad(squadId);
+    }
+
+    public void deleteSquadCheckinWhitPlayerId(int squadMemberId) {
+        squadCheckinRepository.deleteSquadCheckinWhitPlayerId(squadMemberId);
+    }
 }

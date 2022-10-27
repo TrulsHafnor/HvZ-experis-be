@@ -9,10 +9,14 @@ import academy.noroff.hvz.models.*;
 import academy.noroff.hvz.models.dtos.JoinSquadDto;
 import academy.noroff.hvz.repositories.SquadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class SquadService {
@@ -24,15 +28,15 @@ public class SquadService {
     private final ChatService chatService;
 
     @Autowired
-    public SquadService(SquadRepository squadRepository, PlayerService playerService,
-                        SquadMemberService squadMemberService, GameService gameService,
-                        SquadCheckinService squadCheckinService, ChatService chatService) {
+    public SquadService(SquadRepository squadRepository, @Lazy PlayerService playerService,
+                        SquadMemberService squadMemberService,@Lazy GameService gameService,
+                        SquadCheckinService squadCheckinService, @Lazy ChatService chatService) {
         this.squadRepository =squadRepository;
         this.playerService=playerService;
         this.squadMemberService=squadMemberService;
         this.gameService=gameService;
         this.squadCheckinService=squadCheckinService;
-        this.chatService = chatService;
+        this.chatService=chatService;
     }
 
     public Squad findSquadById (int id) {
@@ -51,9 +55,11 @@ public class SquadService {
         return squadRepository.save(squad);
     }
 
+    @Transactional
     public void deleteSquad(int gameId, int squadID) {
-        // TODO: 10/18/2022 slette alt som har med squad
         checkForCompleteGame(gameId);
+        //check if gameId and squadId is valid
+        squadMemberService.deleteAllSquadMembersInSquad(findSquadInGame(gameId,squadID).getId());
         squadRepository.delete(findSquadInGame(gameId,squadID));
     }
 
@@ -62,18 +68,38 @@ public class SquadService {
         return squadRepository.save(squad);
     }
 
+    public void updateSquadBeforeDeletingLeader(Squad squad) {
+        List<SquadMember> squadMembers = (List<SquadMember>) getAllPlayersInSquad(squad.getGame().getId(), squad.getId());
+            squad.setPlayer(squadMembers.get(0).getMember());
+            updateSquad(squad);
+            SquadMember squadMember = squadMemberService.findSquadMemberByIds(squad.getId(),squad.getPlayer().getId());
+            squadMember.setRank("Leader");
+            squadMemberService.updateSquadMember(squadMember);
+    }
+
     @Transactional
-    public void leaveSquad(int gameId, int playerID) {
-        //does player exist in that game?
-        playerService.findPlayerInGame(gameId,playerID);
+    public void leaveSquad(int gameId, int playerId) {
         //check game status
         checkForCompleteGame(gameId);
-        int squadId = squadRepository.findSquadIdWhitPlayerIdAndGameId(gameId,playerID);
-        SquadMember squadMember = squadMemberService.findSquadMemberByIds(squadId, playerID);
-        squadMemberService.deleteSquadMember(squadMember);
-        if (findSquadById(squadId).getMembers().size() -1 == 0) {
-            deleteSquad(findSquadById(squadId).getGame().getId(),squadId);
+        Squad squad = findSquadWhitPlayerIdAndGameId(gameId, playerId);
+
+        //first delete squad checkin
+        squadMemberService.deleteSquadMember(squadMemberService.findSquadMemberByIds(squad.getId(), playerId));
+        if (squad.getMembers().size()<1) {
+            deleteOnlySquad(findSquadById(squad.getId()));
         }
+        else if(squad.getPlayer().getId() == playerId) {
+            updateSquadBeforeDeletingLeader(squad);
+        }
+    }
+
+    private void deleteOnlySquad(Squad squad) {
+        squadRepository.delete(squad);
+    }
+
+    public Squad findSquadWhitPlayerIdAndGameId(int gameId, int playerId) {
+        return squadRepository.findSquadWhitPlayerIdAndGameId(gameId,playerId).orElseThrow(
+                () -> new SquadNotFoundException("Squad not found whit player id " + playerId + " and game id " + gameId));
     }
 
     public Squad findSquadInGame(int gameId, int squadId) {
@@ -124,13 +150,13 @@ public class SquadService {
         return squadCheckinService.getAllSquadCheckinsWhitSquadAndPlayerId(gameId, squadId);
     }
 
-    public Collection<Chat> getChats(int gameId, int squadId) {
-        return chatService.findSquadChats(gameId, squadId);
-    }
-
     public Collection<SquadMember> getAllPlayersInSquad(int gameId, int squadId) {
         //this will throw exeption if squad is not in game
         findSquadInGame(gameId, squadId);
         return squadMemberService.getAllSquadMembers(squadId);
+    }
+
+    public Collection<Chat> getChats(int gameId, int squadId) {
+        return chatService.findSquadChats(gameId, squadId);
     }
 }

@@ -6,6 +6,7 @@ import academy.noroff.hvz.models.SquadMember;
 import academy.noroff.hvz.repositories.SquadMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -13,10 +14,12 @@ import java.util.Optional;
 @Service
 public class SquadMemberService {
     private final SquadMemberRepository squadMemberRepository;
+    private final SquadCheckinService squadCheckinService;
 
     @Autowired
-    public SquadMemberService(SquadMemberRepository squadMemberRepository) {
+    public SquadMemberService(SquadMemberRepository squadMemberRepository, SquadCheckinService squadCheckinService) {
         this.squadMemberRepository = squadMemberRepository;
+        this.squadCheckinService=squadCheckinService;
     }
 
     public SquadMember findSquadMemberByIds(int squadId, int playerId) {
@@ -42,12 +45,25 @@ public class SquadMemberService {
         return squadMemberRepository.checkIfPlayerIsInSquad(playerID).isEmpty();
     }
 
+    @Transactional
     public void deleteSquadMember(SquadMember squadMember) {
-        // TODO: 10/18/2022 delete more? 
-        squadMemberRepository.delete(squadMember);
+        squadCheckinService.deleteSquadCheckinWhitPlayerId(squadMember.getId());
+        squadMemberRepository.deleteSquadMemberById(squadMember.getId());
+
+    }
+
+    //if u use this check squadId before u delete from database!
+    @Transactional
+    public void deleteAllSquadMembersInSquad(int squadId) {
+        squadCheckinService.deleteAllSquadCheckinsFromSquad(squadId);
+        squadMemberRepository.deleteAllSquadMembersInSquad(squadId);
     }
 
     public Collection<SquadMember> getAllSquadMembers(int squadId) {
         return squadMemberRepository.getAllSquadMembersInSquad(squadId);
+    }
+
+    public SquadMember updateSquadMember(SquadMember squadMember) {
+        return squadMemberRepository.save(squadMember);
     }
 }

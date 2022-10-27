@@ -31,7 +31,7 @@ public class SquadCheckin {
     private String endTime;
 
     @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "squadMember_id")
     private SquadMember squadMember;
 
@@ -39,6 +39,11 @@ public class SquadCheckin {
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "squad_id")
+    private Squad squad;
 
     public SquadCheckin(){}
 

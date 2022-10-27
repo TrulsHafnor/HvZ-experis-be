@@ -6,8 +6,10 @@ import academy.noroff.hvz.exeptions.UserAlreadyHasPlayerException;
 import academy.noroff.hvz.models.AppUser;
 import academy.noroff.hvz.models.Game;
 import academy.noroff.hvz.models.Player;
+import academy.noroff.hvz.models.Squad;
 import academy.noroff.hvz.repositories.PlayerRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
@@ -15,10 +17,13 @@ import java.util.Collection;
 public class PlayerService {
     private final PlayerRepository playerRepository;
     private final UserService userService;
+    private final SquadService squadService;
 
-    public PlayerService (PlayerRepository playerRepository, UserService userService) {
+    public PlayerService (PlayerRepository playerRepository, UserService userService, SquadService squadService) {
         this.playerRepository = playerRepository;
         this.userService = userService;
+        this.squadService=squadService;
+
     }
 
 
@@ -45,14 +50,6 @@ public class PlayerService {
 
 
     /**
-     * find all payers
-     * @return
-     */
-    public Collection<Player> findAllPlayers() {
-        return playerRepository.findAll();
-    }
-
-    /**
      * Find player in game
      * @param gameId
      * @param playerId
@@ -63,7 +60,6 @@ public class PlayerService {
                 () -> new PlayerNotFoundException("Cant find player by id "+ playerId + " ing game by id" + gameId));
 
     }
-
     /**
      * Add player
      * @param player
@@ -111,10 +107,12 @@ public class PlayerService {
      * delete player
      * @param id
      */
-    public void deletePlayer(int id) {
-        // TODO: 17.10.2022 bruk game id 
-        // TODO: 10/5/2022 Cascade delete (Drøyer denne til vi har mer fyll i applikasjonen)
-        playerRepository.deleteById(id);
+    @Transactional
+    public void deletePlayer(int gameId, int playerId) {
+        if (findPlayerInGame(gameId,playerId).getMembership() != null) {
+            squadService.leaveSquad(gameId, playerId);
+        }
+        playerRepository.deleteById(playerId);
     }
 
     public void leavePlayer(int gameId, int playerId) {
@@ -122,14 +120,6 @@ public class PlayerService {
                 () -> new PlayerNotFoundException("Cant find player by id "+ playerId + " ing game by id" + gameId));
         player.setUser(null);
         playerRepository.save(player);
-    }
-
-    /**
-     * Delete all players in game
-     * @param gameId
-     */
-    public void deleteAllPlayersInGame(int gameId) {
-        playerRepository.deleteAllPlayersInGame(gameId);
     }
 
     private void setUniqueBiteCode(Player player) {
