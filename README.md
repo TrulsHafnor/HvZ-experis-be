@@ -13,10 +13,10 @@
 - [License](#license)
 
 ## About
-This project is about building a software solution for players and administrators of the game Human vs. Zombies (HvZ). We have designed and implemened a software solution for managing the state and communication of one or more concurrent games of HvZ. The main components of the system are as follows:
+This project is about a software solution for players and administrators of the game Human vs. Zombies (HvZ). We have designed and implemened a software solution for managing the state and communication of one or more concurrent games of HvZ. The main components of the system are as follows:
 - A static, single-page, front-end using react. This documentation can be found here: [Human vs. Zombies Front End](https://github.com/JakobDenGode/hvz-experis-fe)
 - RESTful  API  service,  through  which  the  front  end  may  interact  with  the database. 
-- PostGres database
+- PostGres database. See ER-diagram for details. 
 
 This repository contains our RESTful API service, through which the front end may interact with the database. The deployed API can be found here [Human vs. Zombies API](https://hvz-api-noroff.herokuapp.com/)
 
