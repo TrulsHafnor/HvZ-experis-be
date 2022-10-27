@@ -19,9 +19,9 @@ INSERT INTO player(bite_code, is_human, game_id, is_patient_zero)
        ('wk2xq', true, 2, false),
        ('eeRTs', false, 2, false),
        ('pq124', false, 3, false),
-       ('okqw0', false, 3, false)
+       ('okqw0', false, 3, false),
        ('pqiwh', false, 3, false),
-       ('okenz', false, 3, false)
+       ('okenz', false, 3, false),
        ('pqiw2', false, 3, false),
        ('ok3n0', false, 3, false);
 
