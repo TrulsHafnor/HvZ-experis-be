@@ -50,7 +50,7 @@ public class SquadController {
         this.squadMemberMapper=squadMemberMapper;
     }
 
-    @Operation(summary = "Create new squad")
+    @Operation(summary = "Create new squad with game id")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "201",
                     description = "Squad was successfully created",
@@ -98,7 +98,7 @@ public class SquadController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class))}),
             @ApiResponse(responseCode = "404",
-                    description = "'Squad not found in game whith supplied ID",
+                    description = "Squad not found in game with supplied ID",
                     content = @Content)
     })
     @GetMapping("/{game_id}/squad/{squad_id}")
@@ -108,7 +108,7 @@ public class SquadController {
         return ResponseEntity.ok(squadDto);
     }
 
-    @Operation(summary = "Get all squads in game by ID")
+    @Operation(summary = "Get all squads in game whit game id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
@@ -118,7 +118,7 @@ public class SquadController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class))}),
             @ApiResponse(responseCode = "404",
-                    description = "Game not found with supplied ID",
+                    description = "Game not found with supplied id",
                     content = @Content)
     })
     @GetMapping("/{game_id}/squads")
@@ -139,7 +139,7 @@ public class SquadController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class))}),
             @ApiResponse(responseCode = "404",
-                    description = "Game not found with supplied ID",
+                    description = "Players in squad not found whit supplied ids",
                     content = @Content)
     })
     @GetMapping("/{game_id}/squad/{squad_id}/players")
@@ -197,7 +197,7 @@ public class SquadController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)) }),
             @ApiResponse(responseCode = "404",
-                    description = "Player does not exist with supplied ID",
+                    description = "Player cant leave with supplied ids",
                     content = {
                             @Content(
                                     mediaType = "application/json",
@@ -209,7 +209,7 @@ public class SquadController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Delete squad whit squad and game id")
+    @Operation(summary = "Delete squad with squad and game id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204",
                     description = "Success",
@@ -229,20 +229,18 @@ public class SquadController {
                                     schema = @Schema(implementation = ApiErrorResponse.class))})
     })
     @DeleteMapping("/{game_id}/squad/{squad_id}")
+    @PreAuthorize("hasAuthority('read:admin')")
     public ResponseEntity deleteSquad(@PathVariable int game_id, @PathVariable int squad_id) {
-        //check for admin
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("read:admin"))) {
-            squadService.deleteSquad(game_id, squad_id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.badRequest().build();
+        squadService.deleteSquad(game_id, squad_id);
+        return ResponseEntity.noContent().build();
+
+
     }
 
-    @Operation(summary = "Update a squad in game")
+    @Operation(summary = "Update squad in game")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204",
-                    description = "squad successfully updated",
+                    description = "squad was successfully updated",
                     content = @Content),
             @ApiResponse(responseCode = "400",
                     description = "Malformed request",
@@ -253,7 +251,7 @@ public class SquadController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)) }),
             @ApiResponse(responseCode = "404",
-                    description = "Player not found with supplied ID",
+                    description = "Cant update squad with supplied ids",
                     content = @Content)
     })
     @PutMapping("/{game_id}/squad/{squad_id}")
@@ -279,7 +277,7 @@ public class SquadController {
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ApiErrorResponse.class)) }),
             @ApiResponse(responseCode = "404",
-                    description = "Squad does not exist with supplied ID in game",
+                    description = "Cant create squad checkin whit supplied ids",
                     content = {
                             @Content(
                                     mediaType = "application/json",
@@ -306,7 +304,7 @@ public class SquadController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorAttributeOptions.class))}),
             @ApiResponse(responseCode = "404",
-                    description = "Cant find any squad check ins",
+                    description = "Cant find any squad check-ins",
                     content = @Content)
     })
     @GetMapping("/{game_id}/squad/{squad_id}/check-in")
@@ -316,7 +314,7 @@ public class SquadController {
         return ResponseEntity.ok(squadCheckinDtos);
     }
 
-    @Operation(summary = "Get squad chat by ID")
+    @Operation(summary = "Get squad chat by with game and squad id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",
