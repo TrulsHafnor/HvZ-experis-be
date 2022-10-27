@@ -54,9 +54,11 @@ https://ligj-pokemon-trainer-app.herokuapp.com/
 - PgAdmin PostgreSql
 
 ## Contributing
-- [Lars-Inge Gammelsæter Jonsen](https://gitlab.com/Kaladinge)
-- [Sondre Mæhre](https://gitlab.com/sondrem)
-- [Truls Hafsnor](
+- [Lars-Inge Gammelsæter Jonsen](https://github.com/Kaladinge)
+- [Sondre Mæhre](https://github.com/Sondrema)
+- [Truls Ombye Hafnor](https://github.com/TrulsHafnor)
+- [Jakob Slyngstadli](https://github.com/JakobDenGode)
+- [Carl Markus Malde](https://github.com/CarlMarkus)
 
 PRs accepted.
 
