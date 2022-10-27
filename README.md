@@ -26,7 +26,7 @@ The Catalogue page lists the Pokémon name and avatar* of the original 151 pokem
 A user may only view this page if there is a Trainer name that exists. It redirects the user back to the Landing page if they do not have a Trainer name stored in localStorage. 
 The Trainer page lists the Pokémons that the trainer has collected. For each collected Pokémon,the Pokémon name and image are displayed. A user is also able to remove a Pokémon from their collection from the Trainer page. The user can also log out from this page. 
 ### API Documentation
-A full description of the API Documentation can be found on Swagger by this link: [Human vs. Zombies API Documentation] (https://hvz-api-noroff.herokuapp.com/swagger-ui/index.html#/)  
+A full description of the API Documentation can be found on Swagger here: [Human vs. Zombies API Documentation](https://hvz-api-noroff.herokuapp.com/swagger-ui/index.html#/)  
 
 ## Install
 - Open PgAdmin
