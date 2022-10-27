@@ -10,6 +10,7 @@ import academy.noroff.hvz.repositories.KillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
@@ -18,13 +19,15 @@ public class KillService {
     private final KillRepository killRepository;
     private final PlayerService playerService;
     private final GameService gameService;
+    private final SquadService squadService;
 
 
     @Autowired
-    public KillService (KillRepository killRepository, PlayerService playerService,@Lazy GameService gameService) {
+    public KillService (KillRepository killRepository, PlayerService playerService,@Lazy GameService gameService, SquadService squadService) {
         this.killRepository = killRepository;
         this.playerService = playerService;
         this.gameService = gameService;
+        this.squadService=squadService;
     }
 
 
@@ -75,6 +78,9 @@ public class KillService {
         }
         player.setHuman(false);
         kill.setPlayerDeath(player);
+        if (player.getMembership() != null) {
+            squadService.leaveSquad(gameId,player.getId());
+        }
         playerService.updatePlayer(player);
         killRepository.save(kill);
         return true;
