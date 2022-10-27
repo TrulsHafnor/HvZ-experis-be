@@ -47,7 +47,7 @@ public class Chat {
         this.chatTime = chatTimestamp();
     }
     private String chatTimestamp() {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
         Date date = new Date();
         return formatter.format(date);
     }
